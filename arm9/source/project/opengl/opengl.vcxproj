@@ -11,20 +11,34 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\battalion.h" />
     <ClInclude Include="..\src\image_dxt.h" />
     <ClInclude Include="..\src\image_helper.h" />
+    <ClInclude Include="..\src\language.h" />
+    <ClInclude Include="..\src\memwatch.h" />
     <ClInclude Include="..\src\SOIL.h" />
     <ClInclude Include="..\src\stbi_dds_aug_c.h" />
     <ClInclude Include="..\src\stb_image_aug.h" />
+    <ClInclude Include="..\src\tgaload.h" />
     <ClInclude Include="..\src\TGDSTypes.h" />
     <ClInclude Include="mainwin32.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\audio.c" />
+    <ClCompile Include="..\src\font.c" />
+    <ClCompile Include="..\src\gprim.c" />
+    <ClCompile Include="..\src\graphics.c" />
     <ClCompile Include="..\src\image_dxt.c" />
     <ClCompile Include="..\src\image_helper.c" />
+    <ClCompile Include="..\src\mainbatallion.c" />
     <ClCompile Include="..\src\mainwin32.c" />
+    <ClCompile Include="..\src\memwatch.c" />
+    <ClCompile Include="..\src\objects.c" />
     <ClCompile Include="..\src\soil.c" />
     <ClCompile Include="..\src\stb_image_aug.c" />
+    <ClCompile Include="..\src\text.c" />
+    <ClCompile Include="..\src\tgaload.c" />
+    <ClCompile Include="..\src\update.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F347282B-F24B-470D-BF8F-FCB92FFF2649}</ProjectGuid>
