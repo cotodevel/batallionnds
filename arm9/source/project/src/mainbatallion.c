@@ -780,7 +780,7 @@ void loadLevel(int level)
     struct tree unitHill;
 
     /* appends the level number and extension to the name of file*/
-    char szLevelNumber[4];
+    char szLevelNumber[256];
     
     /*************************************************/
     /*clear previous trees, tanks, buidings and roads*/
@@ -1305,18 +1305,15 @@ void initialization()
 	roadFile = fopen(fullPath, "rb");
 #else
 
-    dataPtr = getenv("BATTALIONDATADIR");
-    if (dataPtr != NULL)
-	{
-        strcpy(dataPath, dataPtr);
+    strcpy(dataPath, "../src/battalion.data/");
         
-        if (dataPath[strlen(dataPath)-1] != '/')
-            strcat(dataPath, "/");
+    if (dataPath[strlen(dataPath)-1] != '/')
+        strcat(dataPath, "/");
         
-        strcpy(fullPath, dataPath);
-        strcat(fullPath, "battalion.sho");
-        roadFile = fopen(fullPath, "rb");
-	}
+    strcpy(fullPath, dataPath);
+    strcat(fullPath, "battalion.sho");
+    roadFile = fopen(fullPath, "rb");
+
 #endif
 
     if (roadFile != NULL)
