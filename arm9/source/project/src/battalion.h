@@ -16,18 +16,20 @@
 #ifndef BATTALION_H
 #define BATTALION_H
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
 #include <string.h>
 #include <math.h>
 
+#ifdef _MSC_VER
+//disable _CRT_SECURE_NO_WARNINGS message to build this in VC++
+#pragma warning(disable:4996)
+#pragma warning(disable:4703)
+#endif
 
 #ifdef SOUND
-  
   #include <AL/al.h>
- 
 #endif
 
 #ifdef DEBUG
@@ -64,52 +66,21 @@
 /* #define DEBUG */
 
 
-#include <GL/gl.h>
-
-
-
-#include <unistd.h>
-
+//#include <gl/GL.h>
+#include <gl/freeglut.h>
+#include "GL/glu.h"
 #include <sys/types.h>
-#include <sys/time.h>
-
-
 #include <fcntl.h>
 #include <time.h>
+#include <stdio.h>
 
-#ifdef WIN32
+#ifdef _MSC_VER
 
     #include <winsock.h>
     #include <winerror.h>
     #include <wininet.h>
 
 #endif
-
-/*
-#ifndef MACVERSION
-#include <malloc.h>
-#include <pwd.h>
-#endif
-
-
-#ifndef MACVERSION
-
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <sys/param.h>
-#include <netinet/in.h>
-#include <netinet/tcp.h>
-#include <netdb.h>
-#include <sys/uio.h>
-#include <arpa/inet.h>
-#include <fcntl.h>
-#include <sys/errno.h>
-#include <signal.h>
-
-#endif
-*/
-
-
 
 
 /* audio routines */

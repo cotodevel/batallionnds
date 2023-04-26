@@ -117,11 +117,13 @@
 #include <limits.h>
 #include "memwatch.h"
 
+#include "battalion.h"
+
 #ifndef toupper
 #include <ctype.h>
 #endif
 
-#if defined(WIN32) || defined(__WIN32__)
+#if defined(_MSC_VER) || defined(__WIN32__)
 #define MW_HAVE_MUTEX 1
 #include <windows.h>
 #endif
@@ -294,7 +296,7 @@ struct mwMarker_ {
     int level;
     };
 
-#if defined(WIN32) || defined(__WIN32__)
+#if defined(_MSC_VER) || defined(__WIN32__)
 typedef HANDLE          mwMutex;
 #endif
 
@@ -2376,7 +2378,7 @@ static char mwDummy( char c )
 }
 
 #ifndef MW_SAFEADDR
-#ifdef WIN32
+#ifdef _MSC_VER
 #define MW_SAFEADDR
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -2506,7 +2508,7 @@ int mwIsSafeAddr( void *p, unsigned len )
 ** Mutex handling
 **********************************************************************/
 
-#if defined(WIN32) || defined(__WIN32__)
+#if defined(_MSC_VER) || defined(__WIN32__)
 
 static void	mwMutexInit( void )
 {

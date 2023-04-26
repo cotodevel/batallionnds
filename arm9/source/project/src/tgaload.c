@@ -20,9 +20,7 @@
    Finally exorcised all the paletted texture code...
 */
 
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <stdio.h>
+#include "battalion.h"
 #include "tgaload.h"
 
 /* Extension Management */

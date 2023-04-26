@@ -21,9 +21,6 @@
     <ClInclude Include="..\src\TGDSTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="mainwin32.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\stbi_dds_aug_c.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -50,9 +47,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\mainwin32.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\soil.c">
       <Filter>Source Files</Filter>
     </ClCompile>

@@ -21,7 +21,6 @@
     <ClInclude Include="..\src\stb_image_aug.h" />
     <ClInclude Include="..\src\tgaload.h" />
     <ClInclude Include="..\src\TGDSTypes.h" />
-    <ClInclude Include="mainwin32.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\audio.c" />
@@ -31,7 +30,6 @@
     <ClCompile Include="..\src\image_dxt.c" />
     <ClCompile Include="..\src\image_helper.c" />
     <ClCompile Include="..\src\mainbatallion.c" />
-    <ClCompile Include="..\src\mainwin32.c" />
     <ClCompile Include="..\src\memwatch.c" />
     <ClCompile Include="..\src\objects.c" />
     <ClCompile Include="..\src\soil.c" />
