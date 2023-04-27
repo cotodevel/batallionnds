@@ -1213,10 +1213,8 @@ GLuint makeTechsSimpleHead()
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
-GLuint makeTechsShadow()
-    {
+GLuint makeTechsShadow(){
     GLuint O;
-    GLUquadricObj *qobj;
     
     O = glGenLists(1);
     glNewList(O, GL_COMPILE);
@@ -1226,10 +1224,8 @@ GLuint makeTechsShadow()
 	glTranslatef(0,  SHADOWS,   0);
 	glRotatef(-90, 1, 0, 0);
 
-	qobj = gluNewQuadric();
-	gluDisk( qobj, 0.,   0.13, 32, 1);
-	gluDeleteQuadric(qobj);
-
+	drawCircle(32, 1, 0., 0.13); //gluDisk( qobj, 0.,   0.13, 32, 1);
+	
     glPopMatrix();
 
     glColor4fv(colorblack);
@@ -1241,7 +1237,7 @@ GLuint makeTechsShadow()
 
     glEndList();
     return(O);
-    }
+}
 
 
 
@@ -1250,27 +1246,19 @@ GLuint makeTechsShadow()
 /* draw intact power line tower                                  */
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
-GLuint makePowerTower()
-    {
+GLuint makePowerTower(){
     GLuint O;
-    
     O = glGenLists(1);
     glNewList(O, GL_COMPILE);
-
     drawTower(0, 0);
-        
     glEndList();
-
-
     return(O);
-    }
+}
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
-GLuint makeGenericWindows()
-    {
-    GLuint O;
-    
+GLuint makeGenericWindows(){
+    GLuint O;    
     O = glGenLists(1);
     glNewList(O, GL_COMPILE);
 
@@ -1298,15 +1286,14 @@ GLuint makeGenericWindows()
     
     glEndList();
     return(O);
-    }
+}
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /* draw high-rise building                                       */
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
-GLuint makebuilding1(int detail)
-    {
+GLuint makebuilding1(int detail){
     GLuint O;
     
     O = glGenLists(1);
@@ -1354,7 +1341,7 @@ GLuint makebuilding1(int detail)
 	}    
     glEndList();
     return(O);
-    }
+}
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -1450,15 +1437,12 @@ GLuint makebuilding7()
 /* draw water tower                                              */
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
-GLuint makebuilding9(int lowDetail)
-    {
+GLuint makebuilding9(int lowDetail){
     GLuint O;
-    GLUquadricObj *qobj;
     
     O = glGenLists(1);
     glNewList(O, GL_COMPILE);
-
-     
+ 
     glPushMatrix();
 	glTranslatef(-0.3,  1,  -0.3);
 	glScalef(.3,  .2,  .3);
@@ -1494,15 +1478,13 @@ GLuint makebuilding9(int lowDetail)
 	glColor3fv(colorblack);
 	glRotatef(-90, 1, 0, 0);
 
-	qobj = gluNewQuadric();
-	gluDisk( qobj, 0.,   0.3, 32, 1);
-	gluDeleteQuadric(qobj);
-
+	drawCircle(32, 1, 0., 0.3); //gluDisk( qobj, 0.,   0.3, 32, 1);
+	
     glPopMatrix();
      
     glEndList();
     return(O);
-    }
+}
 
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -1760,9 +1742,7 @@ GLuint makebuilding21(int detail)
 /* draw maser emplacement                                        */
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
-GLuint makebuilding31()
-    {
-    GLUquadricObj *qobj;
+GLuint makebuilding31(){
     GLuint O;
     
     O = glGenLists(1);
@@ -1781,29 +1761,22 @@ GLuint makebuilding31()
 	glTranslatef(0,  .2,   0);
 	glRotatef(-90, 1, 0, 0);
 
-	qobj = gluNewQuadric();
-	gluDisk( qobj, 0.,   0.3, 32, 1);
-	gluDeleteQuadric(qobj);
-    glPopMatrix();
+	drawCircle(32, 1, 0., 0.3); //gluDisk( qobj, 0.,   0.3, 32, 1);
+	glPopMatrix();
 
     glEndList();
     return(O);
-    }
+}
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /* draw helicopter pad                                           */
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
-GLuint makebuilding32()
-    {
-    GLUquadricObj *qobj;
+GLuint makebuilding32(){
     GLuint O;
-    
     O = glGenLists(1);
     glNewList(O, GL_COMPILE);
-    
-    
     makercubenobtm(  0,  .095, 0,  .36, .095, .36, colorgrey1);
 
     glColor3fv(coloryellow);
@@ -1812,10 +1785,8 @@ GLuint makebuilding32()
 	glTranslatef(0,  .2,   0);
 	glRotatef(-90, 1, 0, 0);
 
-	qobj = gluNewQuadric();
-	gluDisk( qobj, 0.,   0.3, 32, 1);
-	gluDeleteQuadric(qobj);
-    glPopMatrix();
+	drawCircle(32, 1, 0., 0.3); //gluDisk( qobj, 0.,   0.3, 32, 1);
+	glPopMatrix();
 
     glColor3fv(colorgrey1);
     
@@ -1823,14 +1794,12 @@ GLuint makebuilding32()
 	glTranslatef(0,  .21,   0);
 	glRotatef(-90, 1, 0, 0);
 
-	qobj = gluNewQuadric();
-	gluDisk( qobj, 0.,   0.2, 32, 1);
-	gluDeleteQuadric(qobj);
-    glPopMatrix();
+	drawCircle(32, 1, 0., 0.2); //gluDisk( qobj, 0.,   0.2, 32, 1);
+	glPopMatrix();
 
     glEndList();
     return(O);
-    }
+}
 
 
 
@@ -2127,21 +2096,16 @@ GLuint makePlaneDots(int detail)
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
-GLuint makeRoundTreeShadow()
-    {
+GLuint makeRoundTreeShadow(){
     GLuint O;
-    GLUquadricObj *qobj;
     
     O = glGenLists(1);
     glNewList(O, GL_COMPILE);
 
     glRotatef(-90, 1, 0, 0);
 
-    qobj = gluNewQuadric();
-    gluDisk( qobj, 0.,  0.3, 32, 1);
-    gluDeleteQuadric(qobj);
-
+    drawCircle(32, 1, 0., 0.3); //gluDisk( qobj, 0.,  0.3, 32, 1);
+    
     glEndList();
     return(O);
-    }
-
+}

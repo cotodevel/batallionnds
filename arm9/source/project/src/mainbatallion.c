@@ -6306,3 +6306,155 @@ int TWLPrintf(const char *fmt, ...){
 	return 0;
 }
 #endif
+
+//glutSolidSphere(radius, 16, 16);  -> NDS GX Replacement
+void drawSphere(float r, int lats, int longs) {
+	#ifdef _MSC_VER
+	int i, j;
+	for (i = 0; i <= lats; i++) {
+		double lat0 = M_PI * (-0.5 + (double)(i - 1) / lats);
+		double z0 = sin(lat0);
+		double zr0 = cos(lat0);
+
+		double lat1 = M_PI * (-0.5 + (double)i / lats);
+		double z1 = sin(lat1);
+		double zr1 = cos(lat1);
+		glBegin(GL_QUAD_STRIP
+#ifdef ARM9
+			, USERSPACE_TGDS_OGL_DL_POINTER
+#endif
+		);
+		for (j = 0; j <= longs; j++) {
+			double lng = 2 * M_PI * (double)(j - 1) / longs;
+			double x = cos(lng);
+			double y = sin(lng);
+
+			glNormal3f(x * zr0, y * zr0, z0
+#ifdef ARM9
+				, USERSPACE_TGDS_OGL_DL_POINTER
+#endif
+			);
+			glVertex3f(r * x * zr0, r * y * zr0, r * z0
+#ifdef ARM9
+				, USERSPACE_TGDS_OGL_DL_POINTER
+#endif
+			);
+			glNormal3f(x * zr1, y * zr1, z1
+#ifdef ARM9
+				, USERSPACE_TGDS_OGL_DL_POINTER
+#endif
+			);
+			glVertex3f(r * x * zr1, r * y * zr1, r * z1
+#ifdef ARM9
+				, USERSPACE_TGDS_OGL_DL_POINTER
+#endif
+			);
+		}
+		glEnd(
+#ifdef ARM9
+			USERSPACE_TGDS_OGL_DL_POINTER
+#endif
+		);
+	}
+	#endif
+
+	#ifdef ARM9
+	glScalef(r, r, r
+#ifdef ARM9
+		, USERSPACE_TGDS_OGL_DL_POINTER
+#endif
+	);
+	// Execute the display list
+    glCallListGX((u32*)&Sphere008); //comment out when running on NDSDisplayListUtils
+	#endif
+}
+
+//gluDisk(qObj, 0.0, RADIUS, 16, 16); -> NDS GX Implementation
+void drawCircle(GLfloat x, GLfloat y, GLfloat r, GLfloat BALL_RADIUS)
+{
+	#define SLICES_PER_CIRCLE ((int)16)
+	float angle = 360.f / SLICES_PER_CIRCLE;
+	float anglex = cos(angle);
+	float angley = sin(angle);
+	GLfloat lastX = 1;
+	GLfloat lastY = 0;
+	int c = 0; 
+	#ifdef _MSC_VER
+	glBegin(GL_TRIANGLE_STRIP);
+	#endif
+	#ifdef ARM9
+	glBegin(GL_TRIANGLE_STRIP, USERSPACE_TGDS_OGL_DL_POINTER);
+	#endif
+	for (c = 1; c < SLICES_PER_CIRCLE; c++)
+	{
+		x = lastX * anglex - lastY * angley;
+		y = lastX * angley + lastY * anglex;
+		#ifdef _MSC_VER
+		glVertex2f(x * BALL_RADIUS, y * BALL_RADIUS);
+		#endif
+		#ifdef ARM9
+		glVertex2f(x * BALL_RADIUS, y * BALL_RADIUS, USERSPACE_TGDS_OGL_DL_POINTER);
+		#endif
+		lastX = x;
+		lastY = y;
+	}
+
+	#ifdef _MSC_VER
+	glEnd();
+	#endif
+	#ifdef ARM9
+	glEnd(USERSPACE_TGDS_OGL_DL_POINTER);
+	#endif
+}
+
+
+void drawCylinder(int numMajor, int numMinor, float height, float radius){
+	double majorStep = height / numMajor;
+	double minorStep = 2.0 * M_PI / numMinor;
+	int i, j;
+
+	for (i = 0; i < numMajor; ++i) {
+		GLfloat z0 = 0.5 * height - i * majorStep;
+		GLfloat z1 = z0 - majorStep;
+
+		//glBegin(GL_TRIANGLE_STRIP);
+		for (j = 0; j <= numMinor; ++j) {
+			double a = j * minorStep;
+			GLfloat x = radius * cos(a);
+			GLfloat y = radius * sin(a);
+			glNormal3f(x / radius, y / radius, 0.0
+#ifdef ARM9
+		, USERSPACE_TGDS_OGL_DL_POINTER
+#endif
+			);
+			
+			glTexCoord2f(j / (GLfloat) numMinor, i / (GLfloat) numMajor
+#ifdef ARM9
+		, USERSPACE_TGDS_OGL_DL_POINTER
+#endif
+			);
+			glVertex3f(x, y, z0
+#ifdef ARM9
+		, USERSPACE_TGDS_OGL_DL_POINTER
+#endif
+			);
+
+			glNormal3f(x / radius, y / radius, 0.0
+#ifdef ARM9
+		, USERSPACE_TGDS_OGL_DL_POINTER
+#endif
+			);
+			glTexCoord2f(j / (GLfloat) numMinor, (i + 1) / (GLfloat) numMajor
+#ifdef ARM9
+		, USERSPACE_TGDS_OGL_DL_POINTER
+#endif
+			);
+			glVertex3f(x, y, z1
+#ifdef ARM9
+		, USERSPACE_TGDS_OGL_DL_POINTER
+#endif
+			);
+		}
+		//glEnd();
+	}
+}

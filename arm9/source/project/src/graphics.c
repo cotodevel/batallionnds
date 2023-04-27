@@ -1761,9 +1761,8 @@ void drawBuilding8(float * c1,  float * c2, int detail)
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
 void drawCoolingTower(int detail)
-    {
-    GLUquadricObj *qobj;
-
+{
+    
     glPushMatrix();
 	glTranslatef(-0.3,  0.5,  -0.3);
 	glScalef(0.3,  0.5,  0.3);
@@ -1779,13 +1778,12 @@ void drawCoolingTower(int detail)
 	    glTranslatef(0.0,  0.9,  0.0);
 	    glRotatef(-90, 1, 0, 0);
 	    
-	    qobj = gluNewQuadric();
-	    gluDisk( qobj, 0.,  0.28, 32, 1);
-	    gluDeleteQuadric(qobj);
+	    //gluDisk(qObj, 0.0, RADIUS, 16, 16); -> NDS GX Implementation
+	    drawCircle(32, 1, 0., 0.28);
     
 	glPopMatrix();
 	}
-    }
+}
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -1942,11 +1940,9 @@ void drawBuilding37(float * color, int detail)
 /* draw satellite dish                                           */
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
-void drawBuilding25()
-    {
-    long backNow;
-    GLUquadricObj *qobj;
-    
+void drawBuilding25(){
+	
+	long backNow;
     /******************/
     /* satellite dish */
     /******************/
@@ -1969,10 +1965,8 @@ void drawBuilding25()
 	glTranslatef(0,  0,   0);
 	glRotatef(-90, 1, 0, 0);
 
-	qobj = gluNewQuadric();
-	gluDisk( qobj, 0.,   0.3, 32, 1);
-	gluDeleteQuadric(qobj);
-
+	drawCircle(32, 1, 0., 0.3); //gluDisk( qobj, 0.,   0.3, 32, 1);
+	
     glPopMatrix();
 
     /* support post */
@@ -1992,10 +1986,8 @@ void drawBuilding25()
 	glTranslatef(0,  .4,   0);
 	glRotatef(-45, 1, 0, 0);
 
-	qobj = gluNewQuadric();
-	gluDisk( qobj, 0.,   0.35, 32, 1);
-	gluDeleteQuadric(qobj);
-
+	drawCircle(32, 1, 0., 0.35); //gluDisk( qobj, 0.,   0.35, 32, 1);
+	
     glPopMatrix();
 
     if (backNow)
@@ -2022,8 +2014,7 @@ void drawBuilding25()
 	    glVertex3fv(sat4);	
 	glEnd();
     glPopMatrix();
-    
-    }
+}
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/

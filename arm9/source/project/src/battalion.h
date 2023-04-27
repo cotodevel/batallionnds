@@ -38,6 +38,10 @@
     #include "memwatch.h"
 #endif
 
+#if !defined(M_PI) 
+#define M_PI (3.14159265358979323846)
+#endif
+
 #define RECONNECT_TIME		15
 #define IM_NOT_DEAD_YET_TIME	60
 #define IM_NOT_DEAD_SEND_TIME	19
@@ -716,8 +720,7 @@ void addNetworkTarget(long, int, float, float, float, float, float,
  * gprim.c
  * holds the graphics primitives
  *******************************/
-
-void drawCylinder(float *, float *, float, int,  int, int);
+extern void drawCylinder(int numMajor, int numMinor, float height, float radius);
 void drawClosedCylinder(float *, float *,  int, int);
 
 void drawCone(float *, float *, float, int,  int);
@@ -956,5 +959,8 @@ void drawRoads(struct road *,  float,  float, int, int, int);
 void drawProjectiles(struct projectile *, int, struct fireType*, int, int, int);
 
 void andysphdraw(float loc[4], int);
+
+extern void drawSphere(float r, int lats, int longs);
+extern void drawCircle(GLfloat x, GLfloat y, GLfloat r, GLfloat BALL_RADIUS);
 
 #endif

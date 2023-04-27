@@ -15,7 +15,6 @@
 #include "battalion.h"
 
 
-    GLUquadricObj *qobj;
 
     float   pt1[3] = {1, -1, 1};
     float   pt2[3] = {1, 1, 1};
@@ -173,7 +172,7 @@
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /* draw a vertical cylinder                                      */
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
-
+/*
 void drawCylinder(float * outcol, float * topcol, float radius,
 		    int nsides,  int top, int detail)
     {    
@@ -255,10 +254,8 @@ void drawCylinder(float * outcol, float * topcol, float radius,
 	    glVertex3fv(v3);
 	glEnd();
 
-	/*******/
-	/* top */
-	/*******/
-
+	// top 
+	
 	if (detail >= 0)
 	    {
 	    glColor4fv(topcol);
@@ -273,9 +270,7 @@ void drawCylinder(float * outcol, float * topcol, float radius,
 	    glEnd();
 	    }
 
-	/**********/
-	/* bottom */
-	/**********/
+	// bottom 
 	    
 	glBegin(GL_TRIANGLES);
 	    glVertex3fv(pt1);
@@ -284,47 +279,41 @@ void drawCylinder(float * outcol, float * topcol, float radius,
 	glEnd();
 	}
     }
+*/
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
-void drawClosedCylinder(float * outcol, float * topcol,
-			int top, int detail)
-    {
-    GLint shadeNow;
+void drawClosedCylinder(float * outcol, float * topcol, int top, int detail){
+	GLint shadeNow;
     long backNow;
-
     glGetIntegerv(GL_SHADE_MODEL, &shadeNow);
-    backNow = glIsEnabled(GL_CULL_FACE);
-    
-/*    glShadeModel(GL_SMOOTH); */
+    backNow = glIsEnabled(GL_CULL_FACE);    
     glDisable(GL_CULL_FACE);
     
-    switch (detail)
-	{
-	case 2:	    drawCylinder(outcol, topcol, 1, MORECYLINDERSIDES, top, detail);
-		    break;
-	case 1:
-	case 0:	    
-	case -1:    drawCylinder(outcol, topcol, 1, CYLINDERSIDES, top, detail);
-		    break;
+    switch (detail){
+		case 2:	    drawCylinder(*outcol, *topcol, MORECYLINDERSIDES, top);
+		break;
+		case 1:
+		case 0:	    
+		case -1:    drawCylinder(*outcol, *topcol, CYLINDERSIDES, top);
+		break;
 	}
 	
-    if (backNow)
-	glEnable(GL_CULL_FACE);
-    else
-	glDisable(GL_CULL_FACE);
-	
+    if (backNow){
+		glEnable(GL_CULL_FACE);
+	}
+	else{
+		glDisable(GL_CULL_FACE);
+	}
     glShadeModel(shadeNow);
-    }
+}
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /* draw a vertical cone                                          */
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
-
-void drawCone(float * outcol, float * topcol, float radius, int nsides, int top)
-    {
+void drawCone(float * outcol, float * topcol, float radius, int nsides, int top){
     float   n1a,  n1b,  n2a,  n2b;
     float   v0[3], v1[3], v2[3], v3[3];
     float   theta, theta1;
@@ -336,13 +325,11 @@ void drawCone(float * outcol, float * topcol, float radius, int nsides, int top)
     v0[1] = v3[1] = -1;
     v1[1] = v2[1] = 1;
 
-  if (nsides < 3)
-	nsides = 3;
-     
+	if (nsides < 3){
+		nsides = 3;
+	}
     curve = 2 * PI / nsides;
-
-	for (edge = 0;  edge < nsides; edge++)
-	    {
+	for (edge = 0;  edge < nsides; edge++){
 	    theta = edge * curve;
 	    theta1 = (edge+1) * curve;
 
@@ -401,13 +388,12 @@ void drawCone(float * outcol, float * topcol, float radius, int nsides, int top)
 
 	    glColor3fv(topcol);
 		
-	    if (top)
-		{
-		glBegin(GL_TRIANGLES);
-		    glVertex3fv(pt2);
-		    glVertex3fv(v2);
-		    glVertex3fv(v1);
-		glEnd();
+	    if (top){
+			glBegin(GL_TRIANGLES);
+				glVertex3fv(pt2);
+				glVertex3fv(v2);
+				glVertex3fv(v1);
+			glEnd();
 		}
 		
 	    glBegin(GL_TRIANGLES);
@@ -416,7 +402,7 @@ void drawCone(float * outcol, float * topcol, float radius, int nsides, int top)
 		glVertex3fv(v3); 
 	    glEnd();
 	}
-   }
+}
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -1183,15 +1169,9 @@ void andysphdraw(float loc[4], int count)
 	}
     else
 	{
-	qobj = gluNewQuadric();
-    
-	if (qobj != NULL)
-	    {
-	    glPushMatrix();
+		glPushMatrix();
 		glTranslatef(loc[0], loc[1], loc[2]);
-		gluSphere( qobj, loc[3], count*3, count*3); /* was count*4 */
+		drawSphere(loc[3], count*3, count*3); //gluSphere( qobj, loc[3], count*3, count*3); /* was count*4 */
 	    glPopMatrix();
-	    gluDeleteQuadric(qobj);
-	    }
 	}
     }
