@@ -1363,31 +1363,34 @@ GLint strokeFont[][1+MAX_STROKES*3] = {
 
 GLenum CreateStrokeFont(GLuint fontBase)
 {
+	#ifdef WIN32
     GLint mode, i, j;
-
     for (i = 0; strokeFont[i][0] != END_OF_LIST; i++) {
 	glNewList(fontBase+(unsigned int)strokeFont[i][0], GL_COMPILE);
 	for (j = 1; mode = strokeFont[i][j]; j += 3) {
 	    if (mode == FONT_BEGIN) {
-		glBegin(GL_LINE_STRIP);
-		glVertex2f((float)strokeFont[i][j+1]*STROKE_SCALE,
-			   (float)strokeFont[i][j+2]*STROKE_SCALE);
-	    } else if (mode == FONT_NEXT) {
-		glVertex2f((float)strokeFont[i][j+1]*STROKE_SCALE,
-			   (float)strokeFont[i][j+2]*STROKE_SCALE);
-	    } else if (mode == FONT_END) {
-		glVertex2f((float)strokeFont[i][j+1]*STROKE_SCALE,
-			   (float)strokeFont[i][j+2]*STROKE_SCALE);
-		glEnd();
-	    } else if (mode == FONT_ADVANCE) {
-		glTranslatef((float)strokeFont[i][j+1]*STROKE_SCALE,
-			     (float)strokeFont[i][j+2]*STROKE_SCALE, 0.0);
-		break;
+			glBegin(GL_LINE_STRIP);
+			glVertex2f((float)strokeFont[i][j+1]*STROKE_SCALE, (float)strokeFont[i][j+2]*STROKE_SCALE);
+	    } 
+		else if (mode == FONT_NEXT) {
+			glVertex2f((float)strokeFont[i][j+1]*STROKE_SCALE, (float)strokeFont[i][j+2]*STROKE_SCALE);
+	    } 
+		else if (mode == FONT_END) {
+			glVertex2f((float)strokeFont[i][j+1]*STROKE_SCALE, (float)strokeFont[i][j+2]*STROKE_SCALE);
+			glEnd();
+	    } 
+		else if (mode == FONT_ADVANCE) {
+			glTranslatef((float)strokeFont[i][j+1]*STROKE_SCALE, (float)strokeFont[i][j+2]*STROKE_SCALE, 0.0);
+			break;
 	    }
 	}
 	glEndList();
     }
     return GL_TRUE;
+	#endif
+	#ifdef ARM9
+	return GL_FALSE;
+	#endif
 }
 
 

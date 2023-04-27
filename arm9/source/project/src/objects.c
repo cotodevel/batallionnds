@@ -1253,8 +1253,6 @@ GLuint makeTechsShadow()
 GLuint makePowerTower()
     {
     GLuint O;
-    GLfloat lineWidthNow;
-    glGetFloatv(GL_LINE_WIDTH, &lineWidthNow);
     
     O = glGenLists(1);
     glNewList(O, GL_COMPILE);
@@ -1263,7 +1261,6 @@ GLuint makePowerTower()
         
     glEndList();
 
-    glLineWidth(lineWidthNow);
 
     return(O);
     }
@@ -1551,9 +1548,8 @@ GLuint makebuilding10()
     makercubenobtm(  0,  .05, 0,  .3, .05, .3, colorwhite);
 
     glColor3fv(colorgrey1);
-    glLineWidth(2.01);
-    
-    glBegin(GL_LINES);
+
+    glBegin(GL_QUAD_STRIP);
 	glVertex3fv(cons1);
 	glVertex3fv(cons2);
 
@@ -1568,28 +1564,28 @@ GLuint makebuilding10()
     glEnd();
 
 
-    glBegin(GL_LINE_LOOP);
+    glBegin(GL_QUADS);
 	glVertex3fv(cons2);
 	glVertex3fv(cons8);
 	glVertex3fv(cons6);
 	glVertex3fv(cons4);
     glEnd();
 
-    glBegin(GL_LINE_LOOP);
+    glBegin(GL_QUADS);
 	glVertex3fv(cons9);
 	glVertex3fv(cons10);
 	glVertex3fv(cons11);
 	glVertex3fv(cons12);
     glEnd();
 
-    glBegin(GL_LINE_LOOP);
+    glBegin(GL_QUADS);
 	glVertex3fv(cons13);
 	glVertex3fv(cons14);
 	glVertex3fv(cons15);
 	glVertex3fv(cons16);
     glEnd();
 
-    glBegin(GL_LINE_LOOP);
+    glBegin(GL_QUADS);
 	glVertex3fv(cons17);
 	glVertex3fv(cons18);
 	glVertex3fv(cons19);
@@ -2111,25 +2107,16 @@ GLuint makePlaneDots(int detail)
 	}
     else
 	{
-	glBegin(GL_LINES);
-	for(i=-PLANESIZE+1; i<=PLANESIZE; i+=1)
-	    {
-	    grass1[0] = grass3[0] = i - 0.015;
-	    grass2[0] = grass4[0] = i + 0.015;
+	glBegin(GL_QUADS);
+	grass1[2] = grass4[2] =  0.015;
+	grass2[2] = grass3[2] = 0.015;
 
-	    for(j=-PLANESIZE + 1; j <= PLANESIZE; j += 1)
-		{
-		grass1[2] = grass4[2] = j - 0.015;
-		grass2[2] = grass3[2] = j + 0.015;
+	glVertex3fv(grass1);
+	glVertex3fv(grass2);
 
-		glVertex3fv(grass1);
-		glVertex3fv(grass2);
-
-		glVertex3fv(grass3);
-		glVertex3fv(grass4);
-		}
-	    }
-	}    
+	glVertex3fv(grass3);
+	glVertex3fv(grass4);
+	}
     glEnd();
 
     glEndList();

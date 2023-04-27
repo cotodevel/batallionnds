@@ -1119,9 +1119,6 @@ void initialization()
     /* set up the graphics              */
     /************************************/
 
-    /* if line widths are integral Mesa chokes in a large window */
-    glLineWidth(1.01);
-
     glHint(GL_LINE_SMOOTH_HINT, GL_FASTEST); 
     glHint(GL_POLYGON_SMOOTH_HINT, GL_FASTEST); 
     glHint(GL_POINT_SMOOTH_HINT, GL_FASTEST); 
@@ -1277,21 +1274,7 @@ void initialization()
     srand( (unsigned) today);
 
      
-    /************************************/
-    /* check graphics hardware          */
-    /************************************/
-    
-    glGetIntegerv(GL_DEPTH_BITS, &gdtmp);
-    if (gdtmp == GL_FALSE)
-	    showError("Z-buffer not available on this machine");
-
-    glGetIntegerv(GL_RED_BITS, &gdtmp);
-    if (gdtmp == GL_FALSE)
-	    showError("Double buffered RGB not available on this machine");
-
-    glGetIntegerv(GL_STEREO, &gdtmp);
-    if (gdtmp == GL_FALSE)
-	    no3D = 1;
+	no3D = 1;
 
     /********************************************/
     /* find where all the data files are stored */
@@ -1531,13 +1514,6 @@ void doDrawing (int eyeball)
     }
 #endif
 
-    /* if line widths are integral Mesa chokes in a large window */
-
-	if (lod > -1)
-    	glLineWidth(2.01);
-    else
-    	glLineWidth(1.01);
-
     if (lod >= 2)
 	glShadeModel(GL_SMOOTH);
     else
@@ -1744,9 +1720,6 @@ void doDrawing (int eyeball)
 if (lod == -1)
 textLineWidth = 1.01;
 
-	/* if line widths are integral Mesa chokes in a large window */
-	glLineWidth(textLineWidth);
-
 	/* showText(Googelon.energyRemaining,  Googelon.monsterScore,
 	(long) (viewR-viewL), paused);   */   
 
@@ -1806,52 +1779,8 @@ if (lod > -1 )
 /* go to 1d-video mode                                           */
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
-void goto1d(void)
-    {
-    GLint gdtmp;
+void goto1d(void){
     
-	/* OGLXXX
-	 * getgdesc other posiblilties:
-	 * 	glxGetConfig();
-	 * 	glxGetCurrentContext();
-	 * 	glxGetCurrentDrawable();
-	 * GLint gdtmp;
-	 */
-	if ((glGetIntegerv(GL_STEREO, &gdtmp), gdtmp))
-	/* OGLXXX
-	 * setmonitor not supported
-	 * setmonitor((short) monitorType)
-	 */
-
-	/* OGLXXX
-	 * winposition not supported -- See Window Manager
-	 * winposition(windowLeft, windowLeft + windowWide, windowTop, windowTop + windowTall)
-	 */
-
-	/* OGLXXX
-	 * keepaspect not supported -- See Window Manager
-	 * keepaspect(1280, 1000)
-	 */
-			    
-	/* OGLXXX
-	 * winconstraints not supported -- See Window Manager
-	 * winconstraints()
-	 */
-
-	/* OGLXXX
-	 * getgdesc other posiblilties:
-	 * 	glxGetConfig();
-	 * 	glxGetCurrentContext();
-	 * 	glxGetCurrentDrawable();
-	 * GLint gdtmp;
-	 * see window manager
-	 * getvaluator not supported -- See Events
-	 * getvaluator(MOUSEY)
-	 * setvaluator not supported -- See Events
-	 * setvaluator(MOUSEY, (short) ???, 0, (short) (glGetIntegerv(XXX_YPMAX, &gdtmp), gdtmp))
-	 */
-
- 	mode3D = 0; 
 }
 
 /******************************************************************/

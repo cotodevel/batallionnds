@@ -227,8 +227,8 @@ void doTexStuff(char * dataPath, char * fileName, int width, int height,
 
 void makeObjects(char * dataPath)
     {
-    GLfloat lineWidthNow;
-    GLenum code;
+    
+	GLenum code;
     char fullPath[MAXPATH];
     /********************/
     /* load in textures */
@@ -345,9 +345,7 @@ oddly enough in the mac PPC version - it may be because it is the first OpenGL c
     building9Obj	= makebuilding9(0);
     building9ObjOO	= makebuilding9(1);
     
-    glGetFloatv(GL_LINE_WIDTH, &lineWidthNow);
     building10Obj	= makebuilding10();
-    glLineWidth(lineWidthNow);
     
     building12Obj	= makebuilding12(1);
     building12ObjD0	= makebuilding12(0);
@@ -1961,9 +1959,6 @@ void drawBuilding25()
     float sat3[3] = { 0.35, 0.0,  0.0};
     float sat4[3] = {-0.35, 0.0,  0.0};
 
-    GLfloat lineWidthNow;
-    glGetFloatv(GL_LINE_WIDTH, &lineWidthNow);
-  
     backNow = glIsEnabled(GL_CULL_FACE);
 
     /* shadow */
@@ -1989,7 +1984,6 @@ void drawBuilding25()
     andysphdraw(satSphere, 4);
     
     /* if line widths are integral Mesa chokes in a large window */
-    glLineWidth(3.01);    
     glColor3fv(colorwhite);
     
     glPushMatrix();
@@ -2016,20 +2010,19 @@ void drawBuilding25()
 
 	glColor3fv(colorgrey1);
 
-	glBegin(GL_LINE_STRIP);
+	glBegin(GL_TRIANGLE_STRIP);
 	    glVertex3fv(sat0);
 	    glVertex3fv(sat1);
 	    glVertex3fv(sat2);	
 	glEnd();
 
-	glBegin(GL_LINE_STRIP);
+	glBegin(GL_TRIANGLE_STRIP);
 	    glVertex3fv(sat3);
 	    glVertex3fv(sat1);
 	    glVertex3fv(sat4);	
 	glEnd();
     glPopMatrix();
     
-    glLineWidth(lineWidthNow);
     }
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -2062,23 +2055,20 @@ void drawBuilding26(int rorl, int detail)
     static float tv3[2] = {1,0};
     static float tv4[2] = {0,0};
 
-    GLfloat lineWidthNow;
-    glGetFloatv(GL_LINE_WIDTH, &lineWidthNow);
-
+    
     /* supports for the screen */
     
     glColor4fv(colorgrey2);
     /* if line widths are integral Mesa chokes in a large window */
-    glLineWidth(3.01);
     
-    glBegin(GL_LINE_LOOP);
+    glBegin(GL_QUADS);
 	glVertex3fv(screen0);
 	glVertex3fv(screen1);
 	glVertex3fv(screen2);
 	glVertex3fv(screen3);
     glEnd();
 
-    glBegin(GL_LINE_LOOP);
+    glBegin(GL_QUADS);
 	glVertex3fv(screen0);
 	glVertex3fv(screen4);
 	glVertex3fv(screen5);
@@ -2129,8 +2119,7 @@ void drawBuilding26(int rorl, int detail)
 
 	glPopMatrix();
 	}  
-       
-    glLineWidth(lineWidthNow);
+
 }
 
 
@@ -2293,34 +2282,27 @@ void drawTower(int death, int death2)
     vj[2] = va[2] + .2;
 
 
-    /* if line widths are integral Mesa chokes in a large window */
-    glLineWidth(3.01);
-
     /********/
     /* legs */
     /********/
    
-    glBegin(GL_LINE_LOOP);
+    glBegin(GL_QUADS);
 	glVertex3fv(v1); glVertex3fv(v2); glVertex3fv(v3); glVertex3fv(v4);
     glEnd();
     
-    glBegin(GL_LINE_LOOP);
+    glBegin(GL_QUADS);
 	glVertex3fv(v4); glVertex3fv(v5); glVertex3fv(v2); glVertex3fv(v7);
     glEnd();
 
-    glBegin(GL_LINE_LOOP);
+    glBegin(GL_QUADS);
 	glVertex3fv(v1); glVertex3fv(v6); glVertex3fv(v3); glVertex3fv(v8);
     glEnd();
-
- 
-    /* if line widths are integral Mesa chokes in a large window */
-    glLineWidth(2.01);
 
     /*******/
     /* top */
     /*******/
 
-    glBegin(GL_LINE_LOOP);
+    glBegin(GL_QUADS);
 	glVertex3fv(va); glVertex3fv(vb); glVertex3fv(vc); glVertex3fv(vd);
     glEnd();
 
@@ -2328,24 +2310,24 @@ void drawTower(int death, int death2)
     /* supports and verticals*/
     /*************************/
 
-    glBegin(GL_LINE_STRIP);
+    glBegin(GL_TRIANGLE_STRIP);
 	glVertex3fv(v7); glVertex3fv(v3); glVertex3fv(vc); glVertex3fv(vg); glVertex3fv(ve);
     glEnd();
 
-    glBegin(GL_LINE_STRIP);
+    glBegin(GL_TRIANGLE_STRIP);
 	glVertex3fv(v8); glVertex3fv(v4); glVertex3fv(vd); glVertex3fv(vg); glVertex3fv(vf);
     glEnd();
 
-    glBegin(GL_LINE_STRIP);
+    glBegin(GL_TRIANGLE_STRIP);
 	glVertex3fv(v5); glVertex3fv(v1); glVertex3fv(va); glVertex3fv(vj); glVertex3fv(vh);
     glEnd();
 
-    glBegin(GL_LINE_STRIP);
+    glBegin(GL_TRIANGLE_STRIP);
 	glVertex3fv(v6); glVertex3fv(v2); glVertex3fv(vb); glVertex3fv(vj); glVertex3fv(vi);
     glEnd();
 
 
-    glBegin(GL_LINE_LOOP);
+    glBegin(GL_QUADS);
 	glVertex3fv(ve); glVertex3fv(vf); glVertex3fv(vh); glVertex3fv(vi);
     glEnd();    
 
@@ -2766,7 +2748,6 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
     float x, y, z;
     register int treeCounter;
     int sph;
-    GLfloat lineWidthNow;
     GLint shadeNow;
     
     glGetIntegerv(GL_SHADE_MODEL, &shadeNow);
@@ -2892,12 +2873,12 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
 					else
 					    glCallList(building2Obj);
 					break;
-			    case 3:	glGetFloatv(GL_LINE_WIDTH, &lineWidthNow);
+			    case 3:	{
 					if (allTreesOnPlane[treeCounter].deathCount && allTreesOnPlane[treeCounter].death2)
 					    drawTower(allTreesOnPlane[treeCounter].deathCount, allTreesOnPlane[treeCounter].death2);
 					else
 					    glCallList(powerTower);
-					glLineWidth(lineWidthNow);
+						}
 					break;
 			    case 4:	glPushAttrib(GL_LIGHTING_BIT);
 					if (detail <= 0)
@@ -2941,10 +2922,9 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
 					    }
 					glPopAttrib();
 					break;
-			    case 10:    glGetFloatv(GL_LINE_WIDTH, &lineWidthNow);
+			    case 10:{   
 					glCallList(building10Obj);
-					glLineWidth(lineWidthNow);
-					break;
+					}break;
 			    case 11:    glPushAttrib(GL_LIGHTING_BIT);
 					if (detail <= 0)
 					    glShadeModel(GL_FLAT);
@@ -3161,71 +3141,9 @@ void drawSlagTanks(struct tank * allSlags, int counter, int detail)
 void drawMaser(float sourceX, float sourceY, float sourceZ,
 		int shooter, float mX, float mZ, float mHeight, float mBottom, 
 		float r1, float r2, float r3, int width, int view, int detail)
+{
 
-    {
-    float beamLoc1[3],  beamLoc2[3];
-    GLfloat lineWidthNow;
-
-    beamLoc1[0] = sourceX;
-    beamLoc1[1] = sourceY;
-    beamLoc1[2] = sourceZ;
-
-    beamLoc2[0] = mX + r1;
-    beamLoc2[1] = 0.5 * (mHeight - mBottom) + mBottom + r2;
-    beamLoc2[2] = mZ + r3;
-
-    glGetFloatv(GL_LINE_WIDTH, &lineWidthNow);
-
-    /* if line widths are integral Mesa chokes in a large window */
-    if ((view == MONSTERVIEW) || (view == ARMYVIEW))
-	glLineWidth(width * 0.0057);
-    else
-	glLineWidth(width * 0.0029);
-    
-    
-    glColor3fv(colorwhite);
-
-    glBegin(GL_LINES);
-	glVertex3fv(beamLoc1);
-	glVertex3fv(beamLoc2);
-
-    glEnd();
-
-
-    switch(shooter)
-	{
-	case MASERTANK:	    glColor3fv(colormaserblue);
-			    break;
-			    
-	case CHH:	    glColor3fv(colormaseryellow);
-			    break;
-			    
-	case MECHAG:	    glColor3fv(colorred);
-			    break;
-			    
-	default:	    showError("Invalid Vehicle Type (drawMaser)");
-			    break;
-	}
-	
-    if (detail != -1)
-	glEnable(GL_BLEND);
-    
-    /* if line widths are integral Mesa chokes in a large window */
-    if ((view == MONSTERVIEW) || (view == ARMYVIEW))
-	glLineWidth(width * 0.011);
-    else
-	glLineWidth(width * 0.0057);
-
-    glBegin(GL_LINES);
-
-	glVertex3fv(beamLoc1);
-	glVertex3fv(beamLoc2);
-    glEnd();
-	
-    glDisable(GL_BLEND);
-
-    glLineWidth(lineWidthNow);
-    } 
+} 
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -3723,13 +3641,9 @@ void drawBeam(float x, float z, int horz, int vert, int monsterName,
     float * col;
     float R;
     register int i, nlines;
-    GLfloat lineWidthNow;
 
     GLint shadeNow;
-
     glGetIntegerv(GL_SHADE_MODEL, &shadeNow);
-
-    glGetFloatv(GL_LINE_WIDTH, &lineWidthNow);
     
     if (monsterName == FLUTTER)
 	col = colororange;
@@ -3741,8 +3655,6 @@ void drawBeam(float x, float z, int horz, int vert, int monsterName,
     /* draw beam                      */
     /**********************************/
 
-    /* if line widths are integral Mesa chokes in a large window */
-    glLineWidth(5.01);
 
     if (vert < 175)
 	R = 4;
@@ -3802,11 +3714,13 @@ void drawBeam(float x, float z, int horz, int vert, int monsterName,
 
 	c[1] = 0.5 + randy(0.5);
 	
-	glBegin(GL_LINES);
+	glBegin(GL_TRIANGLES);
 	    glColor3fv(c);
 	    glVertex3fv(loc2);
 	    glColor3fv(col);
 	    glVertex3fv(loc1);
+		glColor3fv(c);
+	    glVertex3fv(loc3);
 	glEnd();
 	}
 	
@@ -3822,13 +3736,13 @@ void drawBeam(float x, float z, int horz, int vert, int monsterName,
 	loc1[1] = SHADOWS;
 	loc3[1] = SHADOWS;
 
-	glBegin(GL_LINES);
+	glBegin(GL_TRIANGLES);
+	    glVertex3fv(loc2);
 	    glVertex3fv(loc1);
-	    glVertex3fv(loc3);
+		glVertex3fv(loc3);
 	glEnd();
 	}
 
-    glLineWidth(lineWidthNow);
     }
 
 
@@ -3861,9 +3775,6 @@ void drawRoads(struct road * roads, float xshift, float zshift,
     float xlinemin, xlinemax, zlinemin, zlinemax;
     float xlinemin2, xlinemax2, zlinemin2, zlinemax2; 
 
-    GLfloat lineWidthNow;
-    glGetFloatv(GL_LINE_WIDTH, &lineWidthNow);
-    
     xplus   = xshift + 0.252;
     xminus  = xshift - 0.252;
     zplus   = zshift + 0.252;
@@ -3900,9 +3811,6 @@ void drawRoads(struct road * roads, float xshift, float zshift,
 	    dprime = d-1;
 	else
 	    dprime = d;
-    
-	/* if line widths are integral Mesa chokes in a large window */
-	glLineWidth(1.01);
 	
 	glPushMatrix();
 	    glTranslatef(cprime, 0, dprime);
@@ -4095,7 +4003,6 @@ void drawRoads(struct road * roads, float xshift, float zshift,
 	glEnd();
 	}
 
-    glLineWidth(lineWidthNow);
     }
     
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -4117,9 +4024,6 @@ void drawProjectiles(struct projectile * allProjs, int counter,
     int beamCounter;
 
     static float beamhitx[MAXBEAMS], beamhitz[MAXBEAMS];
-
-    GLfloat lineWidthNow;
-    glGetFloatv(GL_LINE_WIDTH, &lineWidthNow);
 
     /***********************************/
     /* make standard projectile object */
@@ -4234,9 +4138,6 @@ void drawProjectiles(struct projectile * allProjs, int counter,
     
     glColor3fv(colorblack);
 
-    /* if line widths are integral Mesa chokes in a large window */
-    glLineWidth(2.01);
-
     v[1] = v2[1] = SHADOWS;
     
     v2[0] = beamhitx[0];
@@ -4249,9 +4150,10 @@ void drawProjectiles(struct projectile * allProjs, int counter,
 	
 	if ((fabs(v[0] - v2[0]) < 0.3) && (fabs(v[2] - v2[2]) < 0.3))
 	    {
-	    glBegin(GL_LINES);	
+	    glBegin(GL_TRIANGLES);	
 		glVertex3fv(v);
-		glVertex3fv(v2);	
+		glVertex3fv(v2);
+		glVertex3fv(v);
 	    glEnd();
 	    }
 	    
@@ -4259,7 +4161,7 @@ void drawProjectiles(struct projectile * allProjs, int counter,
 	v2[2] = v[2];	
 	}
 
-    glLineWidth(lineWidthNow);
+
     }
 
 

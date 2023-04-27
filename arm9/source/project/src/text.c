@@ -126,22 +126,15 @@ static float energyBar[4][3] = {
     pixtoSpace = 10.0 / winX;
 
     /* draw the energy bar */
-
-
     if (energy > (MAXLIFE / 3))
 	glColor3fv(healthGreen);
     else if (energy > (MAXLIFE / 10))
 	glColor3fv(colorbrown); 
     else
 	glColor3fv(colorred); 
-	
     energyBar[2][0] = energyBar[3][0] = energy / MAXLIFE * 3 - 4;
-
-    glPushAttrib(GL_POLYGON_BIT);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); 
-
-
-   glBegin(GL_QUADS);
+    
+	glBegin(GL_QUADS);
 	glVertex3fv(energyBar[0]);
 	glVertex3fv(energyBar[1]);
 	glVertex3fv(energyBar[2]);
@@ -149,17 +142,8 @@ static float energyBar[4][3] = {
     glEnd(); 
 
     energyBar[2][0] = energyBar[3][0] = -1;
-
-
-    glColor3fv(colorwhite);	
+	glColor3fv(colorblue);	
 	
-    glBegin(GL_LINE_LOOP);
-	glVertex3fv(energyBar[0]);
-	glVertex3fv(energyBar[1]);
-	glVertex3fv(energyBar[2]);
-	glVertex3fv(energyBar[3]);
-    glEnd(); 
-
     /************************************************/
     /* draw energy bar for any target on the screen */
     /************************************************/
@@ -198,7 +182,7 @@ static float energyBar[4][3] = {
 	    
 		glColor3fv(colorwhite);	
 		    
-		glBegin(GL_LINE_LOOP);
+		glBegin(GL_QUADS);
 		    glVertex3fv(energyBar[0]);
 		    glVertex3fv(energyBar[1]);
 		    glVertex3fv(energyBar[2]);
@@ -225,7 +209,6 @@ static float energyBar[4][3] = {
 	    }	
 	}
 	
-    glPopAttrib(); /* polygon drawing */
  
     glPushMatrix();
 	glTranslatef(-3.8,  4.45,  0);
@@ -288,7 +271,6 @@ void showScores(int itsChristmas, struct score* gscore, struct score* vscore,
     {
     char textString[256];
     struct monsterInfo tempMonster;
-    GLfloat lineWidthNow;
 
 static    float scoreBox[4][3] = {
 	-1,  0.42, 7.1,
@@ -356,9 +338,7 @@ glPushAttrib(GL_DEPTH_BUFFER_BIT);
     if (detail != -1)
 	glEnable(GL_DEPTH_TEST);
 
-    glGetFloatv(GL_LINE_WIDTH, &lineWidthNow);
-    glLineWidth(2.01);
-
+    
 	    
     glPushMatrix();
 	glTranslatef(-0.8,  0.14,  7.2);
@@ -384,9 +364,7 @@ glPushAttrib(GL_DEPTH_BUFFER_BIT);
 	drawFlutter(tempMonster, counter, itsChristmas, offsetX, OMNISCIENTVIEW, detail);
     glPopMatrix();
 
-    glLineWidth(lineWidthNow);
-
-
+    
     /*************/
     /* draw text */
     /*************/
@@ -980,8 +958,6 @@ void doOptions(struct monsterInfo monster, long xWin, int counter,
     {
     float pixtoSpace;
     struct monsterInfo tempMonster;
-    GLfloat lineWidthNow;
-
 
     static float optionsBox[4][3] = {
 	-0.85,  0.5, 7.1,
@@ -1073,9 +1049,6 @@ void doOptions(struct monsterInfo monster, long xWin, int counter,
     if (detail != -1)
 	glEnable(GL_DEPTH_TEST);
 
-    glGetFloatv(GL_LINE_WIDTH, &lineWidthNow);
-    glLineWidth(2.01);
-	    
     glPushMatrix();
 	glTranslatef(-.5,  0.25,  7.2);
 	glScalef(.25,  .25,  .25);
@@ -1101,8 +1074,6 @@ void doOptions(struct monsterInfo monster, long xWin, int counter,
     glPopMatrix();
 
     glPopAttrib();
-
-    glLineWidth(lineWidthNow);
    }
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -1121,7 +1092,6 @@ void doSummary(int monster,  int deadTime, long winX, int killtanks,
     float pixtoSpace;
     char resultString[15];
     char monsterString[40];
-    GLfloat lineWidthNow;
 
 static    float summaryBox[4][3] = {
 	-0.97,  0.25,  7.0,
@@ -1311,9 +1281,6 @@ static    float summaryBox[4][3] = {
     if (detail != -1)
 	glEnable(GL_DEPTH_TEST);
 
-    glGetFloatv(GL_LINE_WIDTH, &lineWidthNow);
-    glLineWidth(2.01);
-
     if (killfighters > 0)
 	{
 	glPushMatrix();
@@ -1406,5 +1373,4 @@ static    float summaryBox[4][3] = {
 
     glPopAttrib();
 
-    glLineWidth(lineWidthNow);
     }

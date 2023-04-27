@@ -33,13 +33,9 @@
 #endif
 
 #ifdef DEBUG
-   
-
     #define MEMWATCH
     #define MEMWATCH_STDIO
-    
     #include "memwatch.h"
-
 #endif
 
 #define RECONNECT_TIME		15
@@ -65,8 +61,6 @@
 /* #define MACVERSION */
 /* #define DEBUG */
 
-
-//#include <gl/GL.h>
 #include <gl/freeglut.h>
 #include "GL/glu.h"
 #include <sys/types.h>
