@@ -1363,8 +1363,7 @@ GLint strokeFont[][1+MAX_STROKES*3] = {
 
 GLenum CreateStrokeFont(GLuint fontBase)
 {
-	#ifdef WIN32
-    GLint mode, i, j;
+	GLint mode, i, j;
     for (i = 0; strokeFont[i][0] != END_OF_LIST; i++) {
 	glNewList(fontBase+(unsigned int)strokeFont[i][0], GL_COMPILE);
 	for (j = 1; mode = strokeFont[i][j]; j += 3) {
@@ -1387,18 +1386,11 @@ GLenum CreateStrokeFont(GLuint fontBase)
 	glEndList();
     }
     return GL_TRUE;
-	#endif
-	#ifdef ARM9
-	return GL_FALSE;
-	#endif
 }
 
 
 void DrawStr(GLuint base, char *str)
 {
-
-    glPushAttrib(GL_LIST_BIT);
     glListBase(base);
     glCallLists(strlen(str), GL_UNSIGNED_BYTE, (unsigned char *)str);
-    glPopAttrib();
 }

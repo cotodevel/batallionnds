@@ -859,8 +859,6 @@ void drawFlutter(struct monsterInfo monster, int counter,
 
 	if (!monster.monsterIsDead)
 	    {
-	    glPushAttrib(GL_DEPTH_BUFFER_BIT);
-	    glPushAttrib(GL_COLOR_BUFFER_BIT);
 	    
 	    if (thaView == MONSTERVIEW)
 		{
@@ -870,9 +868,6 @@ void drawFlutter(struct monsterInfo monster, int counter,
 		}
     
 	    glCallList(flutterShadow); 
-		
-	    glPopAttrib();
-	    glPopAttrib();
 	    }
 
    
@@ -2871,7 +2866,7 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
 					    glCallList(powerTower);
 						}
 					break;
-			    case 4:	glPushAttrib(GL_LIGHTING_BIT);
+			    case 4:	
 					if (detail <= 0)
 					    {
 					    glShadeModel(GL_FLAT);
@@ -2882,7 +2877,6 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
 					    glShadeModel(GL_SMOOTH);
 					    drawCoolingTower(detail);    /* cooling tower */
 					    }
-					glPopAttrib();
 					break;
 			    case 5:	if (detail == 0)	 /* home */
 					    glCallList(building5ObjD0);
@@ -2895,7 +2889,7 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
 					break;
 			    case 8:	drawBuilding8(colorbeige,  colorbrown, detail);
 					break;
-			    case 9:	glPushAttrib(GL_LIGHTING_BIT);
+			    case 9:	
 					if (detail < 0)
 					    {
 					    glShadeModel(GL_FLAT);
@@ -2911,18 +2905,16 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
 					    glShadeModel(GL_SMOOTH);
 					    glCallList(building9Obj);	    /*water tower*/
 					    }
-					glPopAttrib();
 					break;
 			    case 10:{   
 					glCallList(building10Obj);
 					}break;
-			    case 11:    glPushAttrib(GL_LIGHTING_BIT);
+			    case 11:    
 					if (detail <= 0)
 					    glShadeModel(GL_FLAT);
 					else
 					    glShadeModel(GL_SMOOTH);
 					drawBuilding11(detail);		    /* factory smokestacks*/
-					glPopAttrib();
 					break;
 			    case 12:    if (detail == 0)
 					    glCallList(building12ObjD0);

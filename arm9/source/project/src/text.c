@@ -119,7 +119,6 @@ static float energyBar[4][3] = {
 	 0.0, 4.39, 0.0, 
 	 0.0, 4.81, 0.0};
 
-    glPushAttrib(GL_DEPTH_BUFFER_BIT);
     
     glDisable(GL_DEPTH_TEST);
 
@@ -259,7 +258,6 @@ static float energyBar[4][3] = {
 
 	}
 	
-    glPopAttrib();
     }   
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -278,7 +276,6 @@ static    float scoreBox[4][3] = {
 	 1, -0.6, 7.1, 
 	 1,  0.42, 7.1};
 
-glPushAttrib(GL_DEPTH_BUFFER_BIT);
 
     /***********************************/
     /* these monsters are always alive */
@@ -528,8 +525,6 @@ glPushAttrib(GL_DEPTH_BUFFER_BIT);
 	    DrawStr(strokeBase, textString);
 	glPopMatrix();
 	}
-
-    glPopAttrib();
     }
     
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -545,7 +540,6 @@ void showCityName(char* name, int detail)
 	 0.6, -0.4, 7.1, 
 	 0.6,  0.4, 7.1};
 
-glPushAttrib(GL_DEPTH_BUFFER_BIT);
 
         	
     /*************************************/
@@ -603,9 +597,6 @@ glPushAttrib(GL_DEPTH_BUFFER_BIT);
 	DrawStr(strokeBase, name);
     glPopMatrix();
 
-
-
-    glPopAttrib();
     }
     
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -621,9 +612,6 @@ void showText2(long winX, int soundOn, int noSound, int musicOn,
     float right;
     int garbage;
 
-
-
-    glPushAttrib(GL_DEPTH_BUFFER_BIT);
     
     pixtoSpace = 3.0/ winX;
           
@@ -872,8 +860,6 @@ void showText2(long winX, int soundOn, int noSound, int musicOn,
 
     glPopMatrix();
 #endif
-
-    glPopAttrib();
     }
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -895,12 +881,10 @@ void showText3(int detail)
 	glCallList(titleObjOO);
     else if (detail == -1)
 	{
-	glPushAttrib(GL_POLYGON_BIT);
+
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	
 	glCallList(titleObjOOO);
-	
-	glPopAttrib();
 	}
 	
     glColor3fv(colorwhite); 
@@ -919,7 +903,6 @@ void showText3(int detail)
     /* print version number */
     /************************/
 
-	    glPushAttrib(GL_DEPTH_BUFFER_BIT);
 		glDisable(GL_DEPTH_TEST);
 
     glPushMatrix();
@@ -927,8 +910,6 @@ void showText3(int detail)
 	glScalef(0.75, 0.75, 1);
 	DrawStr(strokeBase,  str_version);
     glPopMatrix();
-
-glPopAttrib();
    }
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -965,7 +946,6 @@ void doOptions(struct monsterInfo monster, long xWin, int counter,
 	 0.85, -1.0, 7.1, 
 	 0.85,  0.5, 7.1};
 
-    glPushAttrib(GL_DEPTH_BUFFER_BIT);
  
     /***********************************/
     /* these monsters are always alive */
@@ -1072,8 +1052,6 @@ void doOptions(struct monsterInfo monster, long xWin, int counter,
 	glScalef(.25,  .25,  .25);
 	drawFlutter(tempMonster, counter, itsChristmas, offsetX, OMNISCIENTVIEW, detail);
     glPopMatrix();
-
-    glPopAttrib();
    }
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -1098,8 +1076,6 @@ static    float summaryBox[4][3] = {
 	-0.97, -1.05,  7.0,
 	 0.97, -1.05,  7.0, 
 	 0.97,  0.25,  7.0};
-
-    glPushAttrib(GL_DEPTH_BUFFER_BIT);
 
     pixtoSpace = 2.0 / winX;
 
@@ -1370,7 +1346,4 @@ static    float summaryBox[4][3] = {
 	    drawHeroDude2(100, counter, 0, 0, detail);
 	glPopMatrix();
 	}
-
-    glPopAttrib();
-
     }

@@ -1634,10 +1634,8 @@ void doDrawing (int eyeball)
 	{
 	if (lod == -1)
 	    {
-	    glPushAttrib(GL_POLYGON_BIT);
 	    glPolygonMode(GL_FRONT_AND_BACK,GL_POINT); 
 	    drawBooms(projectboom, lod);
-	    glPopAttrib();
 	    }
 	else
 	    drawBooms(projectboom, lod);
@@ -1671,10 +1669,8 @@ void doDrawing (int eyeball)
 	{
 	if (lod == -1)
 	    {
-	    glPushAttrib(GL_POLYGON_BIT);
 	    glPolygonMode(GL_FRONT_AND_BACK,GL_POINT); 
 	    drawBooms(projectboom, lod);
-	    glPopAttrib();
 	    }
 	else
 	    drawBooms(projectboom, lod);
