@@ -59,13 +59,13 @@ __attribute__((optnone))
 #endif
 #endif
 void setupDLEnableDisable2DTextures(){
-	DLDUMMY=glGenLists(2, USERSPACE_TGDS_OGL_DL_POINTER);									// Generate Different Lists
-	glNewList(DLDUMMY,GL_COMPILE, USERSPACE_TGDS_OGL_DL_POINTER);							// 1: enable_2D_texture()
+	DLDUMMY=glGenLists(2);									// Generate Different Lists
+	glNewList(DLDUMMY,GL_COMPILE);							// 1: enable_2D_texture()
 	{
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT, USERSPACE_TGDS_OGL_DL_POINTER);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT, USERSPACE_TGDS_OGL_DL_POINTER);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR, USERSPACE_TGDS_OGL_DL_POINTER);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR, USERSPACE_TGDS_OGL_DL_POINTER);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
         GLfloat light_ambient[]  = { 0.0f, 0.0f, 0.0f, 1.0f };
         GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -77,24 +77,24 @@ void setupDLEnableDisable2DTextures(){
         GLfloat mat_specular[]   = { 1.0f, 1.0f, 1.0f, 1.0f };
         GLfloat high_shininess[] = { 0.0f };
 
-        glLightfv(GL_LIGHT0, GL_AMBIENT,  light_ambient, USERSPACE_TGDS_OGL_DL_POINTER);
-        glLightfv(GL_LIGHT0, GL_DIFFUSE,  light_diffuse, USERSPACE_TGDS_OGL_DL_POINTER);
-        glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular, USERSPACE_TGDS_OGL_DL_POINTER);
-        glLightfv(GL_LIGHT0, GL_POSITION, light_position, USERSPACE_TGDS_OGL_DL_POINTER);
+        glLightfv(GL_LIGHT0, GL_AMBIENT,  light_ambient);
+        glLightfv(GL_LIGHT0, GL_DIFFUSE,  light_diffuse);
+        glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+        glLightfv(GL_LIGHT0, GL_POSITION, light_position);
     
-        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,   mat_ambient, USERSPACE_TGDS_OGL_DL_POINTER);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,   mat_diffuse, USERSPACE_TGDS_OGL_DL_POINTER);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  mat_specular, USERSPACE_TGDS_OGL_DL_POINTER);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, high_shininess, USERSPACE_TGDS_OGL_DL_POINTER);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,   mat_ambient);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,   mat_diffuse);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  mat_specular);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, high_shininess);
 	}
-	glEndList(USERSPACE_TGDS_OGL_DL_POINTER);
+	glEndList();
 	DLDUMMY2=DLDUMMY+1;										
-	glNewList(DLDUMMY2,GL_COMPILE, USERSPACE_TGDS_OGL_DL_POINTER);							// 2: disable_2D_texture()
+	glNewList(DLDUMMY2,GL_COMPILE);							// 2: disable_2D_texture()
 	{
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT, USERSPACE_TGDS_OGL_DL_POINTER);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT, USERSPACE_TGDS_OGL_DL_POINTER);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR, USERSPACE_TGDS_OGL_DL_POINTER);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR, USERSPACE_TGDS_OGL_DL_POINTER);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
         GLfloat light_ambient[]  = { 0.0f, 0.0f, 0.0f, 1.0f };
         GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -106,17 +106,17 @@ void setupDLEnableDisable2DTextures(){
         GLfloat mat_specular[]   = { 1.0f, 1.0f, 1.0f, 1.0f };
         GLfloat high_shininess[] = { 100.0f };
 
-        glLightfv(GL_LIGHT0, GL_AMBIENT,  light_ambient, USERSPACE_TGDS_OGL_DL_POINTER);
-        glLightfv(GL_LIGHT0, GL_DIFFUSE,  light_diffuse, USERSPACE_TGDS_OGL_DL_POINTER);
-        glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular, USERSPACE_TGDS_OGL_DL_POINTER);
-        glLightfv(GL_LIGHT0, GL_POSITION, light_position, USERSPACE_TGDS_OGL_DL_POINTER);
+        glLightfv(GL_LIGHT0, GL_AMBIENT,  light_ambient);
+        glLightfv(GL_LIGHT0, GL_DIFFUSE,  light_diffuse);
+        glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+        glLightfv(GL_LIGHT0, GL_POSITION, light_position);
     
-        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,   mat_ambient, USERSPACE_TGDS_OGL_DL_POINTER);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,   mat_diffuse, USERSPACE_TGDS_OGL_DL_POINTER);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  mat_specular, USERSPACE_TGDS_OGL_DL_POINTER);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, high_shininess, USERSPACE_TGDS_OGL_DL_POINTER);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,   mat_ambient);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,   mat_diffuse);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  mat_specular);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, high_shininess);
 	}
-	glEndList(USERSPACE_TGDS_OGL_DL_POINTER);
+	glEndList();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////

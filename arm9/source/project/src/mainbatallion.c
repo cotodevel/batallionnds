@@ -6228,32 +6228,13 @@ int InitGL()
 	
 	glClearColor(255,255,255);		// White Background
 	glClearDepth(0x7FFF);		// Depth Buffer Setup
-	glEnable(GL_ANTIALIAS
-#ifdef ARM9
-		, USERSPACE_TGDS_OGL_DL_POINTER
-#endif
-	);
-	glEnable(GL_TEXTURE_2D
-#ifdef ARM9
-		, USERSPACE_TGDS_OGL_DL_POINTER
-#endif
-	); // Enable Texture Mapping 
-	glEnable(GL_BLEND
-#ifdef ARM9
-		, USERSPACE_TGDS_OGL_DL_POINTER
-#endif
-	);
-	glDisable(GL_LIGHT0|GL_LIGHT1
-#ifdef ARM9
-		, USERSPACE_TGDS_OGL_DL_POINTER
-#endif
-	);
-	glEnable(GL_LIGHT0|GL_LIGHT1
-#ifdef ARM9
-		, USERSPACE_TGDS_OGL_DL_POINTER
-#endif
-	); //light #1 & #2 enabled per scene
+	glEnable(GL_ANTIALIAS);
+	glEnable(GL_TEXTURE_2D); // Enable Texture Mapping 
+	glEnable(GL_BLEND);
+	glDisable(GL_LIGHT0|GL_LIGHT1);
+	glEnable(GL_LIGHT0|GL_LIGHT1); //light #1 & #2 enabled per scene
 	
+	setupDLEnableDisable2DTextures();
 	return 0;				
 }
 
@@ -6272,16 +6253,16 @@ GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize Th
 		height=1;										// Making Height Equal One
 	}
 
-	glViewport(0,0,width,height, USERSPACE_TGDS_OGL_DL_POINTER);						// Reset The Current Viewport
+	glViewport(0,0,width,height);						// Reset The Current Viewport
 
-	glMatrixMode(GL_PROJECTION, USERSPACE_TGDS_OGL_DL_POINTER);						// Select The Projection Matrix
-	glLoadIdentity(USERSPACE_TGDS_OGL_DL_POINTER);									// Reset The Projection Matrix
+	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
+	glLoadIdentity();									// Reset The Projection Matrix
 
 	// Calculate The Aspect Ratio Of The Window
-	gluPerspective(45.0f,(GLfloat)width/(GLfloat)height,0.1f,100.0f, USERSPACE_TGDS_OGL_DL_POINTER);
+	gluPerspective(45.0f,(GLfloat)width/(GLfloat)height,0.1f,100.0f);
 
-	glMatrixMode(GL_MODELVIEW, USERSPACE_TGDS_OGL_DL_POINTER);							// Select The Modelview Matrix
-	glLoadIdentity(USERSPACE_TGDS_OGL_DL_POINTER);									// Reset The Modelview Matrix
+	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
+	glLoadIdentity();									// Reset The Modelview Matrix
 }
 #endif
 
@@ -6315,51 +6296,23 @@ void drawSphere(float r, int lats, int longs) {
 		double lat1 = M_PI * (-0.5 + (double)i / lats);
 		double z1 = sin(lat1);
 		double zr1 = cos(lat1);
-		glBegin(GL_QUAD_STRIP
-#ifdef ARM9
-			, USERSPACE_TGDS_OGL_DL_POINTER
-#endif
-		);
+		glBegin(GL_QUAD_STRIP);
 		for (j = 0; j <= longs; j++) {
 			double lng = 2 * M_PI * (double)(j - 1) / longs;
 			double x = cos(lng);
 			double y = sin(lng);
 
-			glNormal3f(x * zr0, y * zr0, z0
-#ifdef ARM9
-				, USERSPACE_TGDS_OGL_DL_POINTER
-#endif
-			);
-			glVertex3f(r * x * zr0, r * y * zr0, r * z0
-#ifdef ARM9
-				, USERSPACE_TGDS_OGL_DL_POINTER
-#endif
-			);
-			glNormal3f(x * zr1, y * zr1, z1
-#ifdef ARM9
-				, USERSPACE_TGDS_OGL_DL_POINTER
-#endif
-			);
-			glVertex3f(r * x * zr1, r * y * zr1, r * z1
-#ifdef ARM9
-				, USERSPACE_TGDS_OGL_DL_POINTER
-#endif
-			);
+			glNormal3f(x * zr0, y * zr0, z0);
+			glVertex3f(r * x * zr0, r * y * zr0, r * z0);
+			glNormal3f(x * zr1, y * zr1, z1);
+			glVertex3f(r * x * zr1, r * y * zr1, r * z1);
 		}
-		glEnd(
-#ifdef ARM9
-			USERSPACE_TGDS_OGL_DL_POINTER
-#endif
-		);
+		glEnd();
 	}
 	#endif
 
 	#ifdef ARM9
-	glScalef(r, r, r
-#ifdef ARM9
-		, USERSPACE_TGDS_OGL_DL_POINTER
-#endif
-	);
+	glScalef(r, r, r);
 	// Execute the display list
     glCallListGX((u32*)&Sphere008); //comment out when running on NDSDisplayListUtils
 	#endif
@@ -6375,32 +6328,16 @@ void drawCircle(GLfloat x, GLfloat y, GLfloat r, GLfloat BALL_RADIUS)
 	GLfloat lastX = 1;
 	GLfloat lastY = 0;
 	int c = 0; 
-	#ifdef _MSC_VER
 	glBegin(GL_TRIANGLE_STRIP);
-	#endif
-	#ifdef ARM9
-	glBegin(GL_TRIANGLE_STRIP, USERSPACE_TGDS_OGL_DL_POINTER);
-	#endif
 	for (c = 1; c < SLICES_PER_CIRCLE; c++)
 	{
 		x = lastX * anglex - lastY * angley;
 		y = lastX * angley + lastY * anglex;
-		#ifdef _MSC_VER
 		glVertex2f(x * BALL_RADIUS, y * BALL_RADIUS);
-		#endif
-		#ifdef ARM9
-		glVertex2f(x * BALL_RADIUS, y * BALL_RADIUS, USERSPACE_TGDS_OGL_DL_POINTER);
-		#endif
 		lastX = x;
 		lastY = y;
 	}
-
-	#ifdef _MSC_VER
 	glEnd();
-	#endif
-	#ifdef ARM9
-	glEnd(USERSPACE_TGDS_OGL_DL_POINTER);
-	#endif
 }
 
 
@@ -6418,38 +6355,13 @@ void drawCylinder(int numMajor, int numMinor, float height, float radius){
 			double a = j * minorStep;
 			GLfloat x = radius * cos(a);
 			GLfloat y = radius * sin(a);
-			glNormal3f(x / radius, y / radius, 0.0
-#ifdef ARM9
-		, USERSPACE_TGDS_OGL_DL_POINTER
-#endif
-			);
+			glNormal3f(x / radius, y / radius, 0.0);
 			
-			glTexCoord2f(j / (GLfloat) numMinor, i / (GLfloat) numMajor
-#ifdef ARM9
-		, USERSPACE_TGDS_OGL_DL_POINTER
-#endif
-			);
-			glVertex3f(x, y, z0
-#ifdef ARM9
-		, USERSPACE_TGDS_OGL_DL_POINTER
-#endif
-			);
-
-			glNormal3f(x / radius, y / radius, 0.0
-#ifdef ARM9
-		, USERSPACE_TGDS_OGL_DL_POINTER
-#endif
-			);
-			glTexCoord2f(j / (GLfloat) numMinor, (i + 1) / (GLfloat) numMajor
-#ifdef ARM9
-		, USERSPACE_TGDS_OGL_DL_POINTER
-#endif
-			);
-			glVertex3f(x, y, z1
-#ifdef ARM9
-		, USERSPACE_TGDS_OGL_DL_POINTER
-#endif
-			);
+			glTexCoord2f(j / (GLfloat) numMinor, i / (GLfloat) numMajor);
+			glVertex3f(x, y, z0);
+			glNormal3f(x / radius, y / radius, 0.0);
+			glTexCoord2f(j / (GLfloat) numMinor, (i + 1) / (GLfloat) numMajor);
+			glVertex3f(x, y, z1);
 		}
 		//glEnd();
 	}
