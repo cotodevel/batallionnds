@@ -119,9 +119,6 @@ static float energyBar[4][3] = {
 	 0.0, 4.39, 0.0, 
 	 0.0, 4.81, 0.0};
 
-    
-    glDisable(GL_DEPTH_TEST);
-
     pixtoSpace = 10.0 / winX;
 
     /* draw the energy bar */
@@ -292,8 +289,6 @@ static    float scoreBox[4][3] = {
 
     glColor4fv(colorbrown);
 
-    glDisable(GL_DEPTH_TEST);
-
     if (detail == -1)
 	{
 	glBegin(GL_QUADS);
@@ -332,11 +327,6 @@ static    float scoreBox[4][3] = {
     /* draw monsters */
     /*****************/
 
-    if (detail != -1)
-	glEnable(GL_DEPTH_TEST);
-
-    
-	    
     glPushMatrix();
 	glTranslatef(-0.8,  0.14,  7.2);
 	glScalef(.2,  .2,  .2);
@@ -368,13 +358,10 @@ static    float scoreBox[4][3] = {
 
     glColor3fv(colorwhite); 
 
-   glDisable(GL_DEPTH_TEST);
-
     glPushMatrix();
 	glTranslatef(-2,  1.4,  0);
 	DrawStr(strokeBase, str_highscores);
     glPopMatrix();
-
 
     /*************************************/
 
@@ -545,10 +532,8 @@ void showCityName(char* name, int detail)
     /*************************************/
     /* draw transparent brown background  */
     /*************************************/
-
-    glColor4fv(colorbrown);
-
-    glDisable(GL_DEPTH_TEST);
+	
+	glColor4fv(colorbrown);
 
     if (detail == -1)
 	{
@@ -590,7 +575,7 @@ void showCityName(char* name, int detail)
 
     glColor3fv(colorwhite); 
 
-   glDisable(GL_DEPTH_TEST);
+   
 
     glPushMatrix();
 	glTranslatef(-1.2,  0,  0);
@@ -614,9 +599,6 @@ void showText2(long winX, int soundOn, int noSound, int musicOn,
 
     
     pixtoSpace = 3.0/ winX;
-          
-    glDisable(GL_DEPTH_TEST);
-
 
     if (itsChristmas)
 	glColor3fv(planeGreen); 
@@ -876,15 +858,11 @@ void showText3(int detail)
     /************************/
 
     if (detail > 0)
-	glCallList(titleObj);
+		glCallList(titleObj);
     else if (detail == 0)
-	glCallList(titleObjOO);
-    else if (detail == -1)
-	{
-
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	
-	glCallList(titleObjOOO);
+		glCallList(titleObjOO);
+    else if (detail == -1){
+		glCallList(titleObjOOO);
 	}
 	
     glColor3fv(colorwhite); 
@@ -902,9 +880,6 @@ void showText3(int detail)
     /************************/
     /* print version number */
     /************************/
-
-		glDisable(GL_DEPTH_TEST);
-
     glPushMatrix();
 	glTranslatef(3.5,  -5.1,  0);
 	glScalef(0.75, 0.75, 1);
@@ -959,9 +934,6 @@ void doOptions(struct monsterInfo monster, long xWin, int counter,
     /*************************************/
     /* draw transparent brown background */
     /*************************************/
-
-    glDisable(GL_DEPTH_TEST);
-
     glColor4fv(colorbrown);
 
     if (detail <= 0)
@@ -1026,9 +998,6 @@ void doOptions(struct monsterInfo monster, long xWin, int counter,
     /* draw monsters */
     /*****************/
 
-    if (detail != -1)
-	glEnable(GL_DEPTH_TEST);
-
     glPushMatrix();
 	glTranslatef(-.5,  0.25,  7.2);
 	glScalef(.25,  .25,  .25);
@@ -1080,8 +1049,6 @@ static    float summaryBox[4][3] = {
     pixtoSpace = 2.0 / winX;
 
     angle = (deadTime * 10) % 3600;
-
-    glDisable(GL_DEPTH_TEST);
 
     glColor4fv(colorbrown);
     
@@ -1253,9 +1220,6 @@ static    float summaryBox[4][3] = {
 		DrawStr(strokeBase, textline);
     glPopMatrix();
 	}
-
-    if (detail != -1)
-	glEnable(GL_DEPTH_TEST);
 
     if (killfighters > 0)
 	{

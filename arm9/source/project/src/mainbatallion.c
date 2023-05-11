@@ -393,14 +393,12 @@ void clearAll()
 
 void goToHighDetail()
 {
-    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-    glEnable(GL_DEPTH_TEST);
+    
 }
     
 void goToLowDetail()
 {
-    glPolygonMode(GL_FRONT_AND_BACK,GL_LINE); 
-    glDisable(GL_DEPTH_TEST);
+    
 }
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -1119,49 +1117,22 @@ void initialization()
     /* set up the graphics              */
     /************************************/
 
-    glHint(GL_LINE_SMOOTH_HINT, GL_FASTEST); 
-    glHint(GL_POLYGON_SMOOTH_HINT, GL_FASTEST); 
-    glHint(GL_POINT_SMOOTH_HINT, GL_FASTEST); 
-
     glFogi(GL_FOG_MODE,  GL_LINEAR);
     glFogfv(GL_FOG_COLOR, fogColor);
     
-    glDisable(GL_POINT_SMOOTH);
-    glDisable(GL_LINE_SMOOTH);
-    glDisable(GL_POLYGON_SMOOTH);
-
-    glDisable(GL_ALPHA_TEST);
-    glDisable(GL_AUTO_NORMAL);
     glDisable(GL_BLEND);
-    glDisable(GL_COLOR_MATERIAL);
     glDisable(GL_LIGHTING);
-    glDisable(GL_LINE_STIPPLE);
-    glDisable(GL_NORMALIZE);
-    glDisable(GL_POLYGON_STIPPLE);
-
-    glDisable(GL_FOG);
+    glEnable(GL_FOG);
     
-    glCullFace(GL_BACK);
-    glEnable(GL_CULL_FACE);
-
-
     /* this helps zbuffering in mesa */
-
-    glDepthRange(0,1);
-    glDepthFunc(GL_LEQUAL);
-
-    glPointSize(2);
-    goToHighDetail();
-    
-    glMatrixMode(GL_MODELVIEW);
-
-    glClearDepth(1);
+	goToHighDetail();
+	glMatrixMode(GL_MODELVIEW);
+	glClearDepth(1);
     glClearColor(0.8, 0.8, 1.0, 1);
     
-    glBlendFunc(GL_SRC_ALPHA,  GL_ONE_MINUS_SRC_ALPHA);
-
-    glDrawBuffer(GL_BACK); 
-    
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	
      /**************************/
     /* stereo stuff           */
     /**************************/
@@ -1520,13 +1491,6 @@ void doDrawing (int eyeball)
 	glShadeModel(GL_FLAT);
 	
 
-    /****************************************************************/
-    /* MUST enable dithering or the 8-bit machines look REALLY ugly */
-    /****************************************************************/
-    
-    glEnable(GL_DITHER);
-
-
     glPushMatrix();
 
     /**********************************/
@@ -1552,13 +1516,8 @@ void doDrawing (int eyeball)
     if (yrot != 0)
     	glRotatef(0.1 * yrot, 0,1,0);
 
-    glDisable(GL_DEPTH_TEST);
-
     drawBattlefield(roadSystem, globalxshift, globalzshift, lod,
 		itsChristmas, view);
-
-    if (lod != -1)   
-	glEnable(GL_DEPTH_TEST);
 
     /**********************************/
     /* draw the slagging vehicles     */
@@ -1634,7 +1593,6 @@ void doDrawing (int eyeball)
 	{
 	if (lod == -1)
 	    {
-	    glPolygonMode(GL_FRONT_AND_BACK,GL_POINT); 
 	    drawBooms(projectboom, lod);
 	    }
 	else
@@ -1669,7 +1627,6 @@ void doDrawing (int eyeball)
 	{
 	if (lod == -1)
 	    {
-	    glPolygonMode(GL_FRONT_AND_BACK,GL_POINT); 
 	    drawBooms(projectboom, lod);
 	    }
 	else
@@ -5428,8 +5385,7 @@ static void doDisplay(void)
 	if (doBigClear)
 	    {
 	    glViewport(0,  0, XMAXSCREEN+1, YMAXSCREEN+1);
-	    glScissor(0,  0, XMAXSCREEN+1, YMAXSCREEN+1);
-
+	    
 	    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	    doBigClear -= 1;
 	    }
@@ -5441,11 +5397,7 @@ static void doDisplay(void)
 	    (short) (YMAXSTEREO/2 - Height3d),
 	    ( (short) (XMAXSCREEN/2 + Width3d))-((short) (XMAXSCREEN/2 - Width3d))+1, 
 	    ( (short) (YMAXSTEREO/2 + Height3d))-( (short) (YMAXSTEREO/2 - Height3d))+1);
-	    
-	glScissor((short) (XMAXSCREEN/2 - Width3d),  (short) (YMAXSTEREO/2 - Height3d),
-	    ( (short) (XMAXSCREEN/2 + Width3d))-((short) (XMAXSCREEN/2 - Width3d))+1,
-	    ( (short) (YMAXSTEREO/2 + Height3d))-( (short) (YMAXSTEREO/2 - Height3d))+1);
-
+	
 	glClear(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
 
 	doDrawing(0);
@@ -5455,10 +5407,6 @@ static void doDisplay(void)
 	    ( (short) (XMAXSCREEN/2 + Width3d))-((short) (XMAXSCREEN/2 - Width3d))+1, 
 	    ((short) (YOFFSET+YMAXSTEREO/2 + Height3d))-( (short) (YOFFSET+YMAXSTEREO/2 - Height3d))+1);
 	
-	glScissor((short) (XMAXSCREEN/2 - Width3d),  (short) (YOFFSET+YMAXSTEREO/2 - Height3d),
-	    ( (short) (XMAXSCREEN/2 + Width3d))-((short) (XMAXSCREEN/2 - Width3d))+1,
-	    ((short) (YOFFSET+YMAXSTEREO/2 + Height3d))-( (short) (YOFFSET+YMAXSTEREO/2 - Height3d))+1);
-
 	glClear(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
 
 	doDrawing(1);
@@ -6203,8 +6151,6 @@ int main(int argc, char **argv)
     // Init openGL and game parameters
 	initialization();
 	setPlayConditions();
-	
-
 	
      // start the main loop
 	glutMainLoop();

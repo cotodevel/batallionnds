@@ -288,8 +288,6 @@ void drawClosedCylinder(float * outcol, float * topcol, int top, int detail){
 	GLint shadeNow;
     long backNow;
     glGetIntegerv(GL_SHADE_MODEL, &shadeNow);
-    backNow = glIsEnabled(GL_CULL_FACE);    
-    glDisable(GL_CULL_FACE);
     
     switch (detail){
 		case 2:	    drawCylinder(*outcol, *topcol, MORECYLINDERSIDES, top);
@@ -300,12 +298,6 @@ void drawClosedCylinder(float * outcol, float * topcol, int top, int detail){
 		break;
 	}
 	
-    if (backNow){
-		glEnable(GL_CULL_FACE);
-	}
-	else{
-		glDisable(GL_CULL_FACE);
-	}
     glShadeModel(shadeNow);
 }
 
@@ -408,25 +400,18 @@ void drawCone(float * outcol, float * topcol, float radius, int nsides, int top)
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
 void drawClosedCone(float * outcol, float * topcol,  int top)
-    {
+{
     GLint shadeNow;
     long backNow;
     
     glGetIntegerv(GL_SHADE_MODEL, &shadeNow);
-    backNow = glIsEnabled(GL_CULL_FACE);
 
     glShadeModel(GL_SMOOTH);
-    glDisable(GL_CULL_FACE);
  
     drawCone(outcol,  topcol,  1, MORECYLINDERSIDES,  top);
 	
-    if (backNow)
-	glEnable(GL_CULL_FACE);
-    else
-	glDisable(GL_CULL_FACE);
-	
     glShadeModel(shadeNow);
-     }
+}
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/

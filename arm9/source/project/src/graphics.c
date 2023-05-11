@@ -1950,8 +1950,6 @@ void drawBuilding25(){
     float sat3[3] = { 0.35, 0.0,  0.0};
     float sat4[3] = {-0.35, 0.0,  0.0};
 
-    backNow = glIsEnabled(GL_CULL_FACE);
-
     /* shadow */
     
     glColor3fv(colorblack);
@@ -1976,7 +1974,6 @@ void drawBuilding25(){
     glColor3fv(colorwhite);
     
     glPushMatrix();
-	glDisable(GL_CULL_FACE);
 	
 	glTranslatef(0,  .4,   0);
 	glRotatef(-45, 1, 0, 0);
@@ -1984,11 +1981,6 @@ void drawBuilding25(){
 	drawCircle(32, 1, 0., 0.35); //gluDisk( qobj, 0.,   0.35, 32, 1);
 	
     glPopMatrix();
-
-    if (backNow)
-	glEnable(GL_CULL_FACE);
-    else
-	glDisable(GL_CULL_FACE);
 
     glPushMatrix();	
 
@@ -3374,7 +3366,6 @@ void drawHeroWeapon(float targetx, float targetz, float x, float y,
     GLint shadeNow;
     
     glGetIntegerv(GL_SHADE_MODEL, &shadeNow);
-    backNow = glIsEnabled(GL_CULL_FACE);
     
     rad = sqrt(x * x + z * z);
     
@@ -3396,7 +3387,6 @@ void drawHeroWeapon(float targetx, float targetz, float x, float y,
     midPoint = 0.5 * (height - bottom) + bottom;
     
     glShadeModel(GL_SMOOTH);
-    glDisable(GL_CULL_FACE);
     
     glBegin(GL_QUADS);
 	glColor3fv(color);
@@ -3441,11 +3431,6 @@ void drawHeroWeapon(float targetx, float targetz, float x, float y,
 	loc2[1] = midPoint + 0.02;
 	glVertex3fv(loc2);
     glEnd();
-	
-    if (backNow)
-	glEnable(GL_CULL_FACE);
-    else
-	glDisable(GL_CULL_FACE);
 	
     glShadeModel(shadeNow);
     }
