@@ -883,8 +883,6 @@ void showScores(int, struct score*, struct score*, struct score*, struct score*,
  * holds the higher level graphics routines
  *****************************************/
 
-void doTexStuff(char *, char *, int, int, GLuint *, int, int);
-
 void makeObjects(char *);
 
 void drawShadow (float, float, float, float);

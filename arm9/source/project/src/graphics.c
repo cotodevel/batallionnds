@@ -11,9 +11,6 @@
 /***********************************************************************/
 /* code modified in 2004 release. Textures are loaded from TGA files   */
 /* tgaload.c implements all neccessary functions.                      */
-/* doTexStuff is no longer used                                        */
-/* from the original file graphics.c v 1.3                             */
-/* high level graphics routines for battalion                          */
 /***********************************************************************/
 #include "battalion.h"
 
@@ -141,85 +138,6 @@
     struct road roadsOnPlane[MAXROADSONPLANE];
 
 
-/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
-    
-/* this function is no longer used in 2004 release. Replaced by tgaload code */
-   
-/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
-
-void doTexStuff(char * dataPath, char * fileName, int width, int height,
-		GLuint * texture, int interpolation, int repeat)
-    {
-    register int x, y;
-    char fullPath[MAXPATH];
-    int arrayLoc;
-    FILE * imageFile;
-    char * TheArray;
-
-    /* open file and read in */
-    strcpy(fullPath, dataPath);
-    strcat(fullPath, fileName);
-    imageFile = fopen(fullPath, "r");
-    
-    TheArray = (char*)malloc(height*width);
-	
-    if (imageFile == NULL) 
-	    showError("Cannot find texture file in data directory");
-    else
-	{	    
-	for (y = 0; y < height; y++)
-	    for (x = 0; x < width; x++)
-		    {
-		    arrayLoc = (height-1-y) * width + (width-1-x);
-		    TheArray[arrayLoc]	= (char) fgetc(imageFile);
-		    }
-		    
-		    
-    /* Texture generation */
-    glGenTextures(1, texture);
-    glPixelStorei(GL_UNPACK_ALIGNMENT,4);	
-    glBindTexture(GL_TEXTURE_2D, *texture); 
-
-    glTexImage2D(GL_TEXTURE_2D, 
-                     0, 
-                     1, 
-                     width, 
-                     height, 
-                     0,  
-                     GL_LUMINANCE,
-                     GL_UNSIGNED_BYTE, 
-                     (const GLvoid *) TheArray);
-
-	    if (repeat)
-		{
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		}
-	    else
-		{		    
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-		}
-	    
-	    if (interpolation)
-		{
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		}
-	    else
-		{
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		}
-	    
-	    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-
-	free(TheArray);
-	
-	fclose(imageFile);
-	}
-    }
-
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /* create the objects to be used in the game                     */
@@ -238,26 +156,6 @@ do {
 code = glGetError();
 } while (code != GL_NO_ERROR);
 
-#ifdef MACVERSION
-
-/* this line generates a GLenum error under the mac mesa 68k version, but not
-oddly enough in the mac PPC version - it may be because it is the first OpenGL call*/
-
-/*
-    doTexStuff(dataPath, "textures:screenleft.tex", 128, 128, &textures[TEX_LSCREEN], 0, 0);
-    doTexStuff(dataPath, "textures:screenright.tex", 128, 128, &textures[TEX_RSCREEN],  0, 0);
-    doTexStuff(dataPath, "textures:treewood.tex", 64, 64, &textures[TEX_TREEWOOD], 1, 0);
-    doTexStuff(dataPath, "textures:road.tex", 64, 64, &textures[TEX_ROAD], 1, 0);
-    doTexStuff(dataPath,"textures:logo.tex", 128, 128, &textures[TEX_OFFLOGO], 0, 0);
-#else
-    doTexStuff(dataPath, "textures/screenleft.tex", 128, 128, &textures[TEX_LSCREEN], 0, 0);
-    doTexStuff(dataPath, "textures/screenright.tex", 128, 128, &textures[TEX_RSCREEN], 0, 0);
-    doTexStuff(dataPath, "textures/treewood.tex", 64, 64,&textures[TEX_TREEWOOD], 1, 0);
-    doTexStuff(dataPath, "textures/road.tex", 64, 64, &textures[TEX_ROAD], 1, 0);
-    doTexStuff(dataPath, "textures/logo.tex", 128, 128, &textures[TEX_OFFLOGO], 0, 0);
-*/
-
-#endif
     strcpy(fullPath, dataPath);
     strcat(fullPath, "textures/screenleft.tga");
     textures[TEX_LSCREEN] = tgaLoadAndBind(fullPath, 0);
