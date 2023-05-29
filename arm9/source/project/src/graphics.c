@@ -697,8 +697,6 @@ void drawVapour(struct monsterInfo monster, int itsChristmas, int detail)
     register int i;
     glPushMatrix();
 
-    if (detail > 0)
-	glEnable(GL_BLEND);
 	
     glRotatef(0.1 * monster.headHorzRotate, 0, 1, 0);
 
@@ -730,8 +728,6 @@ void drawVapour(struct monsterInfo monster, int itsChristmas, int detail)
 	for(i=0; i<MAXTRIBUTES; i++)
 	    andysphdraw(monster.a[i], 0);
 
-    glDisable(GL_BLEND);
-
     glPopMatrix();
     } 
 
@@ -760,8 +756,6 @@ void drawFlutter(struct monsterInfo monster, int counter,
 	    
 	    if (thaView == MONSTERVIEW)
 		{
-		if (detail > 0)	
-		    glEnable(GL_BLEND);		 
 		
 		}
     
@@ -2017,10 +2011,7 @@ void drawBuilding29(int itsChristmas, int detail)
     
     if (!itsChristmas)
 	{
-	if (detail > 0)	
-	    glEnable(GL_BLEND);
 	makercubenobtm(  0,  .1, 0,  .19, .11, .19, colormaserblue);
-	glDisable(GL_BLEND);
 	}
     }
 
@@ -2040,9 +2031,6 @@ void drawBuilding33(int count, int detail)
     c[3] = 1 - (count/20.0);
  
     height = .8 - 0.04*count;
-   
-    if (detail > 0)	
-	glEnable(GL_BLEND);
     
     glPushMatrix();
 	glTranslatef(-.2,  height,  -.2);
@@ -2050,7 +2038,6 @@ void drawBuilding33(int count, int detail)
 	drawClosedCylinder(c,  c,  0, detail);
     glPopMatrix();
     
-    glDisable(GL_BLEND);
     }
  
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -3428,9 +3415,6 @@ void drawBooms(struct boom * boomers, int detail)
     struct boom  * tempboom;
     struct boom b;
 
-    if (detail >= 2)
-	glEnable(GL_BLEND);
-
     glColor3fv(coloryellow);
 
     for(tempboom = boomers->next;tempboom != NULL;tempboom = tempboom->next)
@@ -3490,8 +3474,6 @@ void drawBooms(struct boom * boomers, int detail)
 	glPopMatrix();
 	}
 	
-    if (detail >= 2)
-	glDisable(GL_BLEND);
     }
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/

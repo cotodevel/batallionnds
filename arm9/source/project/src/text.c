@@ -311,16 +311,12 @@ static    float scoreBox[4][3] = {
     else
 
 	{
-	glEnable(GL_BLEND);
-	
 	glBegin(GL_QUADS);
 	    glVertex3fv(scoreBox[0]);
 	    glVertex3fv(scoreBox[1]);
 	    glVertex3fv(scoreBox[2]);
 	    glVertex3fv(scoreBox[3]);
 	glEnd();		
-     
-	glDisable(GL_BLEND);
 	}
 
     /*****************/
@@ -557,16 +553,12 @@ void showCityName(char* name, int detail)
     else
 
 	{
-	glEnable(GL_BLEND);
-	
 	glBegin(GL_QUADS);
 	    glVertex3fv(nameBox[0]);
 	    glVertex3fv(nameBox[1]);
 	    glVertex3fv(nameBox[2]);
 	    glVertex3fv(nameBox[3]);
-	glEnd();		
-     
-	glDisable(GL_BLEND);
+	glEnd();
 	}
 
     /*************/
@@ -947,16 +939,12 @@ void doOptions(struct monsterInfo monster, long xWin, int counter,
 	}
     else
 	{
-	glEnable(GL_BLEND);
-	
 	glBegin(GL_QUADS);
 	    glVertex3fv(optionsBox[0]);
 	    glVertex3fv(optionsBox[1]);
 	    glVertex3fv(optionsBox[2]);
 	    glVertex3fv(optionsBox[3]);
-	glEnd();		
-    
-	glDisable(GL_BLEND);
+	glEnd();
 	}
 
 
@@ -1063,17 +1051,12 @@ static    float summaryBox[4][3] = {
 	}
     else 
 	{
-	glEnable(GL_BLEND);
-
 	glBegin(GL_QUADS);
 	    glVertex3fv(summaryBox[0]);
 	    glVertex3fv(summaryBox[1]);
 	    glVertex3fv(summaryBox[2]);
 	    glVertex3fv(summaryBox[3]);
-	glEnd();		
-	
-    
-	glDisable(GL_BLEND);
+	glEnd();
 	}
     
 

@@ -1119,8 +1119,8 @@ void initialization()
 
     glFogi(GL_FOG_MODE,  GL_LINEAR);
     glFogfv(GL_FOG_COLOR, fogColor);
-    
-    glDisable(GL_BLEND);
+   
+
     glDisable(GL_LIGHTING);
     glEnable(GL_FOG);
     
@@ -6176,7 +6176,6 @@ int InitGL()
 	glClearDepth(0x7FFF);		// Depth Buffer Setup
 	glEnable(GL_ANTIALIAS);
 	glEnable(GL_TEXTURE_2D); // Enable Texture Mapping 
-	glEnable(GL_BLEND);
 	glDisable(GL_LIGHT0|GL_LIGHT1);
 	glEnable(GL_LIGHT0|GL_LIGHT1); //light #1 & #2 enabled per scene
 	
