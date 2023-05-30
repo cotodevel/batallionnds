@@ -1219,7 +1219,7 @@ void initialization()
     roadSystem	    = NULL;
 
 #ifdef SOUND
-    initSound();
+    initSoundBatallion();
 #endif
     /************************************/
     /* get the current date/time        */
@@ -5696,7 +5696,7 @@ void processNormalKey(unsigned char key, int x, int y)
         goto1d();
         clearAll();
 #ifdef SOUND
-        exitSound();
+        exitSoundBatallion();
         alutExit();
 #endif
         exit(0); 

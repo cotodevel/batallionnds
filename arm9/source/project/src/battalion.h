@@ -597,8 +597,8 @@ void toggleMusic();
 int  getMusicOn();
 
 
-int initSound();
-void exitSound();
+int initSoundBatallion();
+void exitSoundBatallion();
  
 #ifdef SOUND
 int doSound(ALuint nsource, int nbuffer, ALboolean loop);

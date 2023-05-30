@@ -62,7 +62,7 @@ ALuint  sources[NUM_SOURCES];
 /****************************************************************/
 /* Must be called first, at the beginning of the program        */
 /****************************************************************/
-int initSound()
+int initSoundBatallion()
 {
     ALsizei    size,freq;
     ALenum     format;
@@ -242,7 +242,7 @@ ALuint getPlayersSource()
     return sources[0];
 }
 
-void exitSound()
+void exitSoundBatallion()
 {
     alDeleteSources( maxSources, sources );
     alDeleteBuffers( NUM_BUFFERS, buffers );
