@@ -551,8 +551,8 @@ void disableViewMenu(void);
  * holds the font routines
  ***************************/
 
-extern GLenum tkCreateStrokeFont(GLuint);
-extern void tkDrawStr(GLuint, char *);
+extern GLenum CreateStrokeFont(GLuint);
+extern void DrawStr(GLuint, char *);
 
 /***************************
  * update.c
@@ -969,5 +969,7 @@ void andysphdraw(float loc[4], int);
 
 extern void drawSphere(float r, int lats, int longs);
 extern void drawCircle(GLfloat x, GLfloat y, GLfloat r, GLfloat BALL_RADIUS);
+
+extern void showCityName(char* name, int detail);
 
 #endif

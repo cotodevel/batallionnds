@@ -146,22 +146,22 @@ int lod;
 /************************************************/
 int keycontrol = 0x00000000;
 
-#define KEY_UP       1
-#define KEY_DOWN     2
-#define KEY_LEFT     4
-#define KEY_RIGHT    8
+#define BAT_KEY_UP       1
+#define BAT_KEY_DOWN     2
+#define BAT_KEY_LEFT     4
+#define BAT_KEY_RIGHT    8
 
-#define KEY_FIRE    16
+#define BAT_KEY_FIRE    16
 
 //rotation of map view
-#define KEY_MAPU    32
-#define KEY_MAPD    64
-#define KEY_MAPR   128
-#define KEY_MAPL   256
+#define BAT_KEY_MAPU    32
+#define BAT_KEY_MAPD    64
+#define BAT_KEY_MAPR   128
+#define BAT_KEY_MAPL   256
 
 //march of monster
-#define KEY_FORW   512
-#define KEY_BACK  1024
+#define BAT_KEY_FORW   512
+#define BAT_KEY_BACK  1024
 
 /***********************************************/
 /* it would be nice to dynamically get these ... */
@@ -3381,9 +3381,9 @@ void updateTargets()
 	thaMonster.beamOn		= temptarget->net_beamOn;
 
 	nearAngle = temptarget->net_headHorzRotate;
-	if (fabs(thaMonster.headHorzRotate - (temptarget->net_headHorzRotate + 3600)) < fabs(thaMonster.headHorzRotate - nearAngle))
+	if (fabs((float)thaMonster.headHorzRotate - (temptarget->net_headHorzRotate + 3600)) < fabs((float)thaMonster.headHorzRotate - nearAngle))
 	    nearAngle = temptarget->net_headHorzRotate + 3600;
-	if (fabs(thaMonster.headHorzRotate - (temptarget->net_headHorzRotate - 3600)) < fabs(thaMonster.headHorzRotate - nearAngle))
+	if (fabs((float)thaMonster.headHorzRotate - (temptarget->net_headHorzRotate - 3600)) < fabs((float)thaMonster.headHorzRotate - nearAngle))
 	    nearAngle = temptarget->net_headHorzRotate - 3600;
 
 	thaMonster.headHorzRotate	= 0.7 * thaMonster.headHorzRotate + 0.3 * nearAngle;
@@ -3394,8 +3394,8 @@ void updateTargets()
 
 	if (thaMonster.energyRemaining > 0)
 	    {
-	    thaMonster.rot1 = cos(thaMonster.moveCount) * 0.02;
-	    thaMonster.rot2 = sin(thaMonster.moveCount) * 0.05;
+	    thaMonster.rot1 = cos((float)thaMonster.moveCount) * 0.02;
+	    thaMonster.rot2 = sin((float)thaMonster.moveCount) * 0.05;
 	    }
 	else
 	    {
@@ -3648,8 +3648,8 @@ void updateTargets()
 	    if (thaMonster.energyRemaining > MAXLIFE)
 		thaMonster.energyRemaining = MAXLIFE;
     
-	    thaMonster.rot1 = cos(thaMonster.moveCount) * 0.02;
-	    thaMonster.rot2 = sin(thaMonster.moveCount) * 0.05;
+	    thaMonster.rot1 = cos((float)thaMonster.moveCount) * 0.02;
+	    thaMonster.rot2 = sin((float)thaMonster.moveCount) * 0.05;
 	    }
 	else
 	    {
@@ -4919,8 +4919,8 @@ void doUpdate()
 	if (Googelon.energyRemaining > MAXLIFE)
 	    Googelon.energyRemaining = MAXLIFE;
 
-	Googelon.rot1 = cos(Googelon.moveCount) * 0.02;
-	Googelon.rot2 = sin(Googelon.moveCount) * 0.05;
+	Googelon.rot1 = cos((float)Googelon.moveCount) * 0.02;
+	Googelon.rot2 = sin((float)Googelon.moveCount) * 0.05;
 	}
     else
 	{
@@ -5291,20 +5291,20 @@ struct monsterInfo autopilot(float centerX, float centerZ, struct monsterInfo th
     thaMonster.headHorzRotate += speed;
     offsetX = 0.8*offsetX - 0.2*(speed * 0.05); /* used to bank flutter in demo mode*/
 
-    if ((thaMonster.energyRemaining > 15) && (fabs(speed) < 6) && (r < 3.5))
+    if ((thaMonster.energyRemaining > 15) && (fabs((float)speed) < 6) && (r < 3.5))
 	thaMonster.beamOn = 1;
 
     switch(thaMonster.monster){
 	case GOOGELON:
 	case TECHS:		
 	    if ((thaMonster.energyRemaining > 5) && (t != -1)  && (t != HERO) &&
-		(t != MECHAG) && ((fabs(speed) < 3) || (r < 1)))
+		(t != MECHAG) && ((fabs((float)speed) < 3) || (r < 1)))
 		thaMonster.monsterGo = 1;
 
-	    else if (((t == MECHAG)  || (t == HERO)) && (fabs(speed) < 5) && (r > 3))
+	    else if (((t == MECHAG)  || (t == HERO)) && (fabs((float)speed) < 5) && (r > 3))
 		thaMonster.monsterGo = 1;
 
-	    else if (((t == MECHAG)  || (t == HERO)) && (fabs(speed) < 5) && (r < .75))
+	    else if (((t == MECHAG)  || (t == HERO)) && (fabs((float)speed) < 5) && (r < .75))
 		thaMonster.monsterBack = 1;
 	    break;
 	    
@@ -5312,19 +5312,19 @@ struct monsterInfo autopilot(float centerX, float centerZ, struct monsterInfo th
 	    if (((t == MECHAG) || (t == CHH) || (t == HERO)) && (r < 0.2))
 		/*stay put on top of the enemy*/;
 		
-	    else if ((thaMonster.energyRemaining > 5) && ((fabs(speed) < 10) || (r < 4)))
+	    else if ((thaMonster.energyRemaining > 5) && ((fabs((float)speed) < 10) || (r < 4)))
 		thaMonster.monsterGo = 1;
 	    break;
 			
 	case FLUTTER:
 	    if ((thaMonster.energyRemaining > 5) && (t != -1)  && (t != HERO) &&
-		(t != MECHAG) && ((fabs(speed) < 3) || (r < 1)))
+		(t != MECHAG) && ((fabs((float)speed) < 3) || (r < 1)))
 		thaMonster.monsterGo = 1;
-	    else if (((t == MECHAG) || (t == HERO)) && (fabs(speed) < 5) && (r > 3))
+	    else if (((t == MECHAG) || (t == HERO)) && (fabs((float)speed) < 5) && (r > 3))
 		thaMonster.monsterGo = 1;
-	    else if (((t == MECHAG) || (t == HERO)) && (fabs(speed) < 5) && (r < .75))
+	    else if (((t == MECHAG) || (t == HERO)) && (fabs((float)speed) < 5) && (r < .75))
 		thaMonster.monsterBack = 1;
-	    else if (!(((t == MECHAG) || (t == HERO)) && (fabs(speed) < 5) && (r < 1)))
+	    else if (!(((t == MECHAG) || (t == HERO)) && (fabs((float)speed) < 5) && (r < 1)))
 		thaMonster.monsterGo = 1;
 	    break;
     }
@@ -5490,19 +5490,19 @@ void releaseSpKey(int key, int x, int y)
     {
                         	    
    	    case GLUT_KEY_LEFT:	
-                    keycontrol &= ~KEY_LEFT; 
+                    keycontrol &= ~BAT_KEY_LEFT; 
 			        break;
 			        
         case GLUT_KEY_RIGHT:	
-                    keycontrol &= ~KEY_RIGHT; 
+                    keycontrol &= ~BAT_KEY_RIGHT; 
 			        break;
 			        
         case GLUT_KEY_UP:	
-                    keycontrol &= ~KEY_FORW; 
+                    keycontrol &= ~BAT_KEY_FORW; 
                     break;
                     
         case GLUT_KEY_DOWN:	
-                    keycontrol &= ~KEY_BACK; 
+                    keycontrol &= ~BAT_KEY_BACK; 
 			        break;
      }
 }
@@ -5514,30 +5514,30 @@ void releaseNormalKey(unsigned char key, int x, int y)
         /********************************************/
         /*          process pressed key             */
         case 'i':
-        case 'I':	keycontrol &= ~KEY_MAPU; 
+        case 'I':	keycontrol &= ~BAT_KEY_MAPU; 
 			        break;
 			    
         case 'j':
-        case 'J':	keycontrol &= ~KEY_MAPL; 
+        case 'J':	keycontrol &= ~BAT_KEY_MAPL; 
 		       	    break;
 			    
         case 'k':
-        case 'K':	keycontrol &= ~KEY_MAPD; 
+        case 'K':	keycontrol &= ~BAT_KEY_MAPD; 
 		       	    break;
 			    
         case 'l':
-	    case 'L':	keycontrol &= ~KEY_MAPR; 
+	    case 'L':	keycontrol &= ~BAT_KEY_MAPR; 
 		    	    break;
 
         case 'a':
-        case 'A':	keycontrol &= ~KEY_UP; 
+        case 'A':	keycontrol &= ~BAT_KEY_UP; 
 		    	    break;
    	    case 'z':
-   	    case 'Z':	keycontrol &= ~KEY_DOWN; 
+   	    case 'Z':	keycontrol &= ~BAT_KEY_DOWN; 
 		   	   	    break;
    	    case 'x': 
    	    case 'X':
-                    keycontrol &= ~KEY_FIRE; 
+                    keycontrol &= ~BAT_KEY_FIRE; 
                     break;
     }
 
@@ -5555,16 +5555,16 @@ void processSpKey(int key, int x, int y)
         {
 
         	 case GLUT_KEY_LEFT:	
-                	keycontrol |= KEY_LEFT; 
+                	keycontrol |= BAT_KEY_LEFT; 
                 	break;
         	 case GLUT_KEY_RIGHT:	
-                    keycontrol |= KEY_RIGHT; 
+                    keycontrol |= BAT_KEY_RIGHT; 
                     break;
              case GLUT_KEY_UP:	
-                    keycontrol |= KEY_FORW; 
+                    keycontrol |= BAT_KEY_FORW; 
                     break;
              case GLUT_KEY_DOWN:	
-                    keycontrol |= KEY_BACK; 
+                    keycontrol |= BAT_KEY_BACK; 
                     break;
           }
      }     
@@ -5724,19 +5724,19 @@ void playKeys(int key)
 /********************************************/
 /*          process pressed key             */
 	case 'i':
-	case 'I':	keycontrol |= KEY_MAPU; 
+	case 'I':	keycontrol |= BAT_KEY_MAPU; 
 			    break;
 			    
 	case 'j':
-	case 'J':	keycontrol |= KEY_MAPL; 
+	case 'J':	keycontrol |= BAT_KEY_MAPL; 
 			    break;
 			    
 	case 'k':
-	case 'K':	keycontrol |= KEY_MAPD; 
+	case 'K':	keycontrol |= BAT_KEY_MAPD; 
 			    break;
 			    
 	case 'l':
-	case 'L':	keycontrol |= KEY_MAPR; 
+	case 'L':	keycontrol |= BAT_KEY_MAPR; 
 			    break;
 			    
      }
@@ -5749,16 +5749,16 @@ void playNoPauseKeys(int key)
     {    
 
 	case 'a':
-	case 'A':	keycontrol |= KEY_UP; 
+	case 'A':	keycontrol |= BAT_KEY_UP; 
 			    break;
 
 	case 'z':
-	case 'Z':	keycontrol |= KEY_DOWN; 
+	case 'Z':	keycontrol |= BAT_KEY_DOWN; 
 			    break;
 
     case 'x': 
     case 'X':
-                keycontrol |= KEY_FIRE; 
+                keycontrol |= BAT_KEY_FIRE; 
 			    break;
 	}
 } 
@@ -5832,46 +5832,46 @@ void id()
             Googelon.monsterMoving = 0;
     
     
-            if(keycontrol & KEY_MAPU) 
+            if(keycontrol & BAT_KEY_MAPU) 
                 xrot -= 8;
             
-            if(keycontrol & KEY_MAPR)		    
+            if(keycontrol & BAT_KEY_MAPR)		    
                 yrot += 8;
             
-            if(keycontrol & KEY_MAPD)
+            if(keycontrol & BAT_KEY_MAPD)
                 xrot += 8;
             
-            if(keycontrol & KEY_MAPL)
+            if(keycontrol & BAT_KEY_MAPL)
                 yrot -= 8;
 
             offsetX = 0;    //used to bank flutter
             
             /***************************************************/
-            if(keycontrol & KEY_LEFT)
+            if(keycontrol & BAT_KEY_LEFT)
             {	
                 offsetX = -0.5;
                 Googelon.headHorzRotate -= (int) (offsetX * Googelon.xspeed);
                 Googelon.monsterMoving = 1; 
             }
             
-            if(keycontrol & KEY_RIGHT)
+            if(keycontrol & BAT_KEY_RIGHT)
             {	
                 offsetX = 0.5;
                 Googelon.headHorzRotate -= (int) (offsetX * Googelon.xspeed);
                 Googelon.monsterMoving = 1;
             }
             
-            if(keycontrol & KEY_FORW)
+            if(keycontrol & BAT_KEY_FORW)
                 Googelon.monsterGo = 1;
             else 
                 Googelon.monsterGo = 0;
             
-            if(keycontrol & KEY_BACK)
+            if(keycontrol & BAT_KEY_BACK)
                 Googelon.monsterBack = 1;
             else 
                 Googelon.monsterBack = 0;	    
             
-            if(keycontrol & KEY_FIRE)
+            if(keycontrol & BAT_KEY_FIRE)
             {    
 #ifdef SOUND
                 /* start the beam sound only if monster is alive*/
@@ -5897,10 +5897,10 @@ void id()
                 Googelon.beamOn = 0;
             }
             
-            if(keycontrol & KEY_UP)	
+            if(keycontrol & BAT_KEY_UP)	
                 Googelon.headVertRotate -= 15;
             
-            if(keycontrol & KEY_DOWN)
+            if(keycontrol & BAT_KEY_DOWN)
                 Googelon.headVertRotate += 15;
 
 /****************************************************/
