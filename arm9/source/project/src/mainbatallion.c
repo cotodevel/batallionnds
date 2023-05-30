@@ -35,6 +35,7 @@
 #include "interrupts.h"
 #include "grass_tex.h"
 #include "fish_tex.h"
+#include "Sphere008.h"
 
 extern int vsnprintf( char* buffer, size_t buf_size, const char* format, va_list vlist );
 #endif
@@ -760,7 +761,11 @@ void drawAMonster(float x, struct monsterInfo monster, float z,
 				
 				break;
 	    }
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+		1
+	#endif
+	);
 	}
     }
 
@@ -1128,7 +1133,11 @@ void initialization()
 	goToHighDetail();
 	glMatrixMode(GL_MODELVIEW);
 	glClearDepth(1);
-    glClearColor(0.8, 0.8, 1.0, 1);
+    glClearColor(0.8, 0.8, 1.0
+		#ifdef _MSC_VER
+		, 1
+		#endif
+	);
     
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
@@ -1464,7 +1473,7 @@ float x=0.0f, y=20.0f, z=30.0f;
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
 void doDrawing (int eyeball)
-    {
+{
     GLenum glErrorVal;
     GLint tmp[4];
     struct targetInfo * temptarget;
@@ -1476,8 +1485,9 @@ void doDrawing (int eyeball)
 
 /* mac 68K version giving a spurious error mesage here */
 
-    glErrorVal = glGetError();
-#ifndef MACVERSION
+    
+#if !defined(MACVERSION) && defined(_MSC_VER)
+	glErrorVal = glGetError();
     if (glErrorVal != GL_NO_ERROR)
     {
 	   showError((char *) gluErrorString(glErrorVal));
@@ -1635,7 +1645,11 @@ void doDrawing (int eyeball)
 
     glDisable(GL_FOG);
 
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+		1
+	#endif
+	);
     
     if (!backdrop)
 	{
@@ -1715,7 +1729,11 @@ textLineWidth = 1.01;
                 levelStartCount -=1;
             }
 	
-	    glPopMatrix();
+	    glPopMatrix(
+		#ifdef ARM9
+			1
+		#endif
+		);
 	}
 
 /* part of test to see if single buffering can be used in vector mode
@@ -5488,20 +5506,36 @@ void releaseSpKey(int key, int x, int y)
 {
     switch(key)
     {
-                        	    
-   	    case GLUT_KEY_LEFT:	
+#ifdef _MSC_VER
+   	    case GLUT_KEY_LEFT:
+#endif
+#ifdef ARM9
+		case KEY_LEFT:
+#endif
                     keycontrol &= ~BAT_KEY_LEFT; 
 			        break;
-			        
-        case GLUT_KEY_RIGHT:	
+#ifdef _MSC_VER
+		case GLUT_KEY_RIGHT:
+#endif
+#ifdef ARM9
+		case KEY_RIGHT:
+#endif
                     keycontrol &= ~BAT_KEY_RIGHT; 
 			        break;
-			        
-        case GLUT_KEY_UP:	
+#ifdef _MSC_VER
+		case GLUT_KEY_UP:
+#endif
+#ifdef ARM9
+		case KEY_UP:
+#endif
                     keycontrol &= ~BAT_KEY_FORW; 
                     break;
-                    
-        case GLUT_KEY_DOWN:	
+#ifdef _MSC_VER
+        case GLUT_KEY_DOWN:
+#endif
+#ifdef ARM9
+		case KEY_DOWN:
+#endif
                     keycontrol &= ~BAT_KEY_BACK; 
 			        break;
      }
@@ -5553,37 +5587,43 @@ void processSpKey(int key, int x, int y)
     {
         switch(key)
         {
-
-        	 case GLUT_KEY_LEFT:	
-                	keycontrol |= BAT_KEY_LEFT; 
+#ifdef _MSC_VER
+			case GLUT_KEY_LEFT:
+#endif
+#ifdef ARM9
+			case KEY_LEFT:
+#endif
+					keycontrol |= BAT_KEY_LEFT; 
                 	break;
-        	 case GLUT_KEY_RIGHT:	
+#ifdef _MSC_VER
+			 case GLUT_KEY_RIGHT:
+#endif
+#ifdef ARM9
+			case KEY_RIGHT:
+#endif
                     keycontrol |= BAT_KEY_RIGHT; 
                     break;
-             case GLUT_KEY_UP:	
+#ifdef _MSC_VER
+			case GLUT_KEY_UP:
+#endif
+#ifdef ARM9
+			case KEY_UP:
+#endif
                     keycontrol |= BAT_KEY_FORW; 
                     break;
-             case GLUT_KEY_DOWN:	
+#ifdef _MSC_VER
+			case GLUT_KEY_DOWN:
+#endif
+#ifdef ARM9
+			case KEY_DOWN:
+#endif
                     keycontrol |= BAT_KEY_BACK; 
                     break;
           }
      }     
-     else
-     {
-          switch(key)
-          {
-              case GLUT_KEY_F5:
-              {
-    /*
-                   glutGameModeString( "640x480:16@60" );
-                   glutEnterGameMode();    
-    */  
-              }
-              break;
-          }
+     else{
+          
      }
-     
-     
 }
 
 void processNormalKey(unsigned char key, int x, int y)
@@ -6099,36 +6139,26 @@ int main(int argc, char **argv)
 {
     int screen = 0;
     
+#ifdef _MSC_VER
 	glutInit(&argc, argv);
-
 	glutInitDisplayMode (GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
-
-
-	if(argc == 3)
-	{
-	  
-	  if (strcmp(argv[1],"-f") == 0 )
-	  {
-	     printf("trying gamemode: %s\n",argv[2]);	
-	     glutGameModeString(argv[2]);
+	if(argc == 3){	  
+		if (strcmp(argv[1],"-f") == 0 ){
+			printf("trying gamemode: %s\n",argv[2]);	
+			glutGameModeString(argv[2]);
   	     
-             // enter full screen
-             if (glutGameModeGet(GLUT_GAME_MODE_POSSIBLE))
-             {
-		    glutEnterGameMode();
-		    screen = 1;
-             }
-          }
+			// enter full screen
+			if (glutGameModeGet(GLUT_GAME_MODE_POSSIBLE)){
+				glutEnterGameMode();
+				screen = 1;
+			}
+		}
 	}
- 
-    if(screen == 0)
-    {  
+    if(screen == 0){  
          glutInitWindowPosition  (100,100);
          glutInitWindowSize  (640,480);
          glutCreateWindow    ("Battalion-2004");
     }
-
-
     glutIdleFunc(id);
     glutReshapeFunc(reshape);		/* llamada para eventos de reshape de ventana*/
 
@@ -6140,8 +6170,8 @@ int main(int argc, char **argv)
 	//special keys (ESCAPE close)
 	glutSpecialFunc(processSpKey);
 	glutSpecialUpFunc(releaseSpKey);
-
 	glutIgnoreKeyRepeat(1);
+#endif
 
 #ifdef SOUND
     /* openAL initialization */
@@ -6152,7 +6182,7 @@ int main(int argc, char **argv)
 	initialization();
 	setPlayConditions();
 	
-     // start the main loop
+    // start the main loop
 	glutMainLoop();
 	
 	return(0);
