@@ -396,15 +396,19 @@ int main(int argc, char **argv) {
 	printf("---");
 	printf("---");
 	printf("---");
-	printf("starting Aquarium");
-
-	ret = startAquarium(argc, argv);
+	printf("starting Batallion");
+	
+	#if defined(ARM9)
+    startTimerCounter(tUnitsMilliseconds, 1);
+    #endif
+	
+	ret = startBatallion(argc, argv);
 
 	clrscr();
 	printf("---");
 	printf("---");
 	printf("---");
-	printf("ending Aquarium. Halt");
+	printf("ending Batallion. Halt");
 	while(1==1){
 
 	}

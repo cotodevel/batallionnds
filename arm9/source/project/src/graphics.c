@@ -145,20 +145,15 @@
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
 void makeObjects(char * dataPath)
-    {
-    
+{    
 	GLenum code;
     char fullPath[MAXPATH];
-    /********************/
+    
+	/********************/
     /* load in textures */
     /********************/
 
-/*
-do {
-code = glGetError();
-} while (code != GL_NO_ERROR);
-*/
-
+#ifdef _MSC_VER
     strcpy(fullPath, dataPath);
     strcat(fullPath, "textures/screenleft.tga");
     texturesBatallionGL[TEX_LSCREEN] = tgaLoadAndBind(fullPath, 0);
@@ -178,8 +173,11 @@ code = glGetError();
     strcpy(fullPath, dataPath);
     strcat(fullPath, "textures/logo.tga");
     texturesBatallionGL[TEX_OFFLOGO] = tgaLoadAndBind(fullPath, 0);
- 
+#endif 
 
+#ifdef ARM9
+//todo
+#endif
 
     /********************/
     /* make the objects */

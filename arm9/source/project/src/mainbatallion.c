@@ -1093,8 +1093,8 @@ void initialization()
 
     strcpy(playerName, "Anonymous");
 
- #ifndef _MSC_VER
-
+/* //doesn't matter anyway
+#ifndef _MSC_VER
     playerPointer = (char*)cuserid(NULL);
     if (playerPointer == NULL)
 	    playerPointer = getlogin();
@@ -1116,7 +1116,7 @@ void initialization()
 	     playerHome[0] = '\0';
 	}
 #endif
-
+*/
 
     /************************************/
     /* set up the graphics              */
@@ -1736,14 +1736,10 @@ textLineWidth = 1.01;
 		);
 	}
 
-/* part of test to see if single buffering can be used in vector mode
-if (lod > -1 )
-*/
-
-
-
+#ifdef _MSC_VER
     glutSwapBuffers();
-   
+#endif
+
 }
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -5836,13 +5832,8 @@ void id()
     /* Windows code milliseconds since program starts*/
     now_time = GetTickCount();
 #else
-   /* linux code milliseconds since reference date*/
-   ftime(&tb);
-   now_time = tb.millitm+1000*tb.time;
-
-
+   now_time = getTimerCounter(); //NDS
 #endif
-
 
     /* near 25 fps if possible */
     if(now_time-last_time > 40)
@@ -6135,7 +6126,14 @@ void reshape( int width, int height )
     glViewport(0, 0, width, height);
 }
 
-int main(int argc, char **argv)
+#ifdef _MSC_VER
+int main(int argc, char **argv){
+	startBatallion(argc, argv);
+	return 0;
+}
+#endif
+
+int startBatallion(int argc, char **argv)
 {
     int screen = 0;
     
@@ -6181,10 +6179,16 @@ int main(int argc, char **argv)
     // Init openGL and game parameters
 	initialization();
 	setPlayConditions();
-	
+
+#ifdef _MSC_VER
     // start the main loop
 	glutMainLoop();
-	
+#endif
+
+#ifdef ARM9
+//todo: ARM9 batallion nds game loop
+#endif
+
 	return(0);
 }
 

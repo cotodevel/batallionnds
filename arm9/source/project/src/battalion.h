@@ -972,4 +972,6 @@ extern void drawCircle(GLfloat x, GLfloat y, GLfloat r, GLfloat BALL_RADIUS);
 
 extern void showCityName(char* name, int detail);
 
+extern int startBatallion(int argc, char **argv);
+
 #endif
