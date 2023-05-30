@@ -1,4 +1,4 @@
-
+#ifdef _MSC_VER
 /*
    ...
 
@@ -385,4 +385,4 @@ GLuint tgaLoadAndBind ( char *file_name, tgaFLAG mode )
 
    return texture_id;
 }
-
+#endif

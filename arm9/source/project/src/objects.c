@@ -681,7 +681,11 @@ GLuint makeAirplaneBody()
 		glTranslatef(0,  0,  -0.14);
 		glRotatef(-90, 1, 0, 0);
 		makeitPyr(1, colorwhite, 0.0, 0.08, 0.0, 0.03, 0.08, 0.03);
-	glPopMatrix();
+	glPopMatrix(
+#ifdef ARM9
+		1
+#endif
+	);
 
 	/*************/
 	/* draw tail */
@@ -701,7 +705,11 @@ GLuint makeAirplaneBody()
 		glTranslatef(0,  0,  -0.03);
 		glRotatef(-90,1, 0, 0);
 		makeitPyr(1, colorgrey2, 0.0, 0.03, 0, 0.16, 0.03, 0.004);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
 	makercube(0.0, 0.0, 0.11, 0.08, 0.004, 0.015, colorgrey3);
 
@@ -709,7 +717,11 @@ GLuint makeAirplaneBody()
 		glTranslatef(0,  0,  0.095);
 		glRotatef(-90, 1, 0, 0);
 		makeitPyr(1, colorgrey2, 0.0, 0.02, 0.0, 0.08, 0.02, 0.004);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
     
     makercube(-0.09, -0.004-0.01, -0.07+0.02, 0.01, 0.01, 0.02, colorgrey1);
 
@@ -741,7 +753,11 @@ GLuint makeFighterBody()
 		glTranslatef(0,  0,  -0.14);
 		glRotatef(-90, 1, 0, 0);
 		makeitPyr(1, colorwhite, 0.0, 0.08, 0.0, 0.03, 0.08, 0.03);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
 	/*************/
 	/* draw tail */
@@ -751,13 +767,21 @@ GLuint makeFighterBody()
 		glTranslatef(-0.05, 0.05, 0.11);
 		glRotatef(45, 0, 0, 1);
 	    makercube(0.0, 0, 0, 0.002, 0.04 ,0.02, colorgrey3);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
 	glPushMatrix();
 		glTranslatef(0.05, 0.05, 0.11);
 		glRotatef(-45, 0, 0, 1);
 	    makercube(0.0, 0, 0, 0.002, 0.04 ,0.02, colorgrey3);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
 
 	/**************/
@@ -768,13 +792,21 @@ GLuint makeFighterBody()
 		glTranslatef(0,  0,  0.03);
 		glRotatef(90, 1, 0, 0);
 		makeitPyr(1, colorgrey3, 0.0, 0.01, 0, 0.16, 0.085, 0.004);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
 	glPushMatrix();
 		glTranslatef(0,  0,  0.03);
 		glRotatef(-90, 1, 0, 0);
 		makeitPyr(1, colorgrey3, 0.0, 0.2, 0, 0.1, 0.04, 0.004);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
     
     makercube(-0.09, -0.004-0.01, 0.02, 0.01, 0.01, 0.04, colorred);
@@ -1037,13 +1069,21 @@ GLuint makeFlutterXMas()
 			v[0] = v[1] = v[2] = 0;
 			v[3] = 0.14;
 			andysphdraw(v, 4);
-		glPopMatrix();
+		glPopMatrix(
+		#ifdef ARM9
+				1
+		#endif
+		);
 
 		glPushMatrix();
 		    glTranslatef(-0.15,  PLANEY+1.45,  -0.25);
 		    glScalef(0.15,  0.2,  0.15);
 		    drawClosedCone(healthGreen, healthGreen, 1);
-		glPopMatrix();
+		glPopMatrix(
+		#ifdef ARM9
+				1
+		#endif
+		);
 
 		glPushMatrix();
 		    glTranslatef(-0.09,  PLANEY+1.65,  -0.06);
@@ -1051,7 +1091,11 @@ GLuint makeFlutterXMas()
 		    glRotatef(.1*(450), 0, 0, 1);
 		    glScalef(0.04,  0.11,  0.1);
 		    drawClosedCone(healthGreen, healthGreen, 1);
-		glPopMatrix();
+		glPopMatrix(
+		#ifdef ARM9
+				1
+		#endif
+		);
 
 		glColor3fv(colorwhite);
 		v[0] = -0.15;
@@ -1226,7 +1270,11 @@ GLuint makeTechsShadow(){
 
 	drawCircle(32, 1, 0., 0.13); //gluDisk( qobj, 0.,   0.13, 32, 1);
 	
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
     glColor4fv(colorblack);
     
@@ -1452,7 +1500,11 @@ GLuint makebuilding9(int lowDetail){
 	else
 	    drawClosedCylinder(colorgrey1,  colorwhite,  1, 1);
 
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
   
     glPushMatrix();
 	glTranslatef(-0.1,  0.5,  -0.1);
@@ -1462,7 +1514,11 @@ GLuint makebuilding9(int lowDetail){
 	    drawClosedCylinder(colorgrey3,  colorwhite,  1, -1);
 	else
 	    drawClosedCylinder(colorgrey3,  colorwhite,  1, 1);
-   glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
   
     makercubenobtm(-0.22,  0.5, -0.22,  0.025, 0.5, 0.025, colorgrey2);
     makercubenobtm( 0.22,  0.5, -0.22,  0.025, 0.5, 0.025, colorgrey2);
@@ -1480,7 +1536,11 @@ GLuint makebuilding9(int lowDetail){
 
 	drawCircle(32, 1, 0., 0.3); //gluDisk( qobj, 0.,   0.3, 32, 1);
 	
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
      
     glEndList();
     return(O);
@@ -1762,7 +1822,11 @@ GLuint makebuilding31(){
 	glRotatef(-90, 1, 0, 0);
 
 	drawCircle(32, 1, 0., 0.3); //gluDisk( qobj, 0.,   0.3, 32, 1);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
     glEndList();
     return(O);
@@ -1786,7 +1850,11 @@ GLuint makebuilding32(){
 	glRotatef(-90, 1, 0, 0);
 
 	drawCircle(32, 1, 0., 0.3); //gluDisk( qobj, 0.,   0.3, 32, 1);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
     glColor3fv(colorgrey1);
     
@@ -1795,7 +1863,11 @@ GLuint makebuilding32(){
 	glRotatef(-90, 1, 0, 0);
 
 	drawCircle(32, 1, 0., 0.2); //gluDisk( qobj, 0.,   0.2, 32, 1);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
     glEndList();
     return(O);

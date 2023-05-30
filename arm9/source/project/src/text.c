@@ -14,9 +14,7 @@
 /***********************************************************************/
 
 #include "battalion.h"
-
 #include "language.h"
-
 
 #ifdef DEBUG
 
@@ -185,7 +183,11 @@ static float energyBar[4][3] = {
 		    glVertex3fv(energyBar[3]);
 		glEnd(); 
     
-	    glPopMatrix();
+	    glPopMatrix(
+		#ifdef ARM9
+				1
+		#endif
+		);
     
 	    glPushMatrix();
 		glTranslatef(-3.8,  4.4+drop,  0);
@@ -201,7 +203,11 @@ static float energyBar[4][3] = {
 		    case FLUTTER:   DrawStr(strokeBase,"Flutter");
 				    break;
 		    }
-		glPopMatrix();
+		glPopMatrix(
+		#ifdef ARM9
+				1
+		#endif
+		);
 	    }	
 	}
 	
@@ -209,7 +215,11 @@ static float energyBar[4][3] = {
     glPushMatrix();
 	glTranslatef(-3.8,  4.45,  0);
 	DrawStr(strokeBase, str_energy);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
     /***********************/
     /* print out the score */
@@ -221,7 +231,11 @@ static float energyBar[4][3] = {
     glPushMatrix();
 	glTranslatef(1.8,  4.35,  0);
 	DrawStr(strokeBase, textline);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
 
     /****************************/
@@ -234,7 +248,11 @@ static float energyBar[4][3] = {
     glPushMatrix();
 	glTranslatef(0,  4.4,  0);
 	DrawStr(strokeBase, textline);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 #endif
 
     if (paused)
@@ -242,7 +260,11 @@ static float energyBar[4][3] = {
 	glPushMatrix();
 	    glTranslatef(-0.7,  4.6,  0);	
 	    DrawStr(strokeBase, str_paused);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
 	}
 	
@@ -251,7 +273,11 @@ static float energyBar[4][3] = {
 	glPushMatrix();
 	    glTranslatef(-0.85,  4.2,  0);	
 	    DrawStr(strokeBase, str_grabbed);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
 	}
 	
@@ -327,25 +353,41 @@ static    float scoreBox[4][3] = {
 	glTranslatef(-0.8,  0.14,  7.2);
 	glScalef(.2,  .2,  .2);
 	drawMonster(tempMonster, counter, itsChristmas, detail);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
     glPushMatrix();
 	glTranslatef(-0.8,  -0.23,  7.2);
 	glScalef(.2,  .2,  .2);
 	drawVapour(tempMonster, itsChristmas, detail);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	
     glPushMatrix();
 	glTranslatef(+.14,  0.1,  7.2);
 	glScalef(.2,  .2,  .2);
 	drawTechs(tempMonster, detail);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
     glPushMatrix();
 	glTranslatef(+.14,  -0.26,  7.2);
 	glScalef(.2,  .2,  .2);
 	drawFlutter(tempMonster, counter, itsChristmas, offsetX, OMNISCIENTVIEW, detail);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
     
     /*************/
@@ -357,7 +399,11 @@ static    float scoreBox[4][3] = {
     glPushMatrix();
 	glTranslatef(-2,  1.4,  0);
 	DrawStr(strokeBase, str_highscores);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
     /*************************************/
 
@@ -368,7 +414,11 @@ static    float scoreBox[4][3] = {
 	glPushMatrix();
 	    glTranslatef(-4,  0.5,  0);
 	    DrawStr(strokeBase, textString);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
         }
     else
 	{
@@ -377,7 +427,11 @@ static    float scoreBox[4][3] = {
     glPushMatrix();
 	    glTranslatef(-4,  0.5,  0);
 	    DrawStr(strokeBase, textString);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	}
     
     if (gscore[1].number > -1)
@@ -386,7 +440,11 @@ static    float scoreBox[4][3] = {
 	glPushMatrix();
 	    glTranslatef(-4,  0,  0);
 	    DrawStr(strokeBase, textString);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
        }
     
     if (gscore[2].number > -1)
@@ -395,7 +453,11 @@ static    float scoreBox[4][3] = {
 	glPushMatrix();
 	    glTranslatef(-4,  -0.5,  0);
 	    DrawStr(strokeBase, textString);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
         }
 
     /*************************************/
@@ -406,7 +468,11 @@ static    float scoreBox[4][3] = {
 	glPushMatrix();
 	    glTranslatef(-4,  -1.5,  0);
 	    DrawStr(strokeBase, textString);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	}
     else
 	{
@@ -414,7 +480,11 @@ static    float scoreBox[4][3] = {
 	glPushMatrix();
 	    glTranslatef(-4,  -1.5,  0);
 	    DrawStr(strokeBase, textString);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	}
 	
     if (vscore[1].number > -1)
@@ -423,7 +493,11 @@ static    float scoreBox[4][3] = {
 	glPushMatrix();
 	    glTranslatef(-4,  -2,  0);
 	    DrawStr(strokeBase, textString);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	}
 
     if (vscore[2].number > -1)
@@ -432,7 +506,11 @@ static    float scoreBox[4][3] = {
 	glPushMatrix();
 	    glTranslatef(-4,  -2.5,  0);
 	    DrawStr(strokeBase, textString);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	}
 	
     /*************************************/
@@ -443,7 +521,11 @@ static    float scoreBox[4][3] = {
 	glPushMatrix();
 	    glTranslatef(0.6,  0.5,  0);
 	    DrawStr(strokeBase, textString);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	}
     else
 	{
@@ -451,7 +533,11 @@ static    float scoreBox[4][3] = {
 	glPushMatrix();
 	    glTranslatef(0.6,  0.5,  0);
 	    DrawStr(strokeBase, textString);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	}
 	
    if (tscore[1].number > -1)
@@ -460,7 +546,11 @@ static    float scoreBox[4][3] = {
 	glPushMatrix();
 	    glTranslatef(0.6,  0,  0);
 	    DrawStr(strokeBase, textString);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	}
 	
    if (tscore[2].number > -1)
@@ -469,7 +559,11 @@ static    float scoreBox[4][3] = {
 	glPushMatrix();
 	    glTranslatef(0.6,  -0.5,  0);
 	    DrawStr(strokeBase, textString);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	}
 	
     /*************************************/
@@ -480,7 +574,11 @@ static    float scoreBox[4][3] = {
 	glPushMatrix();
 	    glTranslatef(0.6,  -1.5,  0);
 	    DrawStr(strokeBase, textString);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	}
     else
 	{
@@ -488,7 +586,11 @@ static    float scoreBox[4][3] = {
 	glPushMatrix();
 	    glTranslatef(0.6,  -1.5,  0);
 	    DrawStr(strokeBase, textString);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	}
 
     if (fscore[1].number > -1)
@@ -497,7 +599,11 @@ static    float scoreBox[4][3] = {
 	glPushMatrix();
 	    glTranslatef(0.6,  -2,  0);
 	    DrawStr(strokeBase, textString);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	}
 	
     if (fscore[2].number > -1)
@@ -506,7 +612,11 @@ static    float scoreBox[4][3] = {
 	glPushMatrix();
 	    glTranslatef(0.6,  -2.5,  0);
 	    DrawStr(strokeBase, textString);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	}
     }
     
@@ -572,7 +682,11 @@ void showCityName(char* name, int detail)
     glPushMatrix();
 	glTranslatef(-1.2,  0,  0);
 	DrawStr(strokeBase, name);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
     }
     
@@ -604,7 +718,11 @@ void showText2(long winX, int soundOn, int noSound, int musicOn,
     glPushMatrix();
 	glTranslatef(-5.0,  +0.7,  0);
 	DrawStr(strokeBase, str_views);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
     glPushMatrix();
 	glTranslatef(-4.8,  0.2,  0);
@@ -612,7 +730,11 @@ void showText2(long winX, int soundOn, int noSound, int musicOn,
 	
 	glTranslatef(0.2,  0,  0);
 	DrawStr(strokeBase, str_views1);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
     
     glPushMatrix();
 	glTranslatef(-4.8,  -0.3,  0);
@@ -620,7 +742,11 @@ void showText2(long winX, int soundOn, int noSound, int musicOn,
 	
 	glTranslatef(0.2,  0,  0);	
 	DrawStr(strokeBase, str_views2);
-    glPopMatrix();    
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);   
     
     glPushMatrix();
 	glTranslatef(-4.8,  -0.8,  0);
@@ -628,7 +754,11 @@ void showText2(long winX, int soundOn, int noSound, int musicOn,
 	
 	glTranslatef(0.2,  0,  0);
 	DrawStr(strokeBase, str_views3);
-    glPopMatrix();    
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);   
 
 
 
@@ -645,46 +775,82 @@ void showText2(long winX, int soundOn, int noSound, int musicOn,
     glPushMatrix();
 	glTranslatef(right+0.3,  -2,  0);
 	DrawStr(strokeBase, str_controls);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
     glPushMatrix();
 	glTranslatef(right + 0.5,  -2.5,  0);
 	DrawStr(strokeBase, str_mouse_keys);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
     glPushMatrix();
 	glTranslatef(right + 4.1,  -2.5,  0);
 	DrawStr(strokeBase, str_move);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	
 
     glPushMatrix();
 	glTranslatef(right + 0.5,  -3,  0);
 	DrawStr(strokeBase, str_shoot);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
     glPushMatrix();
 	glTranslatef(right + 4.1,  -3,  0);
 	DrawStr(strokeBase, str_attack);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
    
 
     glPushMatrix();
 	glTranslatef(right+0.5,  -3.5,  0);
 	DrawStr(strokeBase,  str_az);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
     glPushMatrix();
 	glTranslatef(right + 3.25,  -3.5,  0);
 	DrawStr(strokeBase, str_tilthead);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
 
     glPushMatrix();
 	glTranslatef(right+0.5,  -4,  0);
 	DrawStr(strokeBase,  str_ijkl);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
     glPushMatrix();
 	glTranslatef(right+1.5,  -4,  0);
 	DrawStr(strokeBase,  str_rotate);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
     /***********/
     /* options */
@@ -694,7 +860,11 @@ void showText2(long winX, int soundOn, int noSound, int musicOn,
     glPushMatrix();
 	glTranslatef(-5,  -2,  0);
 	DrawStr(strokeBase, str_options);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
 
 
@@ -704,7 +874,11 @@ void showText2(long winX, int soundOn, int noSound, int musicOn,
 
 	glTranslatef(0.2,  0,  0);
 	DrawStr(strokeBase,  str_detail);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
     glPushMatrix();
 	glTranslatef(-2.65,  -2.5,  0);
 	switch (detail) {
@@ -721,7 +895,11 @@ void showText2(long winX, int soundOn, int noSound, int musicOn,
 	    DrawStr(strokeBase, highstring);
 	    break;
 	}
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
     
     
 
@@ -732,7 +910,11 @@ void showText2(long winX, int soundOn, int noSound, int musicOn,
 
 	glTranslatef(0.2,  0,  0);
 	DrawStr(strokeBase,  str_sound);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
     glPushMatrix();
 	glTranslatef(-2.65,  -3,  0);
@@ -741,7 +923,11 @@ void showText2(long winX, int soundOn, int noSound, int musicOn,
 	    DrawStr(strokeBase,unavailablestring);
 	else
 	    soundOn ? DrawStr(strokeBase,onstring) : DrawStr(strokeBase,offstring);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
 
     glPushMatrix();
@@ -750,7 +936,11 @@ void showText2(long winX, int soundOn, int noSound, int musicOn,
 
 	glTranslatef(0.2,  0,  0);
 	DrawStr(strokeBase,  str_music);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
     glPushMatrix();
 	glTranslatef(-2.65,  -3.5,  0);
@@ -759,7 +949,11 @@ void showText2(long winX, int soundOn, int noSound, int musicOn,
 	    DrawStr(strokeBase,unavailablestring);
 	else
 	    musicOn ? DrawStr(strokeBase,onstring) : DrawStr(strokeBase,offstring);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	
 	
     glPushMatrix();
@@ -768,12 +962,20 @@ void showText2(long winX, int soundOn, int noSound, int musicOn,
 
 	glTranslatef(0.2,  0,  0);
 	DrawStr(strokeBase,  str_pause);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
     glPushMatrix();
 	glTranslatef(-2.65,  -4,  0);
 	paused ? DrawStr(strokeBase,onstring) : DrawStr(strokeBase,offstring);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
 
     glPushMatrix();
@@ -782,7 +984,11 @@ void showText2(long winX, int soundOn, int noSound, int musicOn,
 
 	glTranslatef(0.2,  0,  0);
 	DrawStr(strokeBase,  str_grab);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
     glPushMatrix();
 	glTranslatef(-2.65,  -4.5,  0);
@@ -793,7 +999,11 @@ void showText2(long winX, int soundOn, int noSound, int musicOn,
 	ptrGrab ? DrawStr(strokeBase,onstring) :
 		  DrawStr(strokeBase,offstring);
 #endif
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
     garbage = no3D;
 /* someday the 3D from the Original GL version will return in
@@ -805,7 +1015,11 @@ void showText2(long winX, int soundOn, int noSound, int musicOn,
 
 	glTranslatef(0.2,  0,  0);
 	DrawStr(strokeBase,  str_video);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
     glPushMatrix();
 	glTranslatef(-2.65, -4.5,  0);
@@ -815,7 +1029,11 @@ void showText2(long winX, int soundOn, int noSound, int musicOn,
 	else
 	    mode3D ? DrawStr(strokeBase,onstring) : DrawStr(strokeBase,offstring);
 
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 */
 
     glPushMatrix();
@@ -824,7 +1042,11 @@ void showText2(long winX, int soundOn, int noSound, int musicOn,
 
 	glTranslatef(0.2,  0,  0);
 	DrawStr(strokeBase,  str_showcase);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
 #ifndef SGIVERSION
     glPushMatrix();
@@ -832,7 +1054,11 @@ void showText2(long winX, int soundOn, int noSound, int musicOn,
 
 	DrawStr(strokeBase,unavailablestring);
 
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 #endif
     }
 
@@ -867,7 +1093,11 @@ void showText3(int detail)
 	glTranslatef(1.6 ,  +3.85,  0);
 	glScalef(0.57, 0.83, 1);
 	DrawStr(strokeBase,  str_andy);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
     /************************/
     /* print version number */
@@ -876,7 +1106,11 @@ void showText3(int detail)
 	glTranslatef(3.5,  -5.1,  0);
 	glScalef(0.75, 0.75, 1);
 	DrawStr(strokeBase,  str_version);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
    }
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -893,7 +1127,11 @@ void showText4()
     glPushMatrix();
 	glTranslatef(-3.85,  2.3,  0);
 	DrawStr(strokeBase,  str_space);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
     }
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -959,27 +1197,47 @@ void doOptions(struct monsterInfo monster, long xWin, int counter,
     glPushMatrix();
 	glTranslatef(-2.72,  1.75,  0);	
 	DrawStr(strokeBase, str_choosemonster);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
     glPushMatrix();
 	glTranslatef(-3.72,  -.6,  0);
 	DrawStr(strokeBase,  str_googelon);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
     glPushMatrix();
 	glTranslatef(1.2,  -.6,  0);
 	DrawStr(strokeBase,  str_techs);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
     glPushMatrix();
 	glTranslatef(-4,  -4,  0);
 	DrawStr(strokeBase,  str_vapour);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
     glPushMatrix();
 	glTranslatef(1.1,  -4,  0);
 	DrawStr(strokeBase,  str_flutter);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
 
     /*****************/
@@ -990,25 +1248,41 @@ void doOptions(struct monsterInfo monster, long xWin, int counter,
 	glTranslatef(-.5,  0.25,  7.2);
 	glScalef(.25,  .25,  .25);
 	drawMonster(tempMonster, counter, itsChristmas, detail);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	
     glPushMatrix();
 	glTranslatef(+.5,  0.25,  7.2);
 	glScalef(.25,  .25,  .25);
 	drawTechs(tempMonster, detail);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
     glPushMatrix();
 	glTranslatef(-.5,  -0.4,  7.2);
 	glScalef(.25,  .25,  .25);
 	drawVapour(tempMonster, itsChristmas, detail);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
     glPushMatrix();
 	glTranslatef(+.5,  -0.4,  7.2);
 	glScalef(.25,  .25,  .25);
 	drawFlutter(tempMonster, counter, itsChristmas, offsetX, OMNISCIENTVIEW, detail);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
    }
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -1091,7 +1365,11 @@ static    float summaryBox[4][3] = {
     glPushMatrix();
 	glTranslatef(-4.25, .5,  0);
 	DrawStr(strokeBase, monsterString);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 
 
     if (killfighters > 0)
@@ -1103,7 +1381,11 @@ static    float summaryBox[4][3] = {
 	else
 		sprintf(textline,  "%1u %s", killfighters,str_fighter);
 	DrawStr(strokeBase, textline);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	}
 
     if (killtanks > 0)
@@ -1115,7 +1397,11 @@ static    float summaryBox[4][3] = {
 	else
 		sprintf(textline,  "%1u %s", killtanks,str_tank);
 	DrawStr(strokeBase, textline);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	}
 
     if (killlaunchers > 0)
@@ -1127,7 +1413,11 @@ static    float summaryBox[4][3] = {
 	else
 		sprintf(textline,  "%1u %s", killlaunchers,str_launcher);
 	DrawStr(strokeBase, textline);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	}
 	
     if (killhelos > 0)
@@ -1139,7 +1429,11 @@ static    float summaryBox[4][3] = {
 	else
 		sprintf(textline,  "%1u %s", killhelos,str_helo);
 	DrawStr(strokeBase, textline);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	}
 
     if (killmtanks > 0)
@@ -1151,7 +1445,11 @@ static    float summaryBox[4][3] = {
 	else
 		sprintf(textline,  "%1u %s", killmtanks,str_maser);
 	DrawStr(strokeBase, textline);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	}
 
 
@@ -1164,7 +1462,11 @@ static    float summaryBox[4][3] = {
 	else
 		sprintf(textline,  "%1u %s", killplanes,str_bomber);
 	DrawStr(strokeBase, textline);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	}
 	
 	
@@ -1177,7 +1479,11 @@ static    float summaryBox[4][3] = {
 	else
 		sprintf(textline,  "%1u %s", killmechags,str_mechag);
 	DrawStr(strokeBase, textline);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	}
 	
     if (killCHHs > 0)
@@ -1189,7 +1495,11 @@ static    float summaryBox[4][3] = {
 	else
 		sprintf(textline,  "%1u %s", killCHHs,str_hunter);
 	DrawStr(strokeBase, textline);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	}
 
     if (killheros > 0)
@@ -1201,7 +1511,11 @@ static    float summaryBox[4][3] = {
 	else
 		sprintf(textline,  "%1u %s", killheros,str_hero);
 		DrawStr(strokeBase, textline);
-    glPopMatrix();
+    glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	}
 
     if (killfighters > 0)
@@ -1211,7 +1525,11 @@ static    float summaryBox[4][3] = {
 	    glRotatef(.1*angle + 180, 0, 1, 0);
 	    glScalef(.6,  .6,  .6);
 	    drawFighter();
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	}
 
     if (killtanks > 0)
@@ -1221,7 +1539,11 @@ static    float summaryBox[4][3] = {
 	    glRotatef(.1*angle + 270, 0, 1, 0);
 	    glScalef(0.33,  0.33,  0.33);
 	    glCallList(plaintank);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	}
 
     if (killlaunchers > 0)
@@ -1231,7 +1553,11 @@ static    float summaryBox[4][3] = {
 	    glRotatef(.1*angle + 270, 0, 1, 0);
 	    glScalef(0.33,  0.33,  0.33);
 	    glCallList(launchertank);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	}
  	
     if (killmtanks > 0)
@@ -1241,7 +1567,11 @@ static    float summaryBox[4][3] = {
 	    glRotatef(.1*angle + 45, 0, 1, 0);
 	    glScalef(0.05,  0.05,  0.05);
 	    glCallList(masertank);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	}
  
     if (killhelos > 0)
@@ -1251,7 +1581,11 @@ static    float summaryBox[4][3] = {
 	    glRotatef(.1*angle + 180, 0, 1, 0);
 	    glScalef(.3,  .3,  .3);
 	    drawHelo((counter*9) % 360,  0);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	}
 
     if (killplanes > 0)
@@ -1261,7 +1595,11 @@ static    float summaryBox[4][3] = {
 	    glRotatef(.1*angle, 0, 1, 0);
 	    glScalef(.75,  .75,  .75);
 	    drawAirplane((counter*2) % 360);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	}
 
     if (killmechags > 0)
@@ -1271,7 +1609,11 @@ static    float summaryBox[4][3] = {
 	    glRotatef(.1*angle + 90, 0, 1, 0);
 	    glScalef(.25,  .25,  .25);
 	    drawMechaMonster(50, counter, detail);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	}
 
     if (killCHHs > 0)
@@ -1281,7 +1623,11 @@ static    float summaryBox[4][3] = {
 	    glRotatef(.1*angle + 180, 0, 1, 0);
 	    glScalef(.3,  .3,  .3);
 	    makeCHH(20);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	}
 
     if (killheros > 0)
@@ -1291,6 +1637,10 @@ static    float summaryBox[4][3] = {
 	    glRotatef(.1*angle + 180, 0, 1, 0);
 	    glScalef(.25,  .25,  .25);
 	    drawHeroDude2(100, counter, 0, 0, detail);
-	glPopMatrix();
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
 	}
     }
