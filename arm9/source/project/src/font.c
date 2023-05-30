@@ -36,7 +36,6 @@
  */
 
 #include "battalion.h"
-#include <GL/glu.h>
 #include "string.h"
 
 

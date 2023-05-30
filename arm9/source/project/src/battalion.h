@@ -65,10 +65,19 @@
 /* #define MACVERSION */
 /* #define DEBUG */
 
+
+#ifdef _MSC_VER
 #include <gl/freeglut.h>
 #include "GL/glu.h"
 #include <sys/types.h>
 #include <fcntl.h>
+#endif
+
+#ifdef ARM9
+#include "VideoTGDS.h"
+#include "VideoGL.h"
+#endif
+
 #include <time.h>
 #include <stdio.h>
 

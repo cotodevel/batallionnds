@@ -13,6 +13,7 @@
 /* tgaload.c implements all neccessary functions.                      */
 /***********************************************************************/
 #include "battalion.h"
+#include "tgaload.h"
 
     /*************/ 
     /*  Textures */
@@ -24,7 +25,7 @@
     #define TEX_ROAD     3
     #define TEX_OFFLOGO  4
     
-    GLuint textures[5];
+    GLuint texturesBatallionGL[5];
     
     /*************/
     /* colours   */
@@ -152,29 +153,31 @@ void makeObjects(char * dataPath)
     /* load in textures */
     /********************/
 
+/*
 do {
 code = glGetError();
 } while (code != GL_NO_ERROR);
+*/
 
     strcpy(fullPath, dataPath);
     strcat(fullPath, "textures/screenleft.tga");
-    textures[TEX_LSCREEN] = tgaLoadAndBind(fullPath, 0);
+    texturesBatallionGL[TEX_LSCREEN] = tgaLoadAndBind(fullPath, 0);
     
     strcpy(fullPath, dataPath);
     strcat(fullPath, "textures/screenright.tga");
-    textures[TEX_RSCREEN] = tgaLoadAndBind(fullPath, 0);
+    texturesBatallionGL[TEX_RSCREEN] = tgaLoadAndBind(fullPath, 0);
     
     strcpy(fullPath, dataPath);
     strcat(fullPath, "textures/treewood.tga");
-    textures[TEX_TREEWOOD] = tgaLoadAndBind(fullPath,  0);
+    texturesBatallionGL[TEX_TREEWOOD] = tgaLoadAndBind(fullPath,  0);
     
     strcpy(fullPath, dataPath);
     strcat(fullPath, "textures/road.tga");
-    textures[TEX_ROAD] = tgaLoadAndBind(fullPath, 64, 0);
+    texturesBatallionGL[TEX_ROAD] = tgaLoadAndBind(fullPath, 0);
     
     strcpy(fullPath, dataPath);
     strcat(fullPath, "textures/logo.tga");
-    textures[TEX_OFFLOGO] = tgaLoadAndBind(fullPath, 0);
+    texturesBatallionGL[TEX_OFFLOGO] = tgaLoadAndBind(fullPath, 0);
  
 
 
@@ -371,7 +374,11 @@ void drawHelo(float percent,  int slag)
     glPushMatrix();
 	glRotatef(-percent, 0, 1, 0);
 	glCallList(bigRotor);	
-    glPopMatrix();
+    glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
 
     /********************/
     /* draw tail rotor  */
@@ -381,7 +388,11 @@ void drawHelo(float percent,  int slag)
 	glTranslatef(0.04,  0,  0.375);
 	glRotatef( -percent, 1, 0, 0);
 	glCallList(smallRotor);
-    glPopMatrix();
+    glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
 	}
 
     
@@ -406,13 +417,21 @@ void drawAirplane(int counter)
 	glTranslatef(-0.09,  -0.014,  -0.07);
 	glRotatef( -percent, 0, 0, 1);
 	glCallList(propeller);	
-    glPopMatrix();
+    glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
 
     glPushMatrix();
 	glTranslatef(+0.09,  -0.014,  -0.07);
 	glRotatef( -percent, 0, 0, 1);
 	glCallList(propeller);	
-    glPopMatrix();
+    glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
 
     }
 
@@ -468,12 +487,20 @@ static    float googShadow3[3] = {-0.1, SHADOWS, -0.5};
 			v[0] = v[1] = v[2] = 0;
 			v[3] = .14;
 			andysphdraw(v, 4);
-		glPopMatrix();
+		glPopMatrix(
+			#ifdef ARM9
+			1
+			#endif
+		);
 		glPushMatrix();
 		    glTranslatef(-0.15,  PLANEY+1.55,  -0.15);
 		    glScalef(0.15,  0.2,  0.15);
 		    drawClosedCone(colorred, colorred, 1);
-		glPopMatrix();
+		glPopMatrix(
+			#ifdef ARM9
+			1
+			#endif
+		);
 
 		glPushMatrix();
 		    glTranslatef(-0.09,  PLANEY+1.75,  0.04);
@@ -481,7 +508,11 @@ static    float googShadow3[3] = {-0.1, SHADOWS, -0.5};
 		    glRotatef(.1*(450), 0, 0, 1);
 		    glScalef(.04,  .11,  .1);
 		    drawClosedCone(colorred, colorred, 1);
-		glPopMatrix();
+		glPopMatrix(
+			#ifdef ARM9
+			1
+			#endif
+		);
 
 		glColor3fv(colorwhite);
 		v[0] = -0.15;
@@ -491,7 +522,11 @@ static    float googShadow3[3] = {-0.1, SHADOWS, -0.5};
 		andysphdraw(v, 4);
 		}
 	    
-	glPopMatrix();   
+	glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);  
 
 	/********/
 	/* body */
@@ -508,7 +543,11 @@ static    float googShadow3[3] = {-0.1, SHADOWS, -0.5};
 	    glCallList(monsterleg);
 	    glTranslatef(-0.4,   -2*monster.rot1,  -2*monster.rot2);
 	    glCallList(monsterleg);
-	glPopMatrix();
+	glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);  
 
 	if ((!monster.monsterIsDead) && (detail > 0))
 	      {
@@ -533,7 +572,11 @@ static    float googShadow3[3] = {-0.1, SHADOWS, -0.5};
 		    glTranslatef(-0.15,  PLANEY+0.85,  -0.45);
 		    glScalef(0.15,  0.15,  0.15);
 		    drawClosedCone(colorbeige, colorbrown, 1);
-		glPopMatrix();
+		glPopMatrix(
+			#ifdef ARM9
+			1
+			#endif
+		);
    
 		glPushMatrix();
 		    glTranslatef(0.0,  PLANEY+0.5,  -0.3);
@@ -542,7 +585,11 @@ static    float googShadow3[3] = {-0.1, SHADOWS, -0.5};
 		    v[0] = v[1] = v[2] = 0;
 		    v[3] = 0.2;
 		    andysphdraw(v, 4);
-		glPopMatrix();
+		glPopMatrix(
+			#ifdef ARM9
+			1
+			#endif
+		);
 		}
 
 	    if ((!monster.monsterIsDead) && (detail > 0))
@@ -560,7 +607,11 @@ static    float googShadow3[3] = {-0.1, SHADOWS, -0.5};
 		glEnd();
 		}
 
-    glPopMatrix();
+    glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
     }
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -599,12 +650,20 @@ void drawSimpleMonster(struct monsterInfo monster, int counter,
 			v[0] = v[1] = v[2] = 0;
 			v[3] = .14;
 			andysphdraw(v, 4);
-		glPopMatrix();
+		glPopMatrix(
+			#ifdef ARM9
+			1
+			#endif
+		);
 		glPushMatrix();
 		    glTranslatef(-0.15,  PLANEY+1.55,  -0.15);
 		    glScalef(0.15,  0.2,  0.15);
 		    drawClosedCone(colorred, colorred, 1);
-		glPopMatrix();
+		glPopMatrix(
+			#ifdef ARM9
+			1
+			#endif
+		);
 
 		glPushMatrix();
 		    glTranslatef(-0.09,  PLANEY+1.75,  0.04);
@@ -612,7 +671,11 @@ void drawSimpleMonster(struct monsterInfo monster, int counter,
 		    glRotatef(.1*(450), 0, 0, 1);
 		    glScalef(.04,  .11,  .1);
 		    drawClosedCone(colorred, colorred, 1);
-		glPopMatrix();
+		glPopMatrix(
+			#ifdef ARM9
+			1
+			#endif
+		);
 
 		glColor3fv(colorwhite);
 		v[0] = -0.15;
@@ -622,7 +685,11 @@ void drawSimpleMonster(struct monsterInfo monster, int counter,
 		andysphdraw(v, 4);
 		}
 	    
-	glPopMatrix();   
+	glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);   
 
 	/********/
 	/* body */
@@ -646,7 +713,11 @@ void drawSimpleMonster(struct monsterInfo monster, int counter,
 	    makercubeTopBack( 0.0,   PLANEY+0.2,  0.0,   0.1,  0.2,  0.1,  colorred);
 	    makercubeTopBack( 0.0,   PLANEY+0.06, 0.17,  0.1,  0.06, 0.08, colorred);
 
-	glPopMatrix();
+	glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
 
 	if ((!monster.monsterIsDead) && (detail > 0))
 	      {
@@ -671,7 +742,11 @@ void drawSimpleMonster(struct monsterInfo monster, int counter,
 		    glTranslatef(-0.15,  PLANEY+0.85,  -0.45);
 		    glScalef(0.15,  0.15,  0.15);
 		    drawClosedCone(colorbeige, colorbrown, 1);
-		glPopMatrix();
+		glPopMatrix(
+			#ifdef ARM9
+			1
+			#endif
+		);
    
 		glPushMatrix();
 		    glTranslatef(0.0,  PLANEY+0.5,  -0.3);
@@ -680,11 +755,19 @@ void drawSimpleMonster(struct monsterInfo monster, int counter,
 		    v[0] = v[1] = v[2] = 0;
 		    v[3] = 0.2;
 		    andysphdraw(v, 4);
-		glPopMatrix();
+		glPopMatrix(
+			#ifdef ARM9
+			1
+			#endif
+		);
 		}
 
 
-    glPopMatrix();
+    glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
     }
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -728,7 +811,11 @@ void drawVapour(struct monsterInfo monster, int itsChristmas, int detail)
 	for(i=0; i<MAXTRIBUTES; i++)
 	    andysphdraw(monster.a[i], 0);
 
-    glPopMatrix();
+    glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
     } 
 
 
@@ -774,7 +861,11 @@ void drawFlutter(struct monsterInfo monster, int counter,
 		glRotatef(monster.headVertRotate * 0.05, 1, 0, 0);
 
 		glCallList(flutterHead);
-	    glPopMatrix();
+	    glPopMatrix(
+			#ifdef ARM9
+			1
+			#endif
+		);
 
 	    glCallList(flutterBody);
     
@@ -783,17 +874,33 @@ void drawFlutter(struct monsterInfo monster, int counter,
 	    glPushMatrix();
 		glRotatef(  rotAmt, 0, 0, 1); /* 1/(2 * pi) */
 		glCallList(flutterWing1);
-	    glPopMatrix();
+	    glPopMatrix(
+			#ifdef ARM9
+			1
+			#endif
+		);
 	    
 	    glPushMatrix();
 		glRotatef( - rotAmt, 0, 0, 1); /* 1/(2 * pi) */
 		glCallList(flutterWing2);
-	    glPopMatrix();
+	    glPopMatrix(
+			#ifdef ARM9
+			1
+			#endif
+		);
 
 	    
-	glPopMatrix();
+	glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
 	
-    glPopMatrix();
+    glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
 
     } 
 
@@ -815,7 +922,11 @@ void drawTechs(struct monsterInfo monster, int detail)
 	glPushMatrix();
 	    glRotatef(0.1 * monster.headVertRotate, 1, 0, 0);
 	    glCallList(techsHead);    
-	glPopMatrix();   
+	glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);   
 
 	glCallList(techsBody);
 	}
@@ -825,7 +936,11 @@ void drawTechs(struct monsterInfo monster, int detail)
 	glCallList(techsShadow);
 	}
 	
-    glPopMatrix();
+    glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
 		    
     if (monster.deadCount >= 45)
 	{
@@ -835,7 +950,11 @@ void drawTechs(struct monsterInfo monster, int detail)
 	    glRotatef(monster.timeDead*15, 0, 1, 0);
 	    makercube(0.0,    0, 0, 0.03, 0.25, 0.2, colorgrey2);
 	    makercube(0.011,  0, 0, 0.02, 0.2, 0.15, colorblack);
-	glPopMatrix();
+	glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
 
 	glPushMatrix();
 	    glTranslatef(-monster.timeDead * 0.05 - 0.2,  monster.timeDead * 0.05,   monster.timeDead * 0.05);
@@ -843,7 +962,11 @@ void drawTechs(struct monsterInfo monster, int detail)
 	    glRotatef(monster.timeDead*15, 0, 1, 0);
 	    makercube( 0.0,   0, 0, 0.03, 0.25, 0.2, colorgrey2);
 	    makercube(-0.011, 0, 0, 0.02, 0.2, 0.15, colorblack);
-	glPopMatrix();
+	glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
 	}
     }
 
@@ -864,7 +987,11 @@ void drawSimpleTechs(struct monsterInfo monster, int detail)
 	glPushMatrix();
 	    glRotatef(0.1 * monster.headVertRotate, 1, 0, 0);
 	    glCallList(techsSimpleHead);    
-	glPopMatrix();   
+	glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);   
 
 	glCallList(techsSimpleBody);
 	}
@@ -874,7 +1001,11 @@ void drawSimpleTechs(struct monsterInfo monster, int detail)
 	glCallList(techsShadow);
 	}
 	
-    glPopMatrix();
+    glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
 		    
     }
 
@@ -952,7 +1083,11 @@ void drawHeroDude(int power, int counter,
 	    glColor4fv(c5);
 	    spheredat[2] = -0.01;
 	    andysphdraw(spheredat, sph);
-    glPopMatrix();
+    glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
 
 
     /********/
@@ -1030,8 +1165,16 @@ void drawHeroDude(int power, int counter,
 		makercube(0, -0.19, 0,  0.03, 0.03, 0.028, c1);
 	    else
 		makeitd(1, c1, 0, -0.19, 0,  0.03, 0.03, 0.028);
-	glPopMatrix();
-    glPopMatrix();
+	glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
+    glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
  
     glPushMatrix();
 	glRotatef(.1*(-ang), 1, 0, 0);
@@ -1053,8 +1196,16 @@ void drawHeroDude(int power, int counter,
 		makercube(0, -0.19, 0,  0.03, 0.03, 0.028, c1);
 	    else
 		makeitd(1, c1, 0, -0.19, 0,  0.03, 0.03, 0.028);
-	glPopMatrix();
-    glPopMatrix();
+	glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
+    glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
     
     /********/
     /* legs */
@@ -1086,7 +1237,11 @@ void drawHeroDude(int power, int counter,
 	    makercube(0, -.59, +0.025,  0.026, 0.04, 0.075, c2);
 	else
 	    makeitd(0, c2, 0, -.59, +0.025,  0.026, 0.04, 0.075);
-    glPopMatrix();
+    glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
     
     glPushMatrix();
 	glTranslatef(-0.04,  PLANEY+0.65,  0);
@@ -1106,7 +1261,11 @@ void drawHeroDude(int power, int counter,
 	    makercube(0, -.59, +0.025,  0.026, 0.04, 0.075, c2);
 	else
 	    makeitd(1, c2, 0, -.59, +0.025,  0.026, 0.04, 0.075);
-    glPopMatrix();
+    glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
     
     }
 
@@ -1185,7 +1344,11 @@ void drawHeroDude2(int power, int counter,
 	    glColor4fv(c5);
 	    spheredat[2] = -0.01;
 	    andysphdraw(spheredat, sph);
-    glPopMatrix();
+    glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
 
     /********/
     /* neck */
@@ -1259,7 +1422,11 @@ void drawHeroDude2(int power, int counter,
 	    makercube(0, -0.19, 0,  0.03, 0.03, 0.028, c1);
 	else
 	    makeitd(1, c1, 0, -0.19, 0,  0.03, 0.03, 0.028);
-    glPopMatrix();
+    glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
 
  
     glPushMatrix();
@@ -1283,8 +1450,16 @@ void drawHeroDude2(int power, int counter,
 		makercube(0, -0.19, 0,  0.03, 0.03, 0.028, c1);
 	    else
 		makeitd(1, c1, 0, -0.19, 0,  0.03, 0.03, 0.028);
-	glPopMatrix();
-    glPopMatrix();
+	glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
+    glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
     
     /********/
     /* legs */
@@ -1316,7 +1491,11 @@ void drawHeroDude2(int power, int counter,
 	    makercube(0, -.59, +0.025,  0.026, 0.04, 0.075, c2);
 	else
 	    makeitd(0, c2, 0, -.59, +0.025,  0.026, 0.04, 0.075);
-    glPopMatrix();
+    glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
     
     glPushMatrix();
 	glTranslatef(-0.04,  PLANEY+0.65,  0);
@@ -1336,7 +1515,11 @@ void drawHeroDude2(int power, int counter,
 	    makercube(0, -.59, +0.025,  0.026, 0.04, 0.075, c2);
 	else
 	    makeitd(1, c2, 0, -.59, +0.025,  0.026, 0.04, 0.075);
-    glPopMatrix();
+    glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
     
     }
 
@@ -1601,7 +1784,11 @@ void drawBuilding6(int counter, float * c1,  float * c2, int detail)
 	glRotatef((counter*15) % 360, 0, 1, 0);
 	makercube(0.0, 0.0, 0.0, 0.01,  0.1,  0.14, c2);
 	makercube(0.0, 0.0, 0.0, 0.013, 0.07, 0.11, c1);
-    glPopMatrix();
+    glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
 
     /* windows */
     
@@ -1656,7 +1843,11 @@ void drawCoolingTower(int detail)
 	
 	drawClosedCylinder(colorgrey3,  colorwhite,  0, detail);
 	    
-    glPopMatrix();
+    glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
 
     if (detail >= 0)
 	{
@@ -1668,7 +1859,11 @@ void drawCoolingTower(int detail)
 	    //gluDisk(qObj, 0.0, RADIUS, 16, 16); -> NDS GX Implementation
 	    drawCircle(32, 1, 0., 0.28);
     
-	glPopMatrix();
+	glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
 	}
 }
 
@@ -1685,13 +1880,21 @@ void drawBuilding11(int detail)
 	glTranslatef(-.25,  .8,  -.1);
 	glScalef(.1,  .8,  .1);
 	drawClosedCylinder(colorgrey2,  colorgrey3,  0, detail);
-    glPopMatrix();
+    glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
 
     glPushMatrix();
 	glTranslatef(.05,  .8,  -.1);
 	glScalef(.1,  .8,  .1);
 	drawClosedCylinder(colorgrey2,  colorgrey3,  0, detail);
-    glPopMatrix();
+    glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
     }
 
 
@@ -1781,7 +1984,7 @@ void drawBuilding37(float * color, int detail)
 
     if ( detail >= 2 )
 	{	
-	glBindTexture(GL_TEXTURE_2D, textures[TEX_OFFLOGO]); 
+	glBindTexture(GL_TEXTURE_2D, texturesBatallionGL[TEX_OFFLOGO]); 
 
 	glEnable(GL_TEXTURE_2D);
 	}	
@@ -1819,7 +2022,11 @@ void drawBuilding37(float * color, int detail)
 
     glDisable(GL_TEXTURE_2D);
 
-    glPopMatrix();
+    glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
     }
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -1852,7 +2059,11 @@ void drawBuilding25(){
 
 	drawCircle(32, 1, 0., 0.3); //gluDisk( qobj, 0.,   0.3, 32, 1);
 	
-    glPopMatrix();
+    glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
 
     /* support post */
     
@@ -1872,7 +2083,11 @@ void drawBuilding25(){
 
 	drawCircle(32, 1, 0., 0.35); //gluDisk( qobj, 0.,   0.35, 32, 1);
 	
-    glPopMatrix();
+    glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
 
     glPushMatrix();	
 
@@ -1892,7 +2107,11 @@ void drawBuilding25(){
 	    glVertex3fv(sat1);
 	    glVertex3fv(sat4);	
 	glEnd();
-    glPopMatrix();
+    glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
 }
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -1956,9 +2175,9 @@ void drawBuilding26(int rorl, int detail)
 
 	
 	    if (rorl == 0)
-		    glBindTexture(GL_TEXTURE_2D, textures[TEX_LSCREEN]); 
+		    glBindTexture(GL_TEXTURE_2D, texturesBatallionGL[TEX_LSCREEN]); 
 	    else
-		    glBindTexture(GL_TEXTURE_2D, textures[TEX_RSCREEN]); 
+		    glBindTexture(GL_TEXTURE_2D, texturesBatallionGL[TEX_RSCREEN]); 
 		
 	    glEnable(GL_TEXTURE_2D);
 	
@@ -1987,7 +2206,11 @@ void drawBuilding26(int rorl, int detail)
 	    glDisable(GL_TEXTURE_2D);
 
 
-	glPopMatrix();
+	glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
 	}  
 
 }
@@ -2036,7 +2259,11 @@ void drawBuilding33(int count, int detail)
 	glTranslatef(-.2,  height,  -.2);
 	glScalef(.2,  height,  .2);
 	drawClosedCylinder(c,  c,  0, detail);
-    glPopMatrix();
+    glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
     
     }
  
@@ -2279,7 +2506,11 @@ void drawBattlefield(struct road * roads,  float xshift,  float zshift,
 		glVertex3fv(arrowhead[1]);
 		glVertex3fv(arrowhead[2]);
 	    glEnd();
-	glPopMatrix();
+	glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
 	
 
 	}
@@ -2651,7 +2882,7 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
 		    
 		    if (detail >= 2)
 			{
-			glBindTexture(GL_TEXTURE_2D, textures[TEX_TREEWOOD]); 
+			glBindTexture(GL_TEXTURE_2D, texturesBatallionGL[TEX_TREEWOOD]); 
 			glEnable(GL_TEXTURE_2D);
 			}
 
@@ -2686,7 +2917,7 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
 		    {
 		    if (detail >= 2)
 			{
-			glBindTexture(GL_TEXTURE_2D, textures[TEX_TREEWOOD]); 
+			glBindTexture(GL_TEXTURE_2D, texturesBatallionGL[TEX_TREEWOOD]); 
 
 			glEnable(GL_TEXTURE_2D);
 			}
@@ -2707,7 +2938,11 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
 			    glColor3fv(colorblack);
 			    glTranslatef(x,  SHADOWS,   z);
 			    glCallList(roundTreeShadow);
-			glPopMatrix();
+			glPopMatrix(
+				#ifdef ARM9
+				1
+				#endif
+			);
 			}
 		    }
 		}
@@ -2868,7 +3103,11 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
 					break;
 			}
 
-		glPopMatrix();	
+		glPopMatrix(
+			#ifdef ARM9
+			1
+			#endif
+		);	
 		}
 
 	    /**********************************/
@@ -2882,7 +3121,11 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
 		    
 		    drawWater(allTreesOnPlane[treeCounter].treeshape, itsChristmas);
 		    
-		glPopMatrix();
+		glPopMatrix(
+			#ifdef ARM9
+			1
+			#endif
+		);
 		}
 
 	    /**********************************/
@@ -2894,7 +3137,11 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
 		glPushMatrix();
 		    glTranslatef(x, PLANEY, z);		    
 		    drawHills(allTreesOnPlane[treeCounter].treeshape, itsChristmas);		    
-		glPopMatrix();
+		glPopMatrix(
+			#ifdef ARM9
+			1
+			#endif
+		);
 		}	    
 	    }
 	}
@@ -2988,7 +3235,11 @@ void drawSlagTanks(struct tank * allSlags, int counter, int detail)
 				break;
 		}
 	    	    
-	    glPopMatrix();
+	    glPopMatrix(
+			#ifdef ARM9
+			1
+			#endif
+		);
 	    }
 	}
     }
@@ -3147,7 +3398,11 @@ void drawTanks(struct tank * allTanks,  int counter, struct monsterInfo G,
 				break;
 		}
 	    
-	    glPopMatrix();	
+	    glPopMatrix(
+			#ifdef ARM9
+			1
+			#endif
+		);
 
 	    if (detail > 0)  	
 		{
@@ -3190,7 +3445,11 @@ void drawTanks(struct tank * allTanks,  int counter, struct monsterInfo G,
 		    default:		showError("Bogus Vehicle in Tank List! (drawTanks)");
 					break;
 		    }
-		glPopMatrix();
+		glPopMatrix(
+			#ifdef ARM9
+			1
+			#endif
+		);
 		}
   
 	    if ((cTank.maserCount > 0) && (cTank.rad <= cTank.range) && (cTank.rad >= 0.5) && (!monsterIsDead))
@@ -3471,7 +3730,11 @@ void drawBooms(struct boom * boomers, int detail)
 			break;
 		}
 	    }
-	glPopMatrix();
+		glPopMatrix(
+			#ifdef ARM9
+			1
+			#endif
+		);
 	}
 	
     }
@@ -3666,7 +3929,11 @@ void drawRoads(struct road * roads, float xshift, float zshift,
 		glCallList(planeDotsObjD0);
 	    else
 		glCallList(planeDotsObj);
-	glPopMatrix();
+	glPopMatrix(
+		#ifdef ARM9
+		1
+		#endif
+	);
 	}
 
 
@@ -3711,7 +3978,7 @@ void drawRoads(struct road * roads, float xshift, float zshift,
 	if (detail >= 2) 
 	    {
 	    glColor3fv(colorwhite);
-	    glBindTexture(GL_TEXTURE_2D, textures[TEX_ROAD]); 
+	    glBindTexture(GL_TEXTURE_2D, texturesBatallionGL[TEX_ROAD]); 
 	    glEnable(GL_TEXTURE_2D);
 	    }
 
@@ -3913,7 +4180,11 @@ void drawProjectiles(struct projectile * allProjs, int counter,
 		case PROJROCKET:glPushMatrix();		/* white cube shells */
 				    glTranslatef(x,  y,  z);
 				    glCallList(shellObj);			
-				glPopMatrix();
+				glPopMatrix(
+					#ifdef ARM9
+					1
+					#endif
+				);
 				if (detail > 0)
 				    {
 				    glColor4fv(colorblack);
@@ -3926,7 +4197,11 @@ void drawProjectiles(struct projectile * allProjs, int counter,
 				    glRotatef(floatRatio, 1, 0, 0);
 				    glRotatef(floatRatio, 0, 1, 0);
 				    glCallList(shell2Obj);
-				glPopMatrix();
+				glPopMatrix(
+					#ifdef ARM9
+					1
+					#endif
+				);
 				if (detail > 0)
 				    {
 				    glColor4fv(colorblack);
@@ -3946,7 +4221,11 @@ void drawProjectiles(struct projectile * allProjs, int counter,
 		case PROJWATER: glPushMatrix();		/* water */
 				    glTranslatef(x,  y,  z);
 				    glCallList(watershellObj);
-				glPopMatrix();
+				glPopMatrix(
+					#ifdef ARM9
+					1
+					#endif
+				);
 				break;
 
 		case PROJHERO:  glPushMatrix();
@@ -3954,7 +4233,11 @@ void drawProjectiles(struct projectile * allProjs, int counter,
 				    glRotatef(floatRatio, 1, 0, 0);
 				    glRotatef(floatRatio, 0, 1, 0);
 				    glCallList(heroshellObj);
-				glPopMatrix();
+				glPopMatrix(
+					#ifdef ARM9
+					1
+					#endif
+				);
 				if (detail > 0)
 				    {
 				    glColor4fv(colorblack);
