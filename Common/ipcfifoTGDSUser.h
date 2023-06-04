@@ -52,8 +52,6 @@ struct sIPCSharedTGDSSpecific {
 
 #define NO_VIDEO_PLAYBACK	1
 
-#define ISEMULATOR 1 //defined == TGDS Project does not self reload, undedfined == TGDS Project self reloads
-
 //Useful to enable ARM9 defines through VisualStudio-like environments at ARM9
 #if !defined(_MSC_VER) && !defined(ARM7)
 #define ARM9 1
