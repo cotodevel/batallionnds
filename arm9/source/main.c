@@ -205,7 +205,7 @@ char args[8][MAX_TGDSFILENAME_LENGTH];
 char *argvs[8];
 
 #if (defined(__GNUC__) && !defined(__clang__))
-__attribute__((optimize("O0")))
+__attribute__((optimize("Os")))
 #endif
 
 #if (!defined(__GNUC__) && defined(__clang__))
