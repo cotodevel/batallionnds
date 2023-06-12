@@ -78,6 +78,9 @@ extern int TWLPrintf(const char *fmt, ...);
 extern int startAquarium(int argc, char *argv[]);
 extern int pendPlay;
 
+
+extern void doDisplay(void);
+
 #ifdef __cplusplus
 }
 #endif

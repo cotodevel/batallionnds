@@ -22,6 +22,16 @@ USA
 #include "gui_console_connector.h"
 #include "consoleTGDS.h"
 #include "videoTGDS.h"
+#include "debugNocash.h"
+
+//printf functionality
+#include <stdio.h>
+#include <string.h>
+#include <stdarg.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include <_ansi.h>
+#include <reent.h>
 
 ////////[For custom Console implementation]:////////
 //You need to override :
@@ -53,6 +63,35 @@ __attribute__ ((optnone))
 vramSetup * getProjectSpecificVRAMSetup(){
 	return TGDSFOOBILLIARD_3DVRAM_SETUP();
 }
+
+
+
+int TGDSCustomPrintf2DConsole(char * stringToRenderOnscreen){
+	nocashMessage((const char *)stringToRenderOnscreen);
+}
+
+char debugHaltMsg[256];
+int printfAndHalt(const char *fmt, ...){
+	//default TGDS printf
+	setTGDSARM9PrintfCallback((printfARM9LibUtils_fn)&TGDSDefaultPrintf2DConsole); //Redirect printf to custom Console implementation
+	
+	clrscr();
+	printf("--");
+	printf("--");
+	printf("--");
+	
+	va_list args;
+	va_start (args, fmt);
+	vsnprintf ((sint8*)debugHaltMsg, (int)sizeof(debugHaltMsg), fmt, args);
+	va_end (args);
+	printf((const char *)debugHaltMsg);
+	printf("Debug ended. Halting.");
+	while(1==1){
+		IRQVBlankWait();
+	}
+	return 0;
+}
+
 
 
 //2) Uses subEngine: VRAM Layout -> Console Setup
@@ -116,6 +155,8 @@ bool InitProjectSpecificConsole(){
 	setOrientation(ORIENTATION_0, mainEngine);
 	mainEngine = false;
 	setOrientation(ORIENTATION_0, mainEngine);
+	
+	setTGDSARM9PrintfCallback((printfARM9LibUtils_fn)&TGDSCustomPrintf2DConsole); //Redirect printf to custom Console implementation
 	
 	return true;
 }

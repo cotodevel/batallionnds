@@ -36,7 +36,7 @@
 #include "grass_tex.h"
 #include "fish_tex.h"
 #include "Sphere008.h"
-
+#include "gui_console_connector.h"
 extern int vsnprintf( char* buffer, size_t buf_size, const char* format, va_list vlist );
 #endif
 
@@ -1028,10 +1028,6 @@ void initialization()
     char * playerPointer;
     char scoredataPath[MAXPATH];
     char garbage;
-
-    
-    
-    
     GLfloat fogColor[4]= {0.8f, 0.8f, 1.0f, 1.0f};
 
     /* init time values (milliseconds)*/
@@ -1054,18 +1050,15 @@ void initialization()
 
 #endif
 
-
     buildingBoomSoFarCounter	    = 0;    
     buildingBoomThisFrameCounter    = 0;
     currentTankNumber		    = 1;
     biggestTankNumberSent	    = 0;
-    
     totalCounter		    = 0;
 
     /************************************/
     /* set up memory arena              */
     /************************************/
-
 #ifdef SGIVERSION
 
     sharedmem = calloc(1, ARENASIZE);
@@ -1252,8 +1245,6 @@ void initialization()
     /**************************************/
 
     srand( (unsigned) today);
-
-     
 	no3D = 1;
 
     /********************************************/
@@ -1268,33 +1259,37 @@ void initialization()
 	roadFile = fopen(fullPath, "rb");
 #else
 
+#ifdef _MSC_VER
     strcpy(dataPath, "../src/battalion.data/");
-        
-    if (dataPath[strlen(dataPath)-1] != '/')
-        strcat(dataPath, "/");
-        
-    strcpy(fullPath, dataPath);
-    strcat(fullPath, "battalion.sho");
-    roadFile = fopen(fullPath, "rb");
-
+#endif
+#ifdef ARM9
+    strcpy(dataPath, "0:/battalion.data/");
 #endif
 
-    if (roadFile != NULL)
-	{
-	     fclose(roadFile);
+
+    if (dataPath[strlen(dataPath)-1] != '/'){
+        strcat(dataPath, "/");
+	}
+
+    strcpy(fullPath, dataPath);
+    strcat(fullPath, "battalion.sho");
+
+#ifdef _MSC_VER
+    roadFile = fopen(fullPath, "rb");
+#endif
+#ifdef ARM9
+    roadFile = fopen(fullPath, "r");
+#endif
+
+#endif
+    if (roadFile != NULL){
+	    fclose(roadFile);
 	}
     else
 	{
-/* since the Indizone version is missing Techs' sound we can't use this.
-
-	roadFile = fopen("/usr/demos/IndiZone/.data/battalion/battalion.sho", "rb");
-	if (roadFile != NULL)
-	    {
-	    strcpy(dataPath,  "/usr/demos/IndiZone/.data/battalion/");
-	    fclose(roadFile);
-	    }
-	else
-*/
+		#ifdef ARM9
+		printfAndHalt("battalion.sho open error (1)");
+		#endif
 	    {
 	    roadFile = fopen("./battalion.data/battalion.sho", "rb");
 	    if (roadFile != NULL)
@@ -1317,21 +1312,31 @@ void initialization()
 
     levelsFile = fopen(fullPath, "r");
   
-    if (levelsFile == NULL)
+    if (levelsFile == NULL){
+		#ifdef ARM9
+		printfAndHalt("Could not load in battalion.levels");
+		#endif
 	    showError("Could not load in battalion.levels\n");
+	}
     else
 	{
 	    /* first line must have the number of levels available*/ 
 	    fscanf(levelsFile,  "%u", &maxLevels);
 	    
-	    if(maxLevels<1 || maxLevels > 99)
-	    {
-	       showError("error reading levels file\n");
+	    if(maxLevels<1 || maxLevels > 99){
+			#ifdef ARM9
+			printfAndHalt("error reading levels file");
+			#endif
+
+		   showError("error reading levels file\n");
 	       maxLevels = 1;
 	       levelNames = NULL;
         } 
-        else  
-        {
+        else{
+			#ifdef ARM9
+			printfAndHalt("levels processed OK from file"); //so far OK
+			#endif
+
             printf("Niveles: %u\n",maxLevels);
             levelNames = (char**)malloc(sizeof(char*)*maxLevels);
             for(i = 0; i<maxLevels; i++)
@@ -5371,61 +5376,57 @@ struct monsterInfo autopilot(float centerX, float centerZ, struct monsterInfo th
     return(thaMonster);
     }
 
-static void doDisplay(void)
-{
 
+void doDisplay(void){
+    if (!mode3D){
+		/**********************************/
+		/*draw in mono                   */
+		/**********************************/
 
-    if (!mode3D)
-	{	
-	/**********************************/
-	/* draw in mono                   */
-	/**********************************/
-
-	if (lod == -1)
-	    glClear(GL_COLOR_BUFFER_BIT);
-	else		
-	    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
- 
- 	doDrawing(2);
+		if (lod == -1){
+			glClear(GL_COLOR_BUFFER_BIT);
+		}
+		else{
+			glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+		}
+ 		doDrawing(2);
  	}
-    else
-	{	
-	short Height3d,  Width3d;
-
-	/**********************************/
-	/* draw in stereo                 */
-	/**********************************/
-
-	if (doBigClear)
-	    {
-	    glViewport(0,  0, XMAXSCREEN+1, YMAXSCREEN+1);
-	    
-	    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-	    doBigClear -= 1;
+    else{
+		short Height3d,  Width3d;
+		/**********************************/
+		/* draw in stereo                 */
+		/**********************************/
+		if (doBigClear){
+			glViewport(0,  0, XMAXSCREEN+1, YMAXSCREEN+1);
+			glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+			doBigClear -= 1;
 	    }
-
-	Height3d = (short) windowTall/4;
-	Width3d = (short) windowWide/2;
-
-	glViewport((short) (XMAXSCREEN/2 - Width3d),
-	    (short) (YMAXSTEREO/2 - Height3d),
-	    ( (short) (XMAXSCREEN/2 + Width3d))-((short) (XMAXSCREEN/2 - Width3d))+1, 
-	    ( (short) (YMAXSTEREO/2 + Height3d))-( (short) (YMAXSTEREO/2 - Height3d))+1);
-	
-	glClear(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
-
-	doDrawing(0);
-
-	glViewport((short) (XMAXSCREEN/2 - Width3d),
-	    (short) (YOFFSET+YMAXSTEREO/2 - Height3d),
-	    ( (short) (XMAXSCREEN/2 + Width3d))-((short) (XMAXSCREEN/2 - Width3d))+1, 
-	    ((short) (YOFFSET+YMAXSTEREO/2 + Height3d))-( (short) (YOFFSET+YMAXSTEREO/2 - Height3d))+1);
-	
-	glClear(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
-
-	doDrawing(1);
+		Height3d = (short) windowTall/4;
+		Width3d = (short) windowWide/2;
+		glViewport(
+			(short) (XMAXSCREEN/2 - Width3d), 
+			(short) (YMAXSTEREO/2 - Height3d),
+			( (short) (XMAXSCREEN/2 + Width3d))-((short) (XMAXSCREEN/2 - Width3d))+1, 
+			( (short) (YMAXSTEREO/2 + Height3d))-( (short) (YMAXSTEREO/2 - Height3d))+1
+		);
+		glClear(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
+		doDrawing(0);
+		glViewport(
+			(short) (XMAXSCREEN/2 - Width3d),
+			(short) (YOFFSET+YMAXSTEREO/2 - Height3d),
+			( (short) (XMAXSCREEN/2 + Width3d))-((short) (XMAXSCREEN/2 - Width3d))+1, 
+			((short) (YOFFSET+YMAXSTEREO/2 + Height3d))-( (short) (YOFFSET+YMAXSTEREO/2 - Height3d))+1
+		);
+		glClear(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
+		doDrawing(1);
 	}
- }
+	
+	#ifdef ARM9
+	glFlush();
+	//handleARM9SVC();	/* Do not remove, handles TGDS services */
+	IRQVBlankWait();
+	#endif
+}
  
  
  
@@ -6118,7 +6119,7 @@ void id()
 
 
 
-//cambia el tamaño de la ventana...hay que hacer algunos ajustes
+//cambia el tamaï¿½o de la ventana...hay que hacer algunos ajustes
 void reshape( int width, int height )
 {
     viewW = width;
@@ -6186,7 +6187,14 @@ int startBatallion(int argc, char **argv)
 #endif
 
 #ifdef ARM9
-//todo: ARM9 batallion nds game loop
+	printf("entering main loop");
+
+	REG_IE |= IRQ_VBLANK;
+
+while(1==1){
+	doDisplay();
+}
+
 #endif
 
 	return(0);

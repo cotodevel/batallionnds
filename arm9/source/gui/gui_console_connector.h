@@ -41,6 +41,14 @@ USA
 #include "keypadTGDS.h"
 #include "videoTGDS.h"
 
+//printf functionality
+#include <stdio.h>
+#include <string.h>
+#include <stdarg.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include <_ansi.h>
+#include <reent.h>
 #endif
 
 #ifdef __cplusplus
@@ -58,6 +66,10 @@ extern vramSetup * getProjectSpecificVRAMSetup();
 extern bool InitProjectSpecificConsole();
 
 extern vramSetup * TGDSFOOBILLIARD_3DVRAM_SETUP();
+
+extern int TGDSCustomPrintf2DConsole(char * stringToRenderOnscreen);
+extern char debugHaltMsg[256];
+extern int printfAndHalt(const char *fmt, ...);
 
 #ifdef __cplusplus
 }

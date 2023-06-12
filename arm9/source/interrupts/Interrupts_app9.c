@@ -30,6 +30,7 @@ USA
 #include "imagepcx.h"
 #include "keypadTGDS.h"
 #include "CubeImported.h"
+#include "timerTGDS.h"
 
 #ifdef ARM9
 __attribute__((section(".itcm")))
@@ -84,6 +85,8 @@ void Timer3handlerUser(){
 		msCounter = 0;	
 	}
 	msCounter++;
+	
+	//printf("timer: %d", getTimerCounter());
 }
 
 #ifdef ARM9
