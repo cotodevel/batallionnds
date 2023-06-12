@@ -331,6 +331,12 @@
 /* Make sure that malloc(), realloc(), calloc() and free() are declared. */
 /*lint -save -e537 */
 #include <stdlib.h>
+
+
+#ifdef _MSC_VER
+#include "TGDSTypes.h"
+#endif
+
 /*lint -restore */
 
 #ifdef __cplusplus
@@ -575,11 +581,11 @@ char* mwStrdup( const char *, const char*, int );
 #undef strdup
 #endif
 
-#define malloc(n)       mwMalloc(n,__FILE__,__LINE__)
+#define TGDSARM9Malloc(n)       mwMalloc(n,__FILE__,__LINE__)
 #define strdup(p)       mwStrdup(p,__FILE__,__LINE__)
-#define realloc(p,n)    mwRealloc(p,n,__FILE__,__LINE__)
-#define calloc(n,m)     mwCalloc(n,m,__FILE__,__LINE__)
-#define free(p)         mwFree(p,__FILE__,__LINE__)
+#define TGDSARM9Realloc(p,n)    mwRealloc(p,n,__FILE__,__LINE__)
+#define TGDSARM9Calloc(n,m)     mwCalloc(n,m,__FILE__,__LINE__)
+#define TGDSARM9Free(p)         mwFree(p,__FILE__,__LINE__)
 #define CHECK()         mwTest(__FILE__,__LINE__,MW_TEST_ALL)
 #define CHECK_THIS(n)   mwTest(__FILE__,__LINE__,n)
 #define CHECK_BUFFER(b) mwTestBuffer(__FILE__,__LINE__,b)
@@ -627,15 +633,15 @@ extern void mwDummyTraceFunction(const char *,...);
 #define mwStatistics(f)
 #define mwMark(p,t,f,n)     (p)
 #define mwUnmark(p,f,n)     (p)
-#define mwMalloc(n,f,l)     malloc(n)
+#define mwMalloc(n,f,l)     TGDSARM9Malloc(n)
 #define mwStrdup(p,f,l)     strdup(p)
-#define mwRealloc(p,n,f,l)  realloc(p,n)
-#define mwCalloc(n,m,f,l)   calloc(n,m)
-#define mwFree(p)           free(p)
-#define mwMalloc_(n)        malloc(n)
-#define mwRealloc_(p,n)     realloc(p,n)
-#define mwCalloc_(n,m)      calloc(n,m)
-#define mwFree_(p)          free(p)
+#define mwRealloc(p,n,f,l)  TGDSARM9Realloc(p,n)
+#define mwCalloc(n,m,f,l)   TGDSARM9Calloc(n,m)
+#define mwFree(p)           TGDSARM9Free(p)
+#define mwMalloc_(n)        TGDSARM9Malloc(n)
+#define mwRealloc_(p,n)     TGDSARM9Realloc(p,n)
+#define mwCalloc_(n,m)      TGDSARM9Calloc(n,m)
+#define mwFree_(p)          TGDSARM9Free(p)
 #define mwAssert(e,es,f,l)
 #define mwVerify(e,es,f,l)  (e)
 #define mwTrace             mwDummyTrace

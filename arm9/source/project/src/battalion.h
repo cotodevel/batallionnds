@@ -28,6 +28,10 @@
 #pragma warning(disable:4703)
 #endif
 
+#ifdef _MSC_VER
+#include "TGDSTypes.h"
+#endif
+
 #ifdef SOUND
   #include <AL/al.h>
 #endif
@@ -115,9 +119,9 @@
 /* to try and speed up computations */
 /************************************/
 
-#define amalloc(x,y)	malloc(x)
-#define afree(x,y)	free(x)
-#define acalloc(n,x,y)	calloc(n,x)
+#define amalloc(x,y)	TGDSARM9Malloc(x)
+#define afree(x,y)	TGDSARM9Free(x)
+#define acalloc(n,x,y)	TGDSARM9Calloc(n,x)
 
 
 /**********************/

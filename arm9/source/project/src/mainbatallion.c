@@ -312,7 +312,7 @@ void clearLists()
     {
 	    ttank = temptank;
 	    temptank= temptank->next;
-	    free(ttank);
+	    TGDSARM9Free(ttank);
 	}
 	numTanksOnPlane = 0;
          
@@ -321,7 +321,7 @@ void clearLists()
 	{
 	    tempboom2 = tempboom;
 	    tempboom = tempboom->next;
-	    free(tempboom2);
+	    TGDSARM9Free(tempboom2);
 	}
 
     temp = projectFlight;
@@ -329,7 +329,7 @@ void clearLists()
 	{
 	    killer = temp;
 	    temp = temp->next;
-	    free(killer);
+	    TGDSARM9Free(killer);
 	}
 
     temptank = slaglist;
@@ -337,7 +337,7 @@ void clearLists()
     {
 	    ttank = temptank;
 	    temptank = temptank->next;
-	    free(ttank);
+	    TGDSARM9Free(ttank);
 	}
 
     temptree = treelist;
@@ -345,7 +345,7 @@ void clearLists()
 	{
 	    ttree = temptree;
 	    temptree = temptree->next;
-	    free(ttree);
+	    TGDSARM9Free(ttree);
 	}
     numTreesOnPlane = 0;
     numTreesEverywhere = 0;
@@ -355,7 +355,7 @@ void clearLists()
 	{
 	    ttarget = temptarg;
 	    temptarg= temptarg->next;
-	    free(ttarget);
+	    TGDSARM9Free(ttarget);
 	}
 }
 
@@ -363,7 +363,7 @@ void clearRoads()
 {
     if(roadSystem != NULL)
     {
-        free(roadSystem);
+        TGDSARM9Free(roadSystem);
         roadSystem = NULL;
     }    
 }
@@ -376,8 +376,8 @@ void clearNames()
     if(levelNames != NULL)
     {
         for(i=0; i<maxLevels; i++)
-                free(levelNames[i]);
-        free(levelNames);
+                TGDSARM9Free(levelNames[i]);
+        TGDSARM9Free(levelNames);
         levelNames = NULL;
     }
 }
@@ -795,22 +795,22 @@ void loadLevel(int level)
     /* set up the dummy head nodes*/
     /******************************/
 
-    projectFlight = (struct projectile *) malloc(sizeProjectile);
+    projectFlight = (struct projectile *) TGDSARM9Malloc(sizeProjectile);
     projectFlight->next = NULL;
 
-    projectboom = (struct boom *) malloc(sizeBoom);
+    projectboom = (struct boom *) TGDSARM9Malloc(sizeBoom);
     projectboom->next = NULL;
 
-    tanklist = (struct tank *) malloc(sizeTank);
+    tanklist = (struct tank *) TGDSARM9Malloc(sizeTank);
     tanklist->next = NULL;
 
-    slaglist = (struct tank *) malloc(sizeTank);
+    slaglist = (struct tank *) TGDSARM9Malloc(sizeTank);
     slaglist->next = NULL;
 
-    treelist = (struct tree *) malloc(sizeof(struct tree));
+    treelist = (struct tree *) TGDSARM9Malloc(sizeof(struct tree));
     treelist->next = NULL;
 
-    targets = (struct targetInfo *) malloc(sizeof(struct targetInfo));
+    targets = (struct targetInfo *) TGDSARM9Malloc(sizeof(struct targetInfo));
     targets->next = NULL;
 
 #ifdef SOUND
@@ -854,7 +854,7 @@ void loadLevel(int level)
 	    
         fclose(datafile);
         
-        roadSystem = (struct road *) calloc(i, sizeof(struct road));
+        roadSystem = (struct road *) TGDSARM9Calloc(i, sizeof(struct road));
         
         if (roadSystem == NULL)
             showError("Could not allocate array for road.data\n");
@@ -893,7 +893,7 @@ void loadLevel(int level)
 	{
 	    do
 	    {
-	        temptree = (struct tree *) malloc(sizeof(struct tree));
+	        temptree = (struct tree *) TGDSARM9Malloc(sizeof(struct tree));
 	        
 	        
 	        if (temptree != NULL)
@@ -950,7 +950,7 @@ void loadLevel(int level)
 	    while (x || z || type || shape);
 	    
         treelist->next = treelist->next->next;
-	    free(temptree);
+	    TGDSARM9Free(temptree);
 
 
 	/**************************************************************************/
@@ -1061,7 +1061,7 @@ void initialization()
     /************************************/
 #ifdef SGIVERSION
 
-    sharedmem = calloc(1, ARENASIZE);
+    sharedmem = TGDSARM9Calloc(1, ARENASIZE);
     arena = acreate(sharedmem, ARENASIZE, 0, NULL, NULL); 
     amallopt(M_FREEHD, 1, arena);
     amallopt(M_CLRONFREE, 0, arena);
@@ -1338,10 +1338,10 @@ void initialization()
 			#endif
 
             printf("Niveles: %u\n",maxLevels);
-            levelNames = (char**)malloc(sizeof(char*)*maxLevels);
+            levelNames = (char**)TGDSARM9Malloc(sizeof(char*)*maxLevels);
             for(i = 0; i<maxLevels; i++)
             {
-                levelNames[i] = (char*)malloc(40);
+                levelNames[i] = (char*)TGDSARM9Malloc(40);
                 fscanf(levelsFile,  "%s", levelNames[i]);
 #ifdef DEBUG
 
@@ -1811,7 +1811,7 @@ void buildHillPart(struct tree unitHill, int shape, float x, float z)
     {
     struct tree * temptree;
 
-    temptree = (struct tree *) malloc(sizeof(struct tree));
+    temptree = (struct tree *) TGDSARM9Malloc(sizeof(struct tree));
 
     if (temptree != NULL)
 	{
@@ -1927,7 +1927,7 @@ void addRandomTarget()
 	
 	newMonster.energyRemaining = MAXLIFE / 2;	
     
-	nother = (struct targetInfo *) malloc(sizeof(struct targetInfo));
+	nother = (struct targetInfo *) TGDSARM9Malloc(sizeof(struct targetInfo));
 	
 	if (nother != NULL)
 	    {
@@ -2049,7 +2049,7 @@ void addBoom(float x,  float y,  float z, struct monsterInfo* m)
     struct boom * tempboom2;
     struct boom tempboom;
     
-    tempboom2 = (struct boom *) malloc(sizeBoom);
+    tempboom2 = (struct boom *) TGDSARM9Malloc(sizeBoom);
 
     if (tempboom2 != NULL)
 	{
@@ -2080,7 +2080,7 @@ void addProjectile( float x,  float y,  float z, int type,
     struct projectile * temp;
     struct projectile tempProj;
 
-    temp = (struct projectile *) malloc(sizeProjectile);
+    temp = (struct projectile *) TGDSARM9Malloc(sizeProjectile);
 
     if (temp != NULL)
 	{
@@ -2572,7 +2572,7 @@ if ((!netUp) || (newtype == MASERTANK))
     blocked = 1;
     attempts = 0;
 
-    temptank = (struct tank *) malloc(sizeTank);
+    temptank = (struct tank *) TGDSARM9Malloc(sizeTank);
     
     if (temptank != NULL)
 	{
@@ -2674,7 +2674,7 @@ if ((!netUp) || (newtype == MASERTANK))
 	if (attempts >= 1500)
 	    {
 	    showError("Nowhere to put a new vehicle");
-	    free(temptank);
+	    TGDSARM9Free(temptank);
 	    }
 	else
 	    {
@@ -2744,7 +2744,7 @@ if ((!netUp) || (newtype == MASERTANK))
 				    temptank->minrange	= 0.5;
 				    temptank->speed	= TANKV;
 				    
-				    temptree = (struct tree *) malloc(sizeof(struct tree));
+				    temptree = (struct tree *) TGDSARM9Malloc(sizeof(struct tree));
 				    if (temptree != NULL)
 					{
 					temptree->x		= temptank->x;
@@ -3057,7 +3057,7 @@ void updateProjectiles()
 	    {
 	    killer = temp->next;
 	    temp->next = temp->next->next;
-	    free(killer);   
+	    TGDSARM9Free(killer);   
 	    }
 	else
 	    temp = temp->next;
@@ -3239,7 +3239,7 @@ void updatetrees(struct tree * allTrees, int itsChristmas)
 	if (dead)
     {
 	    ttree->next = temptree->next;
-	    free(temptree);
+	    TGDSARM9Free(temptree);
 	}
 	else
 	    ttree = ttree->next;
@@ -3753,7 +3753,7 @@ void updateBooms(struct boom * allBooms, struct tank * tanklist)
 	    {
 	    killerb = tempboom->next;
 	    tempboom->next = tempboom->next->next;
-	    free(killerb);
+	    TGDSARM9Free(killerb);
 	    }
 	else
 	    tempboom = tempboom->next;
@@ -4407,7 +4407,7 @@ void updateTanks(struct tank * allTanks, float width, float height,
         doSoundAt(getFreeSource(),EXPLOSION, AL_FALSE,
                   ttank->x, ttank->y, ttank->z);
  #endif
-		free(killertank); 
+		TGDSARM9Free(killertank); 
 		} 
     }
 	else 
@@ -4416,7 +4416,7 @@ void updateTanks(struct tank * allTanks, float width, float height,
 		killertank = temptank->next;
 		temptank->next = temptank->next->next;
 
-		free(killertank);  
+		TGDSARM9Free(killertank);  
 
 		}
 	    else
@@ -4585,7 +4585,7 @@ void updateSlagTanks(struct tank * allSlags)
 	    {
 	    killertank = temptank->next;
 	    temptank->next = temptank->next->next;
-	    free(killertank);
+	    TGDSARM9Free(killertank);
 	    }
 	else
 	    temptank = temptank->next;
@@ -4999,7 +4999,7 @@ void doUpdate()
 		    addProjectile( temptarg->x-0.2, PLANEY+0.25, temptarg->z-0.2, 3, 0, -0.003, 0, 10000, NULL);
 		    }
 		    
-		free(temptarg);
+		TGDSARM9Free(temptarg);
 		}
 	    else
 		temptarget = temptarget->next;

@@ -537,8 +537,8 @@ void mwAbort( void ) {
     while( mwFirstMark ) {
         mrk = mwFirstMark->next;
         mwWrite( "mark: %p: %s\n", mwFirstMark->host, mwFirstMark->text );
-        free( mwFirstMark->text );
-        free( mwFirstMark );
+        TGDSARM9Free( mwFirstMark->text );
+        TGDSARM9Free( mwFirstMark );
         mwFirstMark = mrk;
         mwErrors ++;
         }
@@ -588,7 +588,7 @@ void mwAbort( void ) {
             mwWrite( "}\n" );
 			mw = mwHead;
 			mwUnlink( mw, __FILE__, __LINE__ );
-            free( mw );
+            TGDSARM9Free( mw );
             }
         else {
             data = ((char*)mwHead) + mwDataSize + mwOverflowZoneSize;
@@ -602,7 +602,7 @@ void mwAbort( void ) {
 			mwNmlCurAlloc -= mwHead->size;
 			mw = mwHead;
 			mwUnlink( mw, __FILE__, __LINE__ );
-            free( mw );
+            TGDSARM9Free( mw );
             }
         }
 
@@ -758,7 +758,7 @@ void * mwMark( void *p, const char *desc, const char *file, unsigned line ) {
 
     if( mrk == NULL ) {
         isnew = 1;
-        mrk = (mwMarker*) malloc( sizeof( mwMarker ) );
+        mrk = (mwMarker*) TGDSARM9Malloc( sizeof( mwMarker ) );
         if( mrk == NULL ) {
             mwWrite("mark: %s(%d), no mark for %p:'%s', out of memory\n", file, line, p, desc );
             return p;
@@ -772,9 +772,9 @@ void * mwMark( void *p, const char *desc, const char *file, unsigned line ) {
         }
 
     n += strlen( wherebuf );
-    buf = (char*) malloc( n+3 );
+    buf = (char*) TGDSARM9Malloc( n+3 );
     if( buf == NULL ) {
-        if( isnew ) free( mrk );
+        if( isnew ) TGDSARM9Free( mrk );
         mwWrite("mark: %s(%d), no mark for %p:'%s', out of memory\n", file, line, p, desc );
         return p;
         }
@@ -791,7 +791,7 @@ void * mwMark( void *p, const char *desc, const char *file, unsigned line ) {
         strcpy( buf, mrk->text );
         strcat( buf, ", " );
         strcat( buf, wherebuf );
-        free( mrk->text );
+        TGDSARM9Free( mrk->text );
         mrk->text = buf;
         mrk->level ++;
         }
@@ -812,8 +812,8 @@ void* mwUnmark( void *p, const char *file, unsigned line ) {
             if( mrk->level < 2 ) {
                 if( prv ) prv->next = mrk->next;
                 else mwFirstMark = mrk->next;
-                free( mrk->text );
-                free( mrk );
+                TGDSARM9Free( mrk->text );
+                TGDSARM9Free( mrk );
                 return p;
                 }
             mrk->level --;
@@ -892,10 +892,10 @@ void* mwMalloc( size_t size, const char* file, int line) {
         return NULL;
         }
 
-    mw = (mwData*) malloc( needed );
+    mw = (mwData*) TGDSARM9Malloc( needed );
     if( mw == NULL ) {
         if( mwFreeUp(needed,0) >= needed ) {
-            mw = (mwData*) malloc(needed);
+            mw = (mwData*) TGDSARM9Malloc(needed);
             if( mw == NULL ) {
                 mwWrite( "internal: mwFreeUp(%u) reported success, but malloc() fails\n", needed );
                 mwIncErr();
@@ -1116,7 +1116,7 @@ void mwFree( void* p, const char* file, int line ) {
                 sprintf( buffer, "FBI<%ld>%s(%d)", mwCounter, file, line );
                 strncpy( (char*)(void*)mw, buffer, mwDataSize + mwOverflowZoneSize );
                 }
-            free( mw );
+            TGDSARM9Free( mw );
             }
 
         /* add the pointer to the last-free track */
@@ -1166,28 +1166,28 @@ void mwFree_( void *p ) {
 	MW_MUTEX_LOCK();
     TESTS(NULL,0);
 	MW_MUTEX_UNLOCK();
-    free(p);
+    TGDSARM9Free(p);
     }
 
 void* mwMalloc_( size_t size ) {
 	MW_MUTEX_LOCK();
     TESTS(NULL,0);
 	MW_MUTEX_UNLOCK();
-    return malloc( size );
+    return TGDSARM9Malloc( size );
     }
 
 void* mwRealloc_( void *p, size_t size ) {
 	MW_MUTEX_LOCK();
     TESTS(NULL,0);
 	MW_MUTEX_UNLOCK();
-    return realloc( p, size );
+    return TGDSARM9Realloc( p, size );
     }
 
 void* mwCalloc_( size_t a, size_t b ) {
 	MW_MUTEX_LOCK();
     TESTS(NULL,0);
 	MW_MUTEX_UNLOCK();
-    return calloc( a, b );
+    return TGDSARM9Calloc( a, b );
     }
 
 void mwFlushNow( void ) {
@@ -1417,7 +1417,7 @@ static unsigned mwGrab_( unsigned kb, int type, int silent ) {
                 }
             return i-kb;
             }
-        gd = (mwGrabData*) malloc( sizeof(mwGrabData) );
+        gd = (mwGrabData*) TGDSARM9Malloc( sizeof(mwGrabData) );
         if( gd == NULL ) {
             if( !silent ) {
                 mwWrite("grabbed: all available memory to %s (%u kb)\n",
@@ -1470,7 +1470,7 @@ static unsigned mwDrop_( unsigned kb, int type, int silent ) {
                 FLUSH();
                 }
             mwGrabSize -= (long) sizeof(mwGrabData);
-            free( tmp );
+            TGDSARM9Free( tmp );
             }
         else {
             pr = gd;
@@ -2089,9 +2089,9 @@ static size_t mwFreeUp( size_t needed, int urgent ) {
     /* free grabbed NML memory */
     for(;;) {
         if( mwDrop_( 1, MW_VAL_NML, 1 ) == 0 ) break;
-        p = malloc( needed );
+        p = TGDSARM9Malloc( needed );
         if( p == NULL ) continue;
-        free( p );
+        TGDSARM9Free( p );
         return needed;
         }
 
@@ -2108,11 +2108,11 @@ static size_t mwFreeUp( size_t needed, int urgent ) {
                 }
             mw2 = mw->next;
             mwUnlink( mw, "mwFreeUp", 0 );
-            free( mw );
+            TGDSARM9Free( mw );
             mw = mw2;
-            p = malloc( needed );
+            p = TGDSARM9Malloc( needed );
             if( p == NULL ) continue;
-            free( p );
+            TGDSARM9Free( p );
             return needed;
             }
         }
@@ -2123,9 +2123,9 @@ static size_t mwFreeUp( size_t needed, int urgent ) {
     /* free grabbed memory */
     for(;;) {
         if( mwDrop_( 1, MW_VAL_GRB, 1 ) == 0 ) break;
-        p = malloc( needed );
+        p = TGDSARM9Malloc( needed );
         if( p == NULL ) continue;
-        free( p );
+        TGDSARM9Free( p );
         return needed;
         }
 
@@ -2306,10 +2306,10 @@ static mwStat* mwStatGet( const char *file, int line, int makenew ) {
 
     if( !makenew ) return NULL;
 
-    ms = (mwStat*) malloc( sizeof(mwStat) );
+    ms = (mwStat*) TGDSARM9Malloc( sizeof(mwStat) );
     if( ms == NULL ) {
         if( mwFreeUp( sizeof(mwStat), 0 ) < sizeof(mwStat) ||
-            (ms=(mwStat*)malloc(sizeof(mwStat))) == NULL ) {
+            (ms=(mwStat*)TGDSARM9Malloc(sizeof(mwStat))) == NULL ) {
             mwWrite("internal: memory low, statistics incomplete for '%s'\n", file );
             return NULL;
             }
@@ -2633,7 +2633,7 @@ void* operator new[] ( unsigned size, const char *file, int line ) {
 void operator delete( void *p ) {
     if( p == NULL ) return;
     if( !mwInited ) {
-        free( p );
+        TGDSARM9Free( p );
         return;
         }
     if( mwNCur ) {
@@ -2647,7 +2647,7 @@ void operator delete( void *p ) {
 void operator delete[]( void *p ) {
     if( p == NULL ) return;
     if( !mwInited ) {
-        free( p );
+        TGDSARM9Free( p );
         return;
         }
     if( mwNCur ) {
