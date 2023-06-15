@@ -33,8 +33,11 @@
 #include "biosTGDS.h"
 #include "InterruptsARMCores_h.h"
 #include "interrupts.h"
-#include "grass_tex.h"
-#include "fish_tex.h"
+#include "logo_tex.h"
+#include "road_tex.h"
+#include "screenleft_tex.h"
+#include "screenright_tex.h"
+#include "treewood_tex.h"
 #include "Sphere008.h"
 #include "gui_console_connector.h"
 extern int vsnprintf( char* buffer, size_t buf_size, const char* format, va_list vlist );
@@ -838,10 +841,10 @@ void loadLevel(int level)
     strcat(fullPath, szLevelNumber);
     datafile = fopen(fullPath, "r");
   
-    if (datafile == NULL)
+    if (datafile == NULL){
 	    showError("Could not load in road.data\n");
-    else
-	{
+	}
+    else{
 
 	    /* find out how many entries are in the road file */
 		i = 0;
@@ -856,8 +859,12 @@ void loadLevel(int level)
         
         roadSystem = (struct road *) TGDSARM9Calloc(i, sizeof(struct road));
         
-        if (roadSystem == NULL)
+        if (roadSystem == NULL){
+			#ifdef ARM9
+			printfAndHalt("Could not allocate array for road.data"); 
+			#endif
             showError("Could not allocate array for road.data\n");
+		}
         else
 	    {
 	        roadSystem[i-1].type = NULLROAD;       
@@ -887,14 +894,14 @@ void loadLevel(int level)
     treeID = 0;
     buildingsToDestroy = 0;
     
-    if (datafile == NULL)
+    if (datafile == NULL){
 	    showError("Could not load in tree.data\n");
+	}
     else
 	{
 	    do
 	    {
 	        temptree = (struct tree *) TGDSARM9Malloc(sizeof(struct tree));
-	        
 	        
 	        if (temptree != NULL)
 		    {
@@ -978,8 +985,9 @@ void loadLevel(int level)
         strcat(fullPath, szLevelNumber);
         datafile = fopen(fullPath, "r");
       
-        if (datafile == NULL)
+        if (datafile == NULL){
 	        showError("Could not load in tank.data\n");
+		}
         else
 	    {
 	        do
@@ -1085,31 +1093,6 @@ void initialization()
     /************************************/
 
     strcpy(playerName, "Anonymous");
-
-/* //doesn't matter anyway
-#ifndef _MSC_VER
-    playerPointer = (char*)cuserid(NULL);
-    if (playerPointer == NULL)
-	    playerPointer = getlogin();
-
-    if (playerPointer != NULL)
-	sscanf(playerPointer,"%s",playerName);
-
-    if (strlen(playerName) > 9)
-		playerName[9] = 0;
-
-    password = getpwuid(getuid());
-    if (password != NULL && password->pw_dir != NULL && *(password->pw_dir) !='\0')
-	{
-	    strcpy(playerHome, password->pw_dir);
-	    playerHome[strlen(playerHome)] = '\0';
-    }
-    else
-	{
-	     playerHome[0] = '\0';
-	}
-#endif
-*/
 
     /************************************/
     /* set up the graphics              */
@@ -1333,21 +1316,30 @@ void initialization()
 	       levelNames = NULL;
         } 
         else{
-			#ifdef ARM9
-			printfAndHalt("levels processed OK from file"); //so far OK
-			#endif
+			
+#ifdef ARM9
+		/*setTGDSARM9PrintfCallback((printfARM9LibUtils_fn)&TGDSDefaultPrintf2DConsole); //Redirect to default TGDS printf Console implementation
+		clrscr();
+		printf("--");
+		printf("--");
+		printf("--");
+		*/
+#endif
 
-            printf("Niveles: %u\n",maxLevels);
+            printf("Niveles: %d",maxLevels);
             levelNames = (char**)TGDSARM9Malloc(sizeof(char*)*maxLevels);
             for(i = 0; i<maxLevels; i++)
             {
                 levelNames[i] = (char*)TGDSARM9Malloc(40);
                 fscanf(levelsFile,  "%s", levelNames[i]);
 #ifdef DEBUG
-
-                printf("%s\n", levelNames[i]);            
+                printf("%s", levelNames[i]);            
 #endif                
             }
+
+			#ifdef ARM9
+			//while(1==1){}
+			#endif
         }
 	       
 	 }      
@@ -1370,83 +1362,95 @@ void initialization()
        top entry for each user in the high score list.
      */
 
+#ifdef ARM9
+multipleHighScores = 0;
+#endif
+
+#ifndef ARM9
     if (getenv("BATTALIONSCOREUNIQUE"))
 	{
 	 multipleHighScores = 0;
 	}
+#endif
 
     hiScoreFile = NULL;
 
+#ifndef ARM9
     dataPtr = getenv("BATTALIONSCOREDIR");
     if (dataPtr != NULL)
 	    strcpy(scoredataPath, dataPtr);
     else
 	    strcpy(scoredataPath, ".");
+#endif
 
-    if (scoredataPath[strlen(scoredataPath)-1] != '/')
+#ifdef ARM9
+strcpy(scoredataPath, "0:");
+#endif
+
+    if (scoredataPath[strlen(scoredataPath)-1] != '/'){
 	    strcat(scoredataPath, "/");
-    
+	}
     strcpy(scorefullPath, scoredataPath);
     
     strcat(scorefullPath, "battalion_hiscore");
     hiScoreFile = fopen(scorefullPath, "r");
 
-    if (hiScoreFile == NULL)
-	{
+    if (hiScoreFile == NULL){
 	    hiScoreFile = fopen(scorefullPath, "w");
 	
-	if (hiScoreFile == NULL)
-	    {
-	    sprintf(textBuffer, "Couldn't create high score file: %s", hiScoreFile);
-	    showError(textBuffer);
+		if (hiScoreFile == NULL){
+			#ifdef ARM9
+			printfAndHalt("fail creating: %s", scorefullPath);
+			#endif
+			sprintf(textBuffer, "fail creating: %s", scorefullPath);
+			showError(textBuffer);
 	    }
-	else
-	    {
-	    for(i=0;i<12;i++)
-	        fprintf(hiScoreFile, "-1 -\n");
-		
-	    G[0].number = G[1].number = G[2].number = -1;
-	    F[0].number = F[1].number = F[2].number = -1;
-	    V[0].number = V[1].number = V[2].number = -1;
-	    T[0].number = T[1].number = T[2].number = -1;
+		else{
+			for(i=0;i<12;i++){	        
+				fprintf(hiScoreFile, "-1 -\n");
+			}
+			G[0].number = G[1].number = G[2].number = -1;
+			F[0].number = F[1].number = F[2].number = -1;
+			V[0].number = V[1].number = V[2].number = -1;
+			T[0].number = T[1].number = T[2].number = -1;
 
-	    G[0].name[0] = G[1].name[0] = G[2].name[0] = 0;
-	    F[0].name[0] = F[1].name[0] = F[2].name[0] = 0;
-	    V[0].name[0] = V[1].name[0] = V[2].name[0] = 0;
-	    T[0].name[0] = T[1].name[0] = T[2].name[0] = 0;
-	    
-	    fclose(hiScoreFile);
-
-# ifdef SOLARIS
-
-	    /* Make hiscore file read/writeable for everyone */
-	    if (chmod(scorefullPath, 0666))
-		{
-		  sprintf(textBuffer, "Couldn't change permission of high score file: %s", hiScoreFile);
-		  showError(textBuffer);
-		}
-# endif
+			G[0].name[0] = G[1].name[0] = G[2].name[0] = 0;
+			F[0].name[0] = F[1].name[0] = F[2].name[0] = 0;
+			V[0].name[0] = V[1].name[0] = V[2].name[0] = 0;
+			T[0].name[0] = T[1].name[0] = T[2].name[0] = 0;
+			fclose(hiScoreFile);
+			#ifdef SOLARIS
+			/* Make hiscore file read/writeable for everyone */
+			if (chmod(scorefullPath, 0666))
+			{
+			  sprintf(textBuffer, "Couldn't change permission of high score file: %s", hiScoreFile);
+			  showError(textBuffer);
+			}
+			#endif
 	    }
+
+		//create hiscore implemented OK
 	}
-    else
-	{	
-	fscanf(hiScoreFile, "%d%c%s", &(G[0].number), &garbage, &(G[0].name));
-	fscanf(hiScoreFile, "%d%c%s", &(G[1].number), &garbage, &(G[1].name));
-	fscanf(hiScoreFile, "%d%c%s", &(G[2].number), &garbage, &(G[2].name));
+    else{
+		fscanf(hiScoreFile, "%d%c%s", &(G[0].number), &garbage, &(G[0].name));
+		fscanf(hiScoreFile, "%d%c%s", &(G[1].number), &garbage, &(G[1].name));
+		fscanf(hiScoreFile, "%d%c%s", &(G[2].number), &garbage, &(G[2].name));
 
-	fscanf(hiScoreFile, "%d%c%s", &(V[0].number), &garbage, &(V[0].name));
-	fscanf(hiScoreFile, "%d%c%s", &(V[1].number), &garbage, &(V[1].name));
-	fscanf(hiScoreFile, "%d%c%s", &(V[2].number), &garbage, &(V[2].name));
+		fscanf(hiScoreFile, "%d%c%s", &(V[0].number), &garbage, &(V[0].name));
+		fscanf(hiScoreFile, "%d%c%s", &(V[1].number), &garbage, &(V[1].name));
+		fscanf(hiScoreFile, "%d%c%s", &(V[2].number), &garbage, &(V[2].name));
 
-	fscanf(hiScoreFile, "%d%c%s", &(F[0].number), &garbage, &(F[0].name));
-	fscanf(hiScoreFile, "%d%c%s", &(F[1].number), &garbage, &(F[1].name));
-	fscanf(hiScoreFile, "%d%c%s", &(F[2].number), &garbage, &(F[2].name));
+		fscanf(hiScoreFile, "%d%c%s", &(F[0].number), &garbage, &(F[0].name));
+		fscanf(hiScoreFile, "%d%c%s", &(F[1].number), &garbage, &(F[1].name));
+		fscanf(hiScoreFile, "%d%c%s", &(F[2].number), &garbage, &(F[2].name));
 
-	fscanf(hiScoreFile, "%d%c%s", &(T[0].number), &garbage, &(T[0].name));
-	fscanf(hiScoreFile, "%d%c%s", &(T[1].number), &garbage, &(T[1].name));
-	fscanf(hiScoreFile, "%d%c%s", &(T[2].number), &garbage, &(T[2].name));
+		fscanf(hiScoreFile, "%d%c%s", &(T[0].number), &garbage, &(T[0].name));
+		fscanf(hiScoreFile, "%d%c%s", &(T[1].number), &garbage, &(T[1].name));
+		fscanf(hiScoreFile, "%d%c%s", &(T[2].number), &garbage, &(T[2].name));
 
-	fclose(hiScoreFile);
+		fclose(hiScoreFile);
+
+		//read hiscore implemented OK
 	}
 
     /************************************/
@@ -6187,14 +6191,16 @@ int startBatallion(int argc, char **argv)
 #endif
 
 #ifdef ARM9
-	printf("entering main loop");
-
+	setTGDSARM9PrintfCallback((printfARM9LibUtils_fn)&TGDSDefaultPrintf2DConsole); //Redirect to default TGDS printf Console implementation
+	clrscr();
+	printf("--");
+	printf("--");
+	printf("--");
+	printf("entering doDisplay() 'main loop' ");
 	REG_IE |= IRQ_VBLANK;
-
-while(1==1){
-	doDisplay();
-}
-
+	while(1==1){
+		doDisplay();
+	}
 #endif
 
 	return(0);
@@ -6212,14 +6218,23 @@ __attribute__((optnone))
 #endif
 int InitGL()
 {
-	glInit(); //NDSDLUtils: Initializes a new videoGL context
-	
+	glInit(); //NDSDLUtils: Initializes a new videoGL context	
 	glClearColor(255,255,255);		// White Background
 	glClearDepth(0x7FFF);		// Depth Buffer Setup
-	glEnable(GL_ANTIALIAS);
-	glEnable(GL_TEXTURE_2D); // Enable Texture Mapping 
-	glDisable(GL_LIGHT0|GL_LIGHT1);
-	glEnable(GL_LIGHT0|GL_LIGHT1); //light #1 & #2 enabled per scene
+	glEnable(GL_ANTIALIAS|GL_TEXTURE_2D|GL_BLEND|GL_LIGHT0); // Enable Texture Mapping + light #0 enabled per scene
+	
+	//#1: Load a texture and map each one to a texture slot
+	u32 arrayOfTextures[5];
+	arrayOfTextures[0] = (u32)&screenleft_tex; //0: screenleft_tex.bmp
+	arrayOfTextures[1] = (u32)&screenright_tex; //1: screenright_tex.bmp
+	arrayOfTextures[2] = (u32)&treewood_tex; //2: treewood_tex.bmp
+	arrayOfTextures[3] = (u32)&road_tex; //3: road_tex.bmp
+	arrayOfTextures[4] = (u32)&logo_tex; //4: logo_tex.bmp
+	int texturesInSlot = LoadLotsOfGLTextures((u32*)&arrayOfTextures, (int*)&texturesBatallionGL, 5); //Implements both glBindTexture and glTexImage2D 
+	int i = 0;
+	for(i = 0; i < texturesInSlot; i++){
+		printf("Texture loaded: %d:textID[%d] Size: %d", i, texturesBatallionGL[i], getTextureBaseFromTextureSlot(activeTexture));
+	}
 	
 	setupDLEnableDisable2DTextures();
 	return 0;				

@@ -107,7 +107,7 @@ int different(char * first,  char * second)
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
 struct monsterInfo resetMonsterParameters(struct monsterInfo Googelon)
-    {
+{
     register int i;
 
     /************************************/
@@ -181,12 +181,17 @@ struct monsterInfo resetMonsterParameters(struct monsterInfo Googelon)
 			Googelon.regenRate  = 0.1;
 			break;
 			
-	default:	showError("Bogus Monster! (setPlayConditions)");
-			break;
+			default:{
+				showError("Bogus Monster! (setPlayConditions)");
+
+				#ifdef ARM9
+				printfAndHalt("Bogus Monster! (setPlayConditions)"); 
+				#endif
+			}break;
     }
     
     return(Googelon);
-    }
+}
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/

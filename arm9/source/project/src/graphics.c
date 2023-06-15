@@ -15,16 +15,13 @@
 #include "battalion.h"
 #include "tgaload.h"
 
+#ifdef ARM9
+#include "gui_console_connector.h"
+#endif
+
     /*************/ 
     /*  Textures */
     /*************/
-    
-    #define TEX_LSCREEN  0
-    #define TEX_RSCREEN  1
-    #define TEX_TREEWOOD 2
-    #define TEX_ROAD     3
-    #define TEX_OFFLOGO  4
-    
     GLuint texturesBatallionGL[5];
     
     /*************/
@@ -173,10 +170,10 @@ void makeObjects(char * dataPath)
     strcpy(fullPath, dataPath);
     strcat(fullPath, "textures/logo.tga");
     texturesBatallionGL[TEX_OFFLOGO] = tgaLoadAndBind(fullPath, 0);
-#endif 
+#endif
 
 #ifdef ARM9
-//todo
+//NDS Textures already loaded at InitGL();
 #endif
 
     /********************/
@@ -275,7 +272,8 @@ void makeObjects(char * dataPath)
     makeBooms();
     
     initFonts();
-    }
+
+}
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/

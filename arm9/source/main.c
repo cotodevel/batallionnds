@@ -403,6 +403,10 @@ int main(int argc, char **argv) {
 	printf("---");
 	printf("starting Batallion");
 	
+	/* OpenGL 1.1 Dynamic Display List */
+	InitGL();
+	ReSizeGLScene(255, 191);
+	
 	#if defined(ARM9)
     startTimerCounter(tUnitsMilliseconds, 1);
     #endif

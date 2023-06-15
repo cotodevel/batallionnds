@@ -72,8 +72,7 @@ int TGDSCustomPrintf2DConsole(char * stringToRenderOnscreen){
 
 char debugHaltMsg[256];
 int printfAndHalt(const char *fmt, ...){
-	//default TGDS printf
-	setTGDSARM9PrintfCallback((printfARM9LibUtils_fn)&TGDSDefaultPrintf2DConsole); //Redirect printf to custom Console implementation
+	setTGDSARM9PrintfCallback((printfARM9LibUtils_fn)&TGDSDefaultPrintf2DConsole); //Redirect to default TGDS printf Console implementation
 	
 	clrscr();
 	printf("--");

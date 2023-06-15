@@ -86,19 +86,19 @@
 #include <stdio.h>
 
 #ifdef _MSC_VER
-
     #include <winsock.h>
     #include <winerror.h>
     #include <wininet.h>
-
 #endif
 
+#define TEX_LSCREEN  ((int)0)
+#define TEX_RSCREEN  ((int)1)
+#define TEX_TREEWOOD ((int)2)
+#define TEX_ROAD     ((int)3)
+#define TEX_OFFLOGO  ((int)4)
 
 /* audio routines */
 /*****************/
-
-
-
 
 /* added for the OpenGL version */
 
@@ -698,10 +698,10 @@ void id(void);
 
 void showCommands(char *);
 
-/*******************************
- * net.c
- * holds the network primitives
- *******************************/
+/////////////////////////////////
+///// net.c
+///// holds the network primitives
+/////////////////////////////////
 
 #ifdef NETPLAY
 void turnBeamOnSinceLast(void);
@@ -977,5 +977,7 @@ extern void drawCircle(GLfloat x, GLfloat y, GLfloat r, GLfloat BALL_RADIUS);
 extern void showCityName(char* name, int detail);
 
 extern int startBatallion(int argc, char **argv);
+
+extern GLuint texturesBatallionGL[5];
 
 #endif
