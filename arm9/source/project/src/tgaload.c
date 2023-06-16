@@ -1,4 +1,6 @@
-#ifdef _MSC_VER
+#include "battalion.h" //comment out when in TGDS
+
+#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
 /*
    ...
 

@@ -12,12 +12,11 @@
 
 #include "battalion.h"
 
-
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
 
-#ifdef ARM9
+#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
 #include <ctype.h>
 #include <stdlib.h>
 #include <_ansi.h>
@@ -43,7 +42,7 @@
 extern int vsnprintf( char* buffer, size_t buf_size, const char* format, va_list vlist );
 #endif
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
 
 #include <Windows.h>
 #include <gl/GL.h>
@@ -860,7 +859,7 @@ void loadLevel(int level)
         roadSystem = (struct road *) TGDSARM9Calloc(i, sizeof(struct road));
         
         if (roadSystem == NULL){
-			#ifdef ARM9
+			#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
 			printfAndHalt("Could not allocate array for road.data"); 
 			#endif
             showError("Could not allocate array for road.data\n");
@@ -1110,7 +1109,7 @@ void initialization()
 	glMatrixMode(GL_MODELVIEW);
 	glClearDepth(1);
     glClearColor(0.8, 0.8, 1.0
-		#ifdef _MSC_VER
+		#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
 		, 1
 		#endif
 	);
@@ -1270,7 +1269,7 @@ void initialization()
 	}
     else
 	{
-		#ifdef ARM9
+		#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
 		printfAndHalt("battalion.sho open error (1)");
 		#endif
 	    {
@@ -1296,7 +1295,7 @@ void initialization()
     levelsFile = fopen(fullPath, "r");
   
     if (levelsFile == NULL){
-		#ifdef ARM9
+		#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
 		printfAndHalt("Could not load in battalion.levels");
 		#endif
 	    showError("Could not load in battalion.levels\n");
@@ -1307,7 +1306,7 @@ void initialization()
 	    fscanf(levelsFile,  "%u", &maxLevels);
 	    
 	    if(maxLevels<1 || maxLevels > 99){
-			#ifdef ARM9
+			#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
 			printfAndHalt("error reading levels file");
 			#endif
 
@@ -1399,7 +1398,7 @@ strcpy(scoredataPath, "0:");
 	    hiScoreFile = fopen(scorefullPath, "w");
 	
 		if (hiScoreFile == NULL){
-			#ifdef ARM9
+			#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
 			printfAndHalt("fail creating: %s", scorefullPath);
 			#endif
 			sprintf(textBuffer, "fail creating: %s", scorefullPath);
@@ -1493,16 +1492,6 @@ void doDrawing (int eyeball)
 
 
 /* mac 68K version giving a spurious error mesage here */
-
-    
-#if !defined(MACVERSION) && defined(_MSC_VER)
-	glErrorVal = glGetError();
-    if (glErrorVal != GL_NO_ERROR)
-    {
-	   showError((char *) gluErrorString(glErrorVal));
-       printf("main.c 1159\n");
-    }
-#endif
 
     if (lod >= 2)
 	glShadeModel(GL_SMOOTH);
@@ -1745,7 +1734,7 @@ textLineWidth = 1.01;
 		);
 	}
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
     glutSwapBuffers();
 #endif
 
@@ -5425,7 +5414,7 @@ void doDisplay(void){
 		doDrawing(1);
 	}
 	
-	#ifdef ARM9
+	#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
 	glFlush();
 	//handleARM9SVC();	/* Do not remove, handles TGDS services */
 	IRQVBlankWait();
@@ -5505,46 +5494,50 @@ void doMapView()
 
 void releaseSpKey(int key, int x, int y)
 {
+#if ((defined(_MSC_VER) && !defined(ARM9)) || (!defined(_MSC_VER) && defined(ARM9)) )  //BatallionNDS is VS2012? or BatallionNDS on TGDS ARM9?
+
     switch(key)
     {
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
    	    case GLUT_KEY_LEFT:
 #endif
-#ifdef ARM9
+#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
 		case KEY_LEFT:
 #endif
                     keycontrol &= ~BAT_KEY_LEFT; 
 			        break;
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
 		case GLUT_KEY_RIGHT:
 #endif
-#ifdef ARM9
+#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
 		case KEY_RIGHT:
 #endif
                     keycontrol &= ~BAT_KEY_RIGHT; 
 			        break;
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
 		case GLUT_KEY_UP:
 #endif
-#ifdef ARM9
+#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
 		case KEY_UP:
 #endif
                     keycontrol &= ~BAT_KEY_FORW; 
                     break;
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
         case GLUT_KEY_DOWN:
 #endif
-#ifdef ARM9
+#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
 		case KEY_DOWN:
 #endif
                     keycontrol &= ~BAT_KEY_BACK; 
 			        break;
      }
+#endif
+
 }
 
 void releaseNormalKey(unsigned char key, int x, int y)
 {
-    switch(key)
+	switch(key)
     {
         /********************************************/
         /*          process pressed key             */
@@ -5584,38 +5577,39 @@ void releaseNormalKey(unsigned char key, int x, int y)
 
 void processSpKey(int key, int x, int y)
 {
-    if ((mode == PLAYMODE) && !paused)
+#if ((defined(_MSC_VER) && !defined(ARM9)) || (!defined(_MSC_VER) && defined(ARM9)) )  //BatallionNDS is VS2012? or BatallionNDS on TGDS ARM9?
+	if ((mode == PLAYMODE) && !paused)
     {
         switch(key)
         {
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
 			case GLUT_KEY_LEFT:
 #endif
-#ifdef ARM9
+#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
 			case KEY_LEFT:
 #endif
 					keycontrol |= BAT_KEY_LEFT; 
                 	break;
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
 			 case GLUT_KEY_RIGHT:
 #endif
-#ifdef ARM9
+#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
 			case KEY_RIGHT:
 #endif
                     keycontrol |= BAT_KEY_RIGHT; 
                     break;
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
 			case GLUT_KEY_UP:
 #endif
-#ifdef ARM9
+#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
 			case KEY_UP:
 #endif
                     keycontrol |= BAT_KEY_FORW; 
                     break;
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
 			case GLUT_KEY_DOWN:
 #endif
-#ifdef ARM9
+#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
 			case KEY_DOWN:
 #endif
                     keycontrol |= BAT_KEY_BACK; 
@@ -5625,6 +5619,7 @@ void processSpKey(int key, int x, int y)
      else{
           
      }
+#endif
 }
 
 void processNormalKey(unsigned char key, int x, int y)
@@ -6142,7 +6137,7 @@ int startBatallion(int argc, char **argv)
 {
     int screen = 0;
     
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
 	glutInit(&argc, argv);
 	glutInitDisplayMode (GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 	if(argc == 3){	  
@@ -6185,12 +6180,12 @@ int startBatallion(int argc, char **argv)
 	initialization();
 	setPlayConditions();
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
     // start the main loop
 	glutMainLoop();
 #endif
 
-#ifdef ARM9
+#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
 	setTGDSARM9PrintfCallback((printfARM9LibUtils_fn)&TGDSDefaultPrintf2DConsole); //Redirect to default TGDS printf Console implementation
 	clrscr();
 	printf("--");
@@ -6198,6 +6193,9 @@ int startBatallion(int argc, char **argv)
 	printf("--");
 	printf("entering doDisplay() 'main loop' ");
 	REG_IE |= IRQ_VBLANK;
+#endif	
+
+#if defined(_MSC_VER) && defined(ARM9) //BatallionNDS is ARM9 mode now (through NDS DL VS2012)
 	while(1==1){
 		doDisplay();
 	}
@@ -6207,6 +6205,84 @@ int startBatallion(int argc, char **argv)
 }
 
 #ifdef ARM9
+
+GLint DLDUMMY = -1;
+GLint DLDUMMY2 = -1;
+
+#ifdef ARM9
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("O0")))
+#endif
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__((optnone))
+#endif
+#endif
+void setupDLEnableDisable2DTextures(){
+	DLDUMMY=glGenLists(2);									// Generate Different Lists
+	glNewList(DLDUMMY,GL_COMPILE);							// 1: enable_2D_texture()
+	{
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+		{
+			GLfloat light_ambient[]  = { 0.0f, 0.0f, 0.0f, 1.0f };
+			GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
+			GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+			GLfloat light_position[] = { 2.0f, 5.0f, 5.0f, 0.0f };
+
+			GLfloat mat_ambient[]    = { 0.7f, 0.7f, 0.7f, 1.0f };
+			GLfloat mat_diffuse[]    = { 0.8f, 0.8f, 0.8f, 1.0f };
+			GLfloat mat_specular[]   = { 1.0f, 1.0f, 1.0f, 1.0f };
+			GLfloat high_shininess[] = { 0.0f };
+
+			glLightfv(GL_LIGHT0, GL_AMBIENT,  light_ambient);
+			glLightfv(GL_LIGHT0, GL_DIFFUSE,  light_diffuse);
+			glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+			glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+    
+			glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,   mat_ambient);
+			glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,   mat_diffuse);
+			glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  mat_specular);
+			glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, high_shininess);
+		}
+	}
+	glEndList();
+	DLDUMMY2=DLDUMMY+1;										
+	glNewList(DLDUMMY2,GL_COMPILE);							// 2: disable_2D_texture()
+	{
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		{
+			GLfloat light_ambient[]  = { 0.0f, 0.0f, 0.0f, 1.0f };
+			GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
+			GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+			GLfloat light_position[] = { 2.0f, 5.0f, 5.0f, 0.0f };
+
+			GLfloat mat_ambient[]    = { 0.7f, 0.7f, 0.7f, 1.0f };
+			GLfloat mat_diffuse[]    = { 0.8f, 0.8f, 0.8f, 1.0f };
+			GLfloat mat_specular[]   = { 1.0f, 1.0f, 1.0f, 1.0f };
+			GLfloat high_shininess[] = { 100.0f };
+
+			glLightfv(GL_LIGHT0, GL_AMBIENT,  light_ambient);
+			glLightfv(GL_LIGHT0, GL_DIFFUSE,  light_diffuse);
+			glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+			glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+    
+			glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,   mat_ambient);
+			glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,   mat_diffuse);
+			glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  mat_specular);
+			glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, high_shininess);
+		}
+	}
+	glEndList();
+}
+
+/////////////////////////////////////////////////////////////////////////////////////
+
 
 #ifdef ARM9
 #if (defined(__GNUC__) && !defined(__clang__))
@@ -6223,6 +6299,7 @@ int InitGL()
 	glClearDepth(0x7FFF);		// Depth Buffer Setup
 	glEnable(GL_ANTIALIAS|GL_TEXTURE_2D|GL_BLEND|GL_LIGHT0); // Enable Texture Mapping + light #0 enabled per scene
 	
+	#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
 	//#1: Load a texture and map each one to a texture slot
 	u32 arrayOfTextures[5];
 	arrayOfTextures[0] = (u32)&screenleft_tex; //0: screenleft_tex.bmp
@@ -6235,7 +6312,8 @@ int InitGL()
 	for(i = 0; i < texturesInSlot; i++){
 		printf("Texture loaded: %d:textID[%d] Size: %d", i, texturesBatallionGL[i], getTextureBaseFromTextureSlot(activeTexture));
 	}
-	
+	#endif
+
 	setupDLEnableDisable2DTextures();
 	return 0;				
 }
@@ -6269,7 +6347,7 @@ GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize Th
 #endif
 
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
 void load_image(const char* filename)
 {
     int width, height;
@@ -6280,7 +6358,7 @@ void load_image(const char* filename)
 #endif
 
 //ARM9 version is in main.c
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
 int TWLPrintf(const char *fmt, ...){
 	return 0;
 }
@@ -6313,7 +6391,7 @@ void drawSphere(float r, int lats, int longs) {
 	}
 	#endif
 
-	#ifdef ARM9
+	#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
 	glScalef(r, r, r);
 	// Execute the display list
     glCallListGX((u32*)&Sphere008); //comment out when running on NDSDisplayListUtils

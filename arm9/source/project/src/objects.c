@@ -68,7 +68,7 @@ extern float  treeColor2[4];
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
 GLuint makeMonsterLookat()
-    {
+{
     GLuint O;
     
     O = glGenLists(1);
@@ -78,7 +78,7 @@ GLuint makeMonsterLookat()
    
     glEndList();
     return(O);
-    }
+}
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 

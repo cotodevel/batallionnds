@@ -13,6 +13,8 @@
 /* from header file v 1.4b2                                            */
 /***********************************************************************/
 
+#define ARM9 //BatallionNDS is ARM9 mode now (through NDS DL VS2012)
+
 #ifndef BATTALION_H
 #define BATTALION_H
 
@@ -26,10 +28,6 @@
 //disable _CRT_SECURE_NO_WARNINGS message to build this in VC++
 #pragma warning(disable:4996)
 #pragma warning(disable:4703)
-#endif
-
-#ifdef _MSC_VER
-#include "TGDSTypes.h"
 #endif
 
 #ifdef SOUND
@@ -70,22 +68,27 @@
 /* #define DEBUG */
 
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
 #include <gl/freeglut.h>
 #include "GL/glu.h"
 #include <sys/types.h>
 #include <fcntl.h>
 #endif
 
-#ifdef ARM9
+#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
 #include "VideoTGDS.h"
 #include "VideoGL.h"
+#endif
+
+#if defined(_MSC_VER) && defined(ARM9) //BatallionNDS is ARM9 mode now (through NDS DL VS2012)
+#include "..\..\..\..\..\ndsdisplaylistutils-dev\ndsDisplayListUtils\TGDSTypes.h"
+#include "..\..\..\..\..\ndsdisplaylistutils-dev\ndsDisplayListUtils\VideoGL.h"
 #endif
 
 #include <time.h>
 #include <stdio.h>
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
     #include <winsock.h>
     #include <winerror.h>
     #include <wininet.h>
@@ -555,8 +558,10 @@ void disableViewMenu(void);
  * holds the font routines
  ***************************/
 
-extern GLenum CreateStrokeFont(GLuint);
-extern void DrawStr(GLuint, char *);
+
+GLenum CreateStrokeFont(GLuint a);
+void DrawStr(GLuint a, char * b);
+
 
 /***************************
  * update.c
@@ -979,5 +984,10 @@ extern void showCityName(char* name, int detail);
 extern int startBatallion(int argc, char **argv);
 
 extern GLuint texturesBatallionGL[5];
+
+extern GLint DLDUMMY;
+extern GLint DLDUMMY2;
+extern void setupDLEnableDisable2DTextures();
+
 
 #endif

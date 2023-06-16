@@ -1,4 +1,6 @@
-#ifdef _MSC_VER
+#include "battalion.h" //disable when TGDS ARM9
+
+#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
 
 //disable _CRT_SECURE_NO_WARNINGS message to build this in VC++
 #pragma warning(disable:4996)

@@ -184,7 +184,7 @@ struct monsterInfo resetMonsterParameters(struct monsterInfo Googelon)
 			default:{
 				showError("Bogus Monster! (setPlayConditions)");
 
-				#ifdef ARM9
+				#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
 				printfAndHalt("Bogus Monster! (setPlayConditions)"); 
 				#endif
 			}break;

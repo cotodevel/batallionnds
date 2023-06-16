@@ -45,16 +45,6 @@ USA
 extern "C" {
 #endif
 
-#ifdef __cplusplus
-/////////////////////////////// Billiard GL defs ///////////////////////////////////////
-
-extern GLint DLDUMMY;
-extern GLint DLDUMMY2;
-extern void setupDLEnableDisable2DTextures();
-
-/////////////////////////////////////////////////////////////////////////////////////
-#endif
-
 extern int main(int argc, char **argv);
 extern void menuShow();
 extern char curChosenBrowseFile[MAX_TGDSFILENAME_LENGTH];

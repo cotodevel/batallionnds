@@ -15,7 +15,7 @@
 #include "battalion.h"
 #include "tgaload.h"
 
-#ifdef ARM9
+#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
 #include "gui_console_connector.h"
 #endif
 
@@ -150,7 +150,7 @@ void makeObjects(char * dataPath)
     /* load in textures */
     /********************/
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
     strcpy(fullPath, dataPath);
     strcat(fullPath, "textures/screenleft.tga");
     texturesBatallionGL[TEX_LSCREEN] = tgaLoadAndBind(fullPath, 0);

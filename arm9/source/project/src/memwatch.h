@@ -334,7 +334,7 @@
 
 
 #ifdef _MSC_VER
-#include "TGDSTypes.h"
+#include "battalion.h"
 #endif
 
 /*lint -restore */
