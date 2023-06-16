@@ -73,6 +73,7 @@
 #include "GL/glu.h"
 #include <sys/types.h>
 #include <fcntl.h>
+#include "TGDSTypes.h"
 #endif
 
 #if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
@@ -81,7 +82,7 @@
 #endif
 
 #if defined(_MSC_VER) && defined(ARM9) //BatallionNDS is ARM9 mode now (through NDS DL VS2012)
-#include "..\..\..\..\..\ndsdisplaylistutils-dev\ndsDisplayListUtils\TGDSTypes.h"
+#include "TGDSTypes.h"
 #include "..\..\..\..\..\ndsdisplaylistutils-dev\ndsDisplayListUtils\VideoGL.h"
 #endif
 
