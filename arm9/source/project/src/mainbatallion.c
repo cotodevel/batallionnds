@@ -43,13 +43,11 @@ extern int vsnprintf( char* buffer, size_t buf_size, const char* format, va_list
 #endif
 
 #if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
-
 #include <Windows.h>
 #include <gl/GL.h>
 #include <gl/freeglut.h>
 #pragma comment(lib, "opengl32.lib")
 #include "SOIL.h"
-
 #endif
 
 #ifndef _MSC_VER					// //
@@ -60,6 +58,7 @@ extern int vsnprintf( char* buffer, size_t buf_size, const char* format, va_list
 
 #ifdef _MSC_VER
 	#include <windows.h> 
+	#include "..\..\..\..\..\ndsdisplaylistutils-dev\ndsDisplayListUtils\winDir.h"
 #endif
 
 #include <stdio.h>
@@ -1037,6 +1036,17 @@ void initialization()
     char garbage;
     GLfloat fogColor[4]= {0.8f, 0.8f, 1.0f, 1.0f};
 
+	//NDS TGDS ARM9 + ARM9 GX through NDS DL VS2012
+	#if defined(ARM9)
+	/* OpenGL 1.1 Dynamic Display List */
+	InitGL();
+	ReSizeGLScene(255, 191);
+	#endif
+
+	#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
+    startTimerCounter(tUnitsMilliseconds, 1);
+    #endif
+
     /* init time values (milliseconds)*/
     timePaused = timeMusic = timeSound = timeDetail = 0;
     last_time = now_time = time_second = 0;
@@ -1241,13 +1251,17 @@ void initialization()
 	roadFile = fopen(fullPath, "rb");
 #else
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
     strcpy(dataPath, "../src/battalion.data/");
 #endif
-#ifdef ARM9
+
+#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
     strcpy(dataPath, "0:/battalion.data/");
 #endif
 
+#if defined(_MSC_VER) && defined(ARM9) //BatallionNDS is ARM9 mode now (through NDS DL VS2012)
+	getCWDWin(dataPath, "/../../batallionnds/arm9/source/project/src/battalion.data/");
+#endif
 
     if (dataPath[strlen(dataPath)-1] != '/'){
         strcat(dataPath, "/");
@@ -1256,12 +1270,7 @@ void initialization()
     strcpy(fullPath, dataPath);
     strcat(fullPath, "battalion.sho");
 
-#ifdef _MSC_VER
-    roadFile = fopen(fullPath, "rb");
-#endif
-#ifdef ARM9
-    roadFile = fopen(fullPath, "r");
-#endif
+	roadFile = fopen(fullPath, "r");
 
 #endif
     if (roadFile != NULL){

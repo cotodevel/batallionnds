@@ -1382,7 +1382,7 @@ GLenum CreateStrokeFont(GLuint fontBase)
 			break;
 	    }
 	}
-	glEndList();
+	glEndList(); //NDS TGDS: OpenGL DL using 256K run out of memory, todo: each TGDS Project should specify how much memory is to be allocated for OpenGL DisplayLists when initializing
     }
     return GL_TRUE;
 }

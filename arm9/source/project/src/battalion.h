@@ -989,5 +989,7 @@ extern GLint DLDUMMY;
 extern GLint DLDUMMY2;
 extern void setupDLEnableDisable2DTextures();
 
+extern GLvoid ReSizeGLScene(GLsizei width, GLsizei height);
+extern int InitGL();
 
 #endif
