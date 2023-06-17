@@ -1178,7 +1178,7 @@ void initialization()
     showframes	    = 0;
     paused	    = 0;
 
-    lod		    = 0; //lowest detail possible
+    lod		    = -1; //lowest detail possible
 
 
 #ifdef DETAIL
