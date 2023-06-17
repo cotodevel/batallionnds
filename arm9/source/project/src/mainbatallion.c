@@ -1371,30 +1371,21 @@ void initialization()
        top entry for each user in the high score list.
      */
 
-#ifdef ARM9
-multipleHighScores = 0;
-#endif
-
-#ifndef ARM9
-    if (getenv("BATTALIONSCOREUNIQUE"))
-	{
-	 multipleHighScores = 0;
-	}
-#endif
-
+	multipleHighScores = 0;
     hiScoreFile = NULL;
 
-#ifndef ARM9
-    dataPtr = getenv("BATTALIONSCOREDIR");
-    if (dataPtr != NULL)
-	    strcpy(scoredataPath, dataPtr);
-    else
-	    strcpy(scoredataPath, ".");
-#endif
+	#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
+    strcpy(scoredataPath, "");
+	#endif
 
-#ifdef ARM9
-strcpy(scoredataPath, "0:");
-#endif
+	#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
+	strcpy(scoredataPath, "0:");
+	#endif
+
+	#if defined(_MSC_VER) && defined(ARM9) //BatallionNDS is ARM9 mode now (through NDS DL VS2012)
+		getCWDWin(scoredataPath, "/../../batallionnds/arm9/source/project/src");
+	#endif
+
 
     if (scoredataPath[strlen(scoredataPath)-1] != '/'){
 	    strcat(scoredataPath, "/");
