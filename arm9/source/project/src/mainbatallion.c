@@ -1040,6 +1040,7 @@ void initialization()
 	#if defined(ARM9)
 	/* OpenGL 1.1 Dynamic Display List */
 	InitGL();
+	InitGL();
 	ReSizeGLScene(255, 191);
 	#endif
 
@@ -6307,7 +6308,7 @@ __attribute__((optnone))
 #endif
 int InitGL()
 {
-	glInit(); //NDSDLUtils: Initializes a new videoGL context	
+	glInit(384*1024); //NDSDLUtils: Initializes a new videoGL context	
 	glClearColor(255,255,255);		// White Background
 	glClearDepth(0x7FFF);		// Depth Buffer Setup
 	glEnable(GL_ANTIALIAS|GL_TEXTURE_2D|GL_BLEND|GL_LIGHT0); // Enable Texture Mapping + light #0 enabled per scene
