@@ -745,7 +745,7 @@ void drawAMonster(float x, struct monsterInfo monster, float z,
 				if ((!isTarget) && (view == MONSTERVIEW))
 				    drawSimpleTechs(monster,lod);
 				else
-				    drawTechs(monster,lod);
+				    drawSimpleTechs(monster,lod); //drawTechs(monster,lod);
 				break;
 				
 		case FLUTTER:   if (monster.energyRemaining <= 0)
@@ -1695,8 +1695,9 @@ textLineWidth = 1.01;
 	if (mode == DEMOMODE)
     {
 	    if (!(Googelon.timeDead > 100) && !showOptions)
-		if (Googelon.moveCount < 150)
-		    showScores(itsChristmas, G, V, T, F, Googelon, mainCounter, offsetX, lod);
+		if (Googelon.moveCount < 150){
+		    //showScores(itsChristmas, G, V, T, F, Googelon, mainCounter, offsetX, lod);
+		}
 		else
 
 #ifdef SOUND
