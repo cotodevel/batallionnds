@@ -6200,11 +6200,15 @@ int startBatallion(int argc, char **argv)
 	printf("--");
 	printf("--");
 	printf("--");
+	printf("Free Mem: %d KB", ((int)TGDSARM9MallocFreeMemory()/1024));
 	printf("entering doDisplay() 'main loop' ");
 	REG_IE |= IRQ_VBLANK;
 #endif	
 
-#if defined(_MSC_VER) && defined(ARM9) //BatallionNDS is ARM9 mode now (through NDS DL VS2012)
+ //BatallionNDS is ARM9 mode now (through NDS DL VS2012)
+ //or
+ //TGDS ARM9
+#if ( (defined(_MSC_VER) && defined(ARM9)) || (!defined(_MSC_VER) && defined(ARM9)) )
 	while(1==1){
 		doDisplay();
 	}
