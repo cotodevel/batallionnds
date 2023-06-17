@@ -1367,7 +1367,7 @@ GLenum CreateStrokeFont(GLuint fontBase)
 	glNewList(fontBase+(unsigned int)strokeFont[i][0], GL_COMPILE);
 	for (j = 1; mode = strokeFont[i][j]; j += 3) {
 	    if (mode == FONT_BEGIN) {
-			glBegin(GL_LINE_STRIP);
+			glBegin(GL_QUAD_STRIP);
 			glVertex2f((float)strokeFont[i][j+1]*STROKE_SCALE, (float)strokeFont[i][j+2]*STROKE_SCALE);
 	    } 
 		else if (mode == FONT_NEXT) {
