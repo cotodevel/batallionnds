@@ -6308,8 +6308,8 @@ int InitGL()
 	
 	printf("free mem before: %d KB", ((int)TGDSARM9MallocFreeMemory()/1024));
 	#endif
-	
-	glInit(256*1024); //NDSDLUtils: Initializes a new videoGL context	
+	int TGDSOpenGLDisplayListWorkBufferSize = (384*1024);
+	glInit(TGDSOpenGLDisplayListWorkBufferSize); //NDSDLUtils: Initializes a new videoGL context	
 	
 	#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
 	printf("free mem after: %d KB", ((int)TGDSARM9MallocFreeMemory()/1024));

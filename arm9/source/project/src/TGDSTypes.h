@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <malloc.h>
+#include <math.h>
 
 #define TGDSARM9Malloc malloc
 #define TGDSARM9Calloc calloc
@@ -59,7 +60,6 @@ typedef float GLclampf;
 typedef double GLdouble;
 typedef double GLclampd;
 typedef void GLvoid;
-
 
 #ifndef __cplusplus
 typedef unsigned char bool;
