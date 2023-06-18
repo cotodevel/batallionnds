@@ -1040,7 +1040,6 @@ void initialization()
 	#if defined(ARM9)
 	/* OpenGL 1.1 Dynamic Display List */
 	InitGL();
-	InitGL();
 	ReSizeGLScene(255, 191);
 	#endif
 
@@ -6300,7 +6299,24 @@ __attribute__((optnone))
 #endif
 int InitGL()
 {
-	glInit(384*1024); //NDSDLUtils: Initializes a new videoGL context	
+	#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
+	setTGDSARM9PrintfCallback((printfARM9LibUtils_fn)&TGDSDefaultPrintf2DConsole); //Redirect to default TGDS printf Console implementation
+	clrscr();
+	printf("--");
+	printf("--");
+	printf("--");
+	
+	printf("free mem before: %d KB", ((int)TGDSARM9MallocFreeMemory()/1024));
+	#endif
+	
+	glInit(256*1024); //NDSDLUtils: Initializes a new videoGL context	
+	
+	#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
+	printf("free mem after: %d KB", ((int)TGDSARM9MallocFreeMemory()/1024));
+	
+	while(1==1){}
+	#endif
+
 	glClearColor(255,255,255);		// White Background
 	glClearDepth(0x7FFF);		// Depth Buffer Setup
 	glEnable(GL_ANTIALIAS|GL_TEXTURE_2D|GL_BLEND|GL_LIGHT0); // Enable Texture Mapping + light #0 enabled per scene
