@@ -1695,7 +1695,7 @@ textLineWidth = 1.01;
     {
 	    if (!(Googelon.timeDead > 100) && !showOptions)
 		if (Googelon.moveCount < 150){
-		    //showScores(itsChristmas, G, V, T, F, Googelon, mainCounter, offsetX, lod);
+		    showScores(itsChristmas, G, V, T, F, Googelon, mainCounter, offsetX, lod);
 		}
 		else
 
