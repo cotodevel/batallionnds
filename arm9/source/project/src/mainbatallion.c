@@ -6373,7 +6373,7 @@ int TWLPrintf(const char *fmt, ...){
 
 //glutSolidSphere(radius, 16, 16);  -> NDS GX Replacement
 void drawSphere(float r, int lats, int longs) {
-	#ifdef _MSC_VER
+	#if defined(_MSC_VER) && !defined(ARM9) //VS2012?
 	int i, j;
 	for (i = 0; i <= lats; i++) {
 		double lat0 = M_PI * (-0.5 + (double)(i - 1) / lats);
@@ -6398,7 +6398,15 @@ void drawSphere(float r, int lats, int longs) {
 	}
 	#endif
 
-	#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
+	#if !defined(_MSC_VER) && defined(ARM9) //TGDS ARM9?
+	#include "Sphere008.h"safas
+	#endif
+
+	#if defined(_MSC_VER) && defined(ARM9) //TGDS ARM9 through VS2012?
+	#include "..\..\Sphere008.h"
+	#endif
+
+	#if defined(ARM9) //TGDS ARM9 or TGDS ARM9 through VS2012?
 	glScalef(r, r, r);
 	// Execute the display list
     glCallListGX((u32*)&Sphere008); //comment out when running on NDSDisplayListUtils

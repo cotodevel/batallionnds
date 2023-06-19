@@ -2462,7 +2462,7 @@ void drawBattlefield(struct road * roads,  float xshift,  float zshift,
     /***************/
     /* draw roads  */
     /***************/
-    //drawRoads(roads, xshift, zshift, itsChristmas, view, detail);
+    drawRoads(roads, xshift, zshift, itsChristmas, view, detail);
     
     
     radius = sqrt(xshift * xshift + zshift * zshift);
