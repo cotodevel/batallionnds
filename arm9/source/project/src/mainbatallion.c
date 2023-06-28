@@ -263,8 +263,6 @@ int frameCount;
 int outFrameCount;
 time_t frameTime;
 
-GLuint overviewLookat;
-
 float textLineWidth;
 
 char playerName[16];
@@ -662,8 +660,9 @@ void goToOverView(int eyeball)
     glMatrixMode(GL_MODELVIEW);
 	
 	switch(eyeball){
-	case 2: glCallList(overviewLookat);
-		break;
+	case 2: {
+			gluLookAt( 0,     0, 9 ,  0,     0, 0, 0,1,0);
+		}break;
 
 	case 0: 
         gluLookAt( 0.05,  0, 9,   0.05,  0, 0, 0,1,0);
@@ -1135,8 +1134,6 @@ void initialization()
 	 */
     monitorType = 0; /*THIS IS BAD*/
 
-    overviewLookat =  makeOverviewLookat();
-   
     /*************************/
     /* initialize indicators */
     /*************************/
@@ -5209,7 +5206,9 @@ void doDisplay(void){
 	glMatrixMode(GL_MODELVIEW);
 
 	switch(eyeball){
-		case 2: {glCallList(overviewLookat);} break;
+		case 2: {
+			gluLookAt( 0,     0, 9 ,  0,     0, 0, 0,1,0);
+		} break;
 		case 0: {gluLookAt( 0.065, 0, 9,  0.065, 0, 0, 0,1,0);} break;
 		case 1: {gluLookAt(-0.065, 0, 9, -0.065, 0, 0, 0,1,0);} break;
 	}

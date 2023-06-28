@@ -802,8 +802,6 @@ void makerrotcubexyflat(float u,  float v,  float w,
  * holds the objects for the graphics routines
  *****************************************/
 
-GLuint makeOverviewLookat(void);
-
 GLuint makeshell2(void);
 GLuint makeHeroShell(void);
 GLuint makeWaterShell(void);

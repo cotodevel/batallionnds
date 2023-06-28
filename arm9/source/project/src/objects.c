@@ -64,22 +64,6 @@ extern float  healthGreen[4];
 extern float  treeColor[4];
 extern float  treeColor2[4];
 
-
-/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
-
-GLuint makeOverviewLookat()
-    {
-    GLuint O;
-    
-    O = glGenLists(1);
-    glNewList(O, GL_COMPILE);
-   
-    gluLookAt( 0,     0, 9 ,  0,     0, 0, 0,1,0);
-   
-    glEndList();
-    return(O);
-    }
-
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /* create object for tech's shell                                */
