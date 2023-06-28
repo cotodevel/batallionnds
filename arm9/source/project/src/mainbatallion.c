@@ -263,7 +263,6 @@ int frameCount;
 int outFrameCount;
 time_t frameTime;
 
-GLuint monsterLookat;
 GLuint overviewLookat;
 
 float textLineWidth;
@@ -422,7 +421,7 @@ void goToMonsterView(int eyeball)
     
     switch(eyeball){
 	case 2: 
-        glCallList(monsterLookat);
+        gluLookAt(0, PLANEY + 2.4, 0.1, 0, PLANEY, 1, 0, 1, 0);
         
         x1 = 0;
         y1 = PLANEY+2.4;
@@ -1136,8 +1135,6 @@ void initialization()
 	 */
     monitorType = 0; /*THIS IS BAD*/
 
-
-    monsterLookat =  makeMonsterLookat();
     overviewLookat =  makeOverviewLookat();
    
     /*************************/
