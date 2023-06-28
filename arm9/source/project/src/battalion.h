@@ -693,9 +693,6 @@ void goToMapView(void);
 void goToOverView(int);
 
 void drawAMonster(float, struct monsterInfo, float, int, int);
-
-void doDrawing (int);
-
 struct monsterInfo autopilot(float, float, struct monsterInfo);
 
 void reshape( int, int);

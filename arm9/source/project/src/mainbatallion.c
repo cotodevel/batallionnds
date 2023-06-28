@@ -140,7 +140,6 @@ int noSound;
 int no3D;
 int mode3D;
 int mode;
-int backdrop;
 int itsChristmas;
 int mapHeight;
 int lod;
@@ -408,7 +407,7 @@ void goToLowDetail()
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
 void goToMonsterView(int eyeball)
-    {
+{
 #ifdef SOUND
     /* computing the listener position */
     float xproj, zproj;
@@ -418,8 +417,8 @@ void goToMonsterView(int eyeball)
     
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(70,  1,   0.1,   PLANESIZE);
-    glMatrixMode(GL_MODELVIEW);
+	gluPerspective(70,  1,   0.1,   PLANESIZE);
+	glMatrixMode(GL_MODELVIEW);
     
     switch(eyeball){
 	case 2: 
@@ -501,8 +500,8 @@ void goToMonsterView(int eyeball)
 
     yrot = - (GLfloat) Googelon.headHorzRotate;
     xrot = 360;
-    }
 
+}
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /* view teh scene from the most recently added military vehicle  */
@@ -650,7 +649,7 @@ void goToMapView()
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /* view the scene from omniscient 3rd person                     */
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
-
+static float xdist = 1.0f;
 void goToOverView(int eyeball)
 {
     /* rotations do not affect sound*/
@@ -658,13 +657,12 @@ void goToOverView(int eyeball)
     
     view = OMNISCIENTVIEW;
     
-
-    glMatrixMode(GL_PROJECTION);
+	glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective(65,  1,   0.1,   PLANESIZE);
     glMatrixMode(GL_MODELVIEW);
-	    
-    switch(eyeball){
+	
+	switch(eyeball){
 	case 2: glCallList(overviewLookat);
 		break;
 
@@ -701,18 +699,16 @@ void goToOverView(int eyeball)
         alListenerfv(AL_ORIENTATION, listenerOri);
 #endif 
 
-    if (lod >= 2)
-	{
-	glFogi(GL_FOG_START,  OVERVIEWFOGSTART);
-	glFogi(GL_FOG_END,  OVERVIEWFOGEND);
-	glEnable(GL_FOG);		    
+    if (lod >= 2){
+		glFogi(GL_FOG_START,  OVERVIEWFOGSTART);
+		glFogi(GL_FOG_END,  OVERVIEWFOGEND);
+		glEnable(GL_FOG);		    
 	}
-    }
-    /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+}
+
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /* draw a given monster at a given location                      */
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
-
 void drawAMonster(float x, struct monsterInfo monster, float z,
 			int isTarget, int view)
     {
@@ -1036,17 +1032,6 @@ void initialization()
     char garbage;
     GLfloat fogColor[4]= {0.8f, 0.8f, 1.0f, 1.0f};
 
-	//NDS TGDS ARM9 + ARM9 GX through NDS DL VS2012
-	#if defined(ARM9)
-	/* OpenGL 1.1 Dynamic Display List */
-	InitGL();
-	ReSizeGLScene(255, 191);
-	#endif
-
-	#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
-    startTimerCounter(tUnitsMilliseconds, 1);
-    #endif
-
     /* init time values (milliseconds)*/
     timePaused = timeMusic = timeSound = timeDetail = 0;
     last_time = now_time = time_second = 0;
@@ -1173,7 +1158,6 @@ void initialization()
     mode3D	    = 0;
     doBigClear	    = 0;
     showOptions	    = 0;
-    backdrop	    = 0;
     showframes	    = 0;
     paused	    = 0;
 
@@ -1465,286 +1449,12 @@ void initialization()
 
 }
 
-
-
-
 float x=0.0f, y=20.0f, z=30.0f;
 
-
-
-
-
-
-/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
-/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
-/* draw everything                                               */
-/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
-
-void doDrawing (int eyeball)
-{
-    GLenum glErrorVal;
-    GLint tmp[4];
-    struct targetInfo * temptarget;
-
-    /***********************/
-    /* check for GL errors */
-    /***********************/
-
-
-/* mac 68K version giving a spurious error mesage here */
-
-    if (lod >= 2)
-	glShadeModel(GL_SMOOTH);
-    else
-	glShadeModel(GL_FLAT);
-	
-
-    glPushMatrix();
-
-    /**********************************/
-    /* setting viewing location       */
-    /**********************************/
-
-    if (view == MONSTERVIEW)
-	    goToMonsterView(eyeball);
-    else if ((view == ARMYVIEW) && (lastTankY > NOTANKONPLANE))
-	    goToArmyView(eyeball);
-    else if (view == MAPVIEW)
-	    goToMapView();
-    else /*view == OMNISCIENTVIEW */
-	    goToOverView(eyeball);	    
-
-    /***********************************/
-    /* rotate and draw the battlefield */
-    /***********************************/
-
-    if (xrot != 0)
-	    glRotatef(0.1 * xrot, 1,0,0);
-
-    if (yrot != 0)
-    	glRotatef(0.1 * yrot, 0,1,0);
-
-    drawBattlefield(roadSystem, globalxshift, globalzshift, lod,
-		itsChristmas, view);
-
-    /**********************************/
-    /* draw the slagging vehicles     */
-    /**********************************/
-    
-    if (slaglist->next != NULL)
-	drawSlagTanks(slaglist, mainCounter, lod);
-
-
-    /******************************************************/
-    /* draw the vehicles                                  */
-    /* must come before draw structures for hero entrance */
-    /******************************************************/
-    
-    if (tanklist->next != NULL)
-	drawTanks(tanklist, mainCounter, Googelon, targets, lod,
-		view, viewW);
-
-
-
-    /**********************************/
-    /* draw all projectiles in flight */
-    /**********************************/
-
-    if (projectFlight->next != NULL)
-	drawProjectiles(projectFlight, mainCounter, fires,
-	flameCount, itsChristmas,lod);
-
-
-
-    /********************/
-    /* draw structures  */
-    /********************/
-
-    if (treelist->next != NULL)
-	if (view == MAPVIEW)
-	    drawtrees(allTreesEverywhere, numTreesEverywhere, mainCounter,
-				lod, itsChristmas, view);
-	else
-	    drawtrees(allTreesOnPlane, numTreesOnPlane, mainCounter,
-				lod, itsChristmas, view);
-
-
-
-    /**********************************/   
-    /* draw monsterBeam               */
-    /**********************************/
- 
-    if ((Googelon.beamOn) && ((Googelon.monster == GOOGELON) ||
-			      (Googelon.monster == FLUTTER)))
-	drawBeam(0, 0, Googelon.headHorzRotate, Googelon.headVertRotate,
-			Googelon.monster, lod);
-
-    for (temptarget = targets->next;temptarget != NULL;temptarget = temptarget->next)
-	if ((temptarget->monster.beamOn) &&
-			((temptarget->monster.monster == GOOGELON) ||
-			 (temptarget->monster.monster == FLUTTER)))
-	    drawBeam(temptarget->x, temptarget->z,
-			temptarget->monster.headHorzRotate,
-			temptarget->monster.headVertRotate,
-			temptarget->monster.monster, lod);
-
-
-
-    /*************************************************/
-    /* draw explosions to be seen through the VAPOUR */
-    /*************************************************/
-/*I suppose technically if ANY monster on the field is the vapour this
- * should be done but that may be too costly 
- */
- 
-    if ((Googelon.monster == VAPOUR) && (projectboom->next != NULL))
-	{
-	if (lod == -1)
-	    {
-	    drawBooms(projectboom, lod);
-	    }
-	else
-	    drawBooms(projectboom, lod);
-	}
-
-
-
-    /**********************************/ 
-    /* draw the targets               */
-    /**********************************/
-    
-    for(temptarget = targets->next;temptarget != NULL;temptarget = temptarget->next)
-	drawAMonster(temptarget->x, temptarget->monster, temptarget->z, 1,view);
-
-
-    /**********************************/ 
-    /* draw the player's monster      */
-    /**********************************/
-
-    drawAMonster(0, Googelon, 0, 0,view);
-
-    /**********************************/
-    /* draw explosions                */
-    /*                                */
-    /* explosions must be last so     */
-    /* other things can be seen       */
-    /* throught them                  */
-    /**********************************/
-
-    if (projectboom->next != NULL)
-	{
-	if (lod == -1)
-	    {
-	    drawBooms(projectboom, lod);
-	    }
-	else
-	    drawBooms(projectboom, lod);
-	}
-
-    glDisable(GL_FOG);
-
-    glPopMatrix(
-	#ifdef ARM9
-		1
-	#endif
-	);
-    
-    if (!backdrop)
-	{
-	glGetIntegerv(GL_VIEWPORT, tmp);
-	viewL = tmp[0];
-	viewR = viewL+tmp[2] - 1;
-
-	glPushMatrix();
-    
-	/**********************************/
-	/* print the overlays             */
-	/**********************************/
-    
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective(60,  1,   0.1,   PLANESIZE);
-	glMatrixMode(GL_MODELVIEW);
-
-	switch(eyeball){
-	    case 2: glCallList(overviewLookat);
-
-		    break;
-	    case 0: gluLookAt( 0.065, 0, 9,  0.065, 0, 0, 0,1,0);
-
-		    break;
-	    case 1: gluLookAt(-0.065, 0, 9, -0.065, 0, 0, 0,1,0);
-
-		    break;
-	    }
-
-	textLineWidth = (viewR-viewL) / 300.0;
-	if (textLineWidth < 1)
-	    textLineWidth = 1.01;
-
-if (lod == -1)
-textLineWidth = 1.01;
-
-	/* showText(Googelon.energyRemaining,  Googelon.monsterScore,
-	(long) (viewR-viewL), paused);   */   
-
-	showText(targets, Googelon.energyRemaining,  Googelon.monsterScore,
-	    showframes, paused, pointerGrab);
-
-	if (mode == DEMOMODE)
-    {
-	    if (!(Googelon.timeDead > 100) && !showOptions)
-		if (Googelon.moveCount < 150){
-		    showScores(itsChristmas, G, V, T, F, Googelon, mainCounter, offsetX, lod);
-		}
-		else
-
-#ifdef SOUND
-		    showText2((long) (viewR-viewL), getSoundOn(), noSound, getMusicOn(),
-			    mode3D, no3D, lod, paused, itsChristmas, pointerGrab);
-#else    
-		    showText2((long) (viewR-viewL), 0, noSound, 0,
-			    mode3D, no3D, lod, paused, itsChristmas, pointerGrab);
-#endif	    
-	    showText3(lod);
-
-	    if (showOptions)
-	        doOptions(Googelon, (long) (viewR-viewL),  mainCounter, itsChristmas, offsetX, lod);
-	    else
-            showText4();	    
-    
-        if ((Googelon.timeDead > 100) && !showOptions)
-		    doSummary(Googelon.monster,  Googelon.timeDead,
-		        (long) (viewR-viewL), killtanks, killmtanks, 
-		        killhelos, killCHHs, killmechags, killheros,
-		        killplanes, killlaunchers, killfighters,
-		        mainCounter, lod, moreThanOne);	
-        }
-        else
-
-            if(levelStartCount > 0)
-            {
-                showCityName(levelNames[currentLevel], lod);
-                levelStartCount -=1;
-            }
-	
-	    glPopMatrix(
-		#ifdef ARM9
-			1
-		#endif
-		);
-	}
-
-#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
-    glutSwapBuffers();
-#endif
-
-}
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /* go to 1d-video mode                                           */
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
-
 void goto1d(void){
     
 }
@@ -5370,62 +5080,200 @@ struct monsterInfo autopilot(float centerX, float centerZ, struct monsterInfo th
     return(thaMonster);
     }
 
-
+/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+/* draw everything                                               */
+/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 void doDisplay(void){
-    if (!mode3D){
-		/**********************************/
-		/*draw in mono                   */
-		/**********************************/
+	GLint tmp[4];
+    struct targetInfo * temptarget;
+	int eyeball = 2;
 
-		if (lod == -1){
-			glClear(GL_COLOR_BUFFER_BIT);
-		}
-		else{
-			glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-		}
- 		doDrawing(2);
- 	}
-    else{
-		short Height3d,  Width3d;
-		/**********************************/
-		/* draw in stereo                 */
-		/**********************************/
-		if (doBigClear){
-			glViewport(0,  0, XMAXSCREEN+1, YMAXSCREEN+1);
-			glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-			doBigClear -= 1;
-	    }
-		Height3d = (short) windowTall/4;
-		Width3d = (short) windowWide/2;
-		glViewport(
-			(short) (XMAXSCREEN/2 - Width3d), 
-			(short) (YMAXSTEREO/2 - Height3d),
-			( (short) (XMAXSCREEN/2 + Width3d))-((short) (XMAXSCREEN/2 - Width3d))+1, 
-			( (short) (YMAXSTEREO/2 + Height3d))-( (short) (YMAXSTEREO/2 - Height3d))+1
-		);
-		glClear(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
-		doDrawing(0);
-		glViewport(
-			(short) (XMAXSCREEN/2 - Width3d),
-			(short) (YOFFSET+YMAXSTEREO/2 - Height3d),
-			( (short) (XMAXSCREEN/2 + Width3d))-((short) (XMAXSCREEN/2 - Width3d))+1, 
-			((short) (YOFFSET+YMAXSTEREO/2 + Height3d))-( (short) (YOFFSET+YMAXSTEREO/2 - Height3d))+1
-		);
-		glClear(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
-		doDrawing(1);
+    #if (defined(_MSC_VER) && !defined(ARM9)) //BatallionNDS is ARM9 mode now (through NDS DL VS2012)
+	if (lod == -1){
+		glClear(GL_COLOR_BUFFER_BIT);
+	}
+	else{
+		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	}
+	#endif
+    
+	if (lod >= 2){
+		glShadeModel(GL_SMOOTH);
+	}
+	else{
+		glShadeModel(GL_FLAT);
+	}
+
+	glPushMatrix();
+	
+	if (view == MONSTERVIEW){
+	    goToMonsterView(eyeball);
+	}
+	else if ((view == ARMYVIEW) && (lastTankY > NOTANKONPLANE)){
+	    goToArmyView(eyeball);
+	}
+    else if (view == MAPVIEW){
+	    goToMapView();
+	}
+    else {
+		 goToOverView(eyeball);
 	}
 	
-	#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
-	glFlush();
-	//handleARM9SVC();	/* Do not remove, handles TGDS services */
-	IRQVBlankWait();
+	//rotate and adjust cam scene
+	if (xrot != 0){
+	    glRotatef(0.1 * xrot, 1,0,0);
+	}
+
+    if (yrot != 0){
+    	glRotatef(0.1 * yrot, 0,1,0);
+	}
+	
+    drawBattlefield(roadSystem, globalxshift, globalzshift, lod, itsChristmas, view); //pure GL drawing code here
+
+	if (slaglist->next != NULL){
+		drawSlagTanks(slaglist, mainCounter, lod);
+	}
+
+    if (tanklist->next != NULL){
+		drawTanks(tanklist, mainCounter, Googelon, targets, lod, view, viewW);
+	}
+
+    if (projectFlight->next != NULL){
+		drawProjectiles(projectFlight, mainCounter, fires, flameCount, itsChristmas,lod);
+	}
+
+    if (treelist->next != NULL){
+		if (view == MAPVIEW){
+			drawtrees(allTreesEverywhere, numTreesEverywhere, mainCounter, lod, itsChristmas, view);
+		}
+		else{
+			drawtrees(allTreesOnPlane, numTreesOnPlane, mainCounter, lod, itsChristmas, view);
+		}
+	}
+
+    if ((Googelon.beamOn) && ((Googelon.monster == GOOGELON) || (Googelon.monster == FLUTTER))){
+		drawBeam(0, 0, Googelon.headHorzRotate, Googelon.headVertRotate, Googelon.monster, lod);
+	}
+
+    for (temptarget = targets->next;temptarget != NULL;temptarget = temptarget->next){
+		if (
+			(temptarget->monster.beamOn) &&
+			((temptarget->monster.monster == GOOGELON) ||
+			(temptarget->monster.monster == FLUTTER))
+		){
+			drawBeam(temptarget->x, temptarget->z, temptarget->monster.headHorzRotate, temptarget->monster.headVertRotate, temptarget->monster.monster, lod);
+		}
+	}
+
+    if ((Googelon.monster == VAPOUR) && (projectboom->next != NULL)){
+		if (lod == -1){
+			drawBooms(projectboom, lod);
+	    }
+		else{
+			drawBooms(projectboom, lod);
+		}
+	}
+
+    for(temptarget = targets->next;temptarget != NULL;temptarget = temptarget->next){
+		drawAMonster(temptarget->x, temptarget->monster, temptarget->z, 1,view);
+	}
+
+    drawAMonster(0, Googelon, 0, 0,view);
+
+    if (projectboom->next != NULL){
+		if (lod == -1){
+			drawBooms(projectboom, lod);
+		}
+		else{
+			drawBooms(projectboom, lod);
+		}
+	}
+	
+	glDisable(GL_FOG);
+    glPopMatrix(
+	#ifdef ARM9
+		1
 	#endif
+	);
+    
+	////////////////////////////////////
+	// print the overlays             //
+	////////////////////////////////////
+	glGetIntegerv(GL_VIEWPORT, tmp);
+	viewL = tmp[0];
+	viewR = viewL+tmp[2] - 1;
+
+	glPushMatrix();
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(60,  1,   0.1,   PLANESIZE);
+	glMatrixMode(GL_MODELVIEW);
+
+	switch(eyeball){
+		case 2: {glCallList(overviewLookat);} break;
+		case 0: {gluLookAt( 0.065, 0, 9,  0.065, 0, 0, 0,1,0);} break;
+		case 1: {gluLookAt(-0.065, 0, 9, -0.065, 0, 0, 0,1,0);} break;
+	}
+
+	textLineWidth = (viewR-viewL) / 300.0;
+	if (textLineWidth < 1){
+		textLineWidth = 1.01;
+	}
+
+	if (lod == -1){
+		textLineWidth = 1.01;
+	}
+	showText(targets, Googelon.energyRemaining,  Googelon.monsterScore, showframes, paused, pointerGrab);
+		
+	if (mode == DEMOMODE){
+		if (!(Googelon.timeDead > 100) && !showOptions){
+			if(Googelon.moveCount < 150){
+				showScores(itsChristmas, G, V, T, F, Googelon, mainCounter, offsetX, lod);
+			}
+			else{
+				#ifdef SOUND
+				showText2((long) (viewR-viewL), getSoundOn(), noSound, getMusicOn(), mode3D, no3D, lod, paused, itsChristmas, pointerGrab);
+				#else
+				showText2((long) (viewR-viewL), 0, noSound, 0, mode3D, no3D, lod, paused, itsChristmas, pointerGrab);
+				#endif
+			}
+		}
+		showText3(lod);
+		if(showOptions){
+			doOptions(Googelon, (long) (viewR-viewL),  mainCounter, itsChristmas, offsetX, lod);
+		}
+		else{
+			showText4();	    
+		}
+		if((Googelon.timeDead > 100) && !showOptions){
+			doSummary(Googelon.monster,  Googelon.timeDead, (long)(viewR-viewL), killtanks, killmtanks, killhelos, killCHHs, killmechags, killheros, killplanes, killlaunchers, killfighters, mainCounter, lod, moreThanOne);
+		}
+	}
+	else if(levelStartCount > 0){
+		showCityName(levelNames[currentLevel], lod);
+		levelStartCount -=1;
+    }
+	glPopMatrix(
+	#ifdef ARM9
+		1
+	#endif
+	);
+	
+	#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
+    glutSwapBuffers();
+	#endif
+	#if defined(ARM9)
+	glFlush();	
+	#endif
+	#if (!defined(_MSC_VER) && defined(ARM9)) //TGDS ARM9
+    //handleARM9SVC();	/* Do not remove, handles TGDS services */
+    IRQVBlankWait();
+    #endif
 }
  
- 
- 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
-
 void demoKeys(int key)
     {
     switch(key)
@@ -5495,45 +5343,24 @@ void doMapView()
 
 void releaseSpKey(int key, int x, int y)
 {
-#if ((defined(_MSC_VER) && !defined(ARM9)) || (!defined(_MSC_VER) && defined(ARM9)) )  //BatallionNDS is VS2012? or BatallionNDS on TGDS ARM9?
 
+#if (defined(_MSC_VER) && !defined(ARM9))  //BatallionNDS is VS2012? 
     switch(key)
     {
-#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
    	    case GLUT_KEY_LEFT:
-#endif
-#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
-		case KEY_LEFT:
-#endif
                     keycontrol &= ~BAT_KEY_LEFT; 
 			        break;
-#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
 		case GLUT_KEY_RIGHT:
-#endif
-#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
-		case KEY_RIGHT:
-#endif
                     keycontrol &= ~BAT_KEY_RIGHT; 
 			        break;
-#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
 		case GLUT_KEY_UP:
-#endif
-#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
-		case KEY_UP:
-#endif
                     keycontrol &= ~BAT_KEY_FORW; 
                     break;
-#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
         case GLUT_KEY_DOWN:
-#endif
-#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
-		case KEY_DOWN:
-#endif
                     keycontrol &= ~BAT_KEY_BACK; 
 			        break;
      }
 #endif
-
 }
 
 void releaseNormalKey(unsigned char key, int x, int y)
@@ -5578,49 +5405,42 @@ void releaseNormalKey(unsigned char key, int x, int y)
 
 void processSpKey(int key, int x, int y)
 {
-#if ((defined(_MSC_VER) && !defined(ARM9)) || (!defined(_MSC_VER) && defined(ARM9)) )  //BatallionNDS is VS2012? or BatallionNDS on TGDS ARM9?
+	//directional input keypad in-game happens here
 	if ((mode == PLAYMODE) && !paused)
-    {
-        switch(key)
-        {
-#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
+	{
+		#if ((defined(_MSC_VER) && !defined(ARM9)) )  //BatallionNDS is VS2012?
+		switch(key){
 			case GLUT_KEY_LEFT:
-#endif
-#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
-			case KEY_LEFT:
-#endif
-					keycontrol |= BAT_KEY_LEFT; 
-                	break;
-#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
-			 case GLUT_KEY_RIGHT:
-#endif
-#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
-			case KEY_RIGHT:
-#endif
-                    keycontrol |= BAT_KEY_RIGHT; 
-                    break;
-#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
+				keycontrol |= BAT_KEY_LEFT; 
+				break;
+			case GLUT_KEY_RIGHT:
+				keycontrol |= BAT_KEY_RIGHT; 
+				break;
 			case GLUT_KEY_UP:
-#endif
-#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
-			case KEY_UP:
-#endif
-                    keycontrol |= BAT_KEY_FORW; 
-                    break;
-#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
+				keycontrol |= BAT_KEY_FORW; 
+				break;
 			case GLUT_KEY_DOWN:
-#endif
-#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
-			case KEY_DOWN:
-#endif
-                    keycontrol |= BAT_KEY_BACK; 
-                    break;
-          }
-     }     
-     else{
-          
-     }
-#endif
+				keycontrol |= BAT_KEY_BACK; 
+				break;
+		}
+		#endif
+		  
+		#if (!defined(_MSC_VER) && defined(ARM9))  //BatallionNDS on TGDS ARM9?
+			scanKeys();
+			if(keysHeld()&KEY_LEFT){
+				keycontrol |= BAT_KEY_LEFT;
+			}
+			if(keysHeld()&KEY_RIGHT){
+				keycontrol |= BAT_KEY_RIGHT;
+			}
+			if(keysHeld()&KEY_UP){
+				keycontrol |= BAT_KEY_FORW;
+			}
+			if(keysHeld()&KEY_DOWN){
+				keycontrol |= BAT_KEY_BACK; 
+			}
+		#endif
+	}
 }
 
 void processNormalKey(unsigned char key, int x, int y)
@@ -6172,6 +5992,18 @@ int startBatallion(int argc, char **argv)
 	glutIgnoreKeyRepeat(1);
 #endif
 
+	//NDS TGDS ARM9 + ARM9 GX through NDS DL VS2012
+	#if defined(ARM9)
+	/* OpenGL 1.1 Dynamic Display List */
+	InitGL();
+	ReSizeGLScene(255, 191);
+	glMaterialShinnyness();
+	#endif
+
+	#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
+    startTimerCounter(tUnitsMilliseconds, 1);
+    #endif
+
 #ifdef SOUND
     /* openAL initialization */
     alutInit(NULL,0);
@@ -6196,6 +6028,10 @@ int startBatallion(int argc, char **argv)
 	printf("entering doDisplay() 'main loop' ");
 	REG_IE |= IRQ_VBLANK;
 #endif	
+
+#if defined(ARM9)
+	glReset(); //Depend on GX stack to render scene
+#endif
 
  //BatallionNDS is ARM9 mode now (through NDS DL VS2012)
  //or
@@ -6304,7 +6140,7 @@ int InitGL()
 	
 	glClearColor(255,255,255);		// White Background
 	glClearDepth(0x7FFF);		// Depth Buffer Setup
-	glEnable(GL_ANTIALIAS|GL_TEXTURE_2D|GL_BLEND|GL_LIGHT0); // Enable Texture Mapping + light #0 enabled per scene
+	glEnable(GL_ANTIALIAS|GL_TEXTURE_2D|GL_BLEND); // Enable Texture Mapping + light #0 enabled per scene
 	
 	#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
 	//#1: Load a texture and map each one to a texture slot
@@ -6399,7 +6235,7 @@ void drawSphere(float r, int lats, int longs) {
 	#endif
 
 	#if !defined(_MSC_VER) && defined(ARM9) //TGDS ARM9?
-	#include "Sphere008.h"safas
+	#include "Sphere008.h"
 	#endif
 
 	#if defined(_MSC_VER) && defined(ARM9) //TGDS ARM9 through VS2012?
