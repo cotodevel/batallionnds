@@ -80,59 +80,16 @@
     /*************/
 
     GLuint 
-	plaintank, slagtank, masertank, slagmasertank,  
-	launchertank, slaglaunchertank, helo, slagHelo, 
-	bigRotor, smallRotor, propeller,  
-
-	airplaneBody, fighterBody,  
-    
-	monsterleg, monsterHead,
-	monsterTail, monsterBody,
-	monsterSimpleHead, monsterSimpleTail, 
-	flutterHead,  
-
-	techsBody, techsHead, techsShadow, 
-	techsSimpleBody, techsSimpleHead, 
 	
-	watershellObj, heroshellObj,  
-
-	tankShadow, planeShadow, fighterShadow, 
-
-	flutterShadow, flutterBody, flutterXMas, 
-	flutterWing1, flutterWing2, 
-
-	planeDotsObj, planeDotsObjD0,
-    
-	shellObj, shell2Obj, 
- 
-	titleObj, titleObjOO, titleObjOOO, 
-	lowDPlane, highDPlane, bigPlane, 
-		
-	roundTreeShadow,   
-
 	boom1Obj, boom2Obj, boom3Obj, boom4Obj, boom5Obj, 
 	boom6Obj, boom7Obj, boom8Obj, boom9Obj, boom10Obj, 
 
 	boom1ObjD0, boom2ObjD0, boom3ObjD0, boom4ObjD0, boom5ObjD0, 
-	boom6ObjD0, boom7ObjD0, boom8ObjD0, boom9ObjD0, boom10ObjD0, 
-	
-	strip1Obj, strip2Obj, strip3Obj, 
-	strip1ObjD0, strip2ObjD0, strip3ObjD0, 
-    
-	powerTower,
-	genericWindows, 
- 
-	building1Obj, building2Obj, building7Obj, building9Obj,  building9ObjOO,  
-	building10Obj, building12Obj, building14Obj, building19Obj,  
-	building20Obj, building21Obj, building31Obj, building32Obj,  
-	building5Obj,
-	building1ObjD0, building2ObjD0, building5ObjD0, building12ObjD0,
-	building19ObjD0, building20ObjD0, building21ObjD0;
+	boom6ObjD0, boom7ObjD0, boom8ObjD0, boom9ObjD0, boom10ObjD0;
 
     /***************************/
     /* texture mapping stuff   */
     /***************************/
-
     struct road roadsOnPlane[MAXROADSONPLANE];
 
 
@@ -180,99 +137,8 @@ void makeObjects(char * dataPath)
     /* make the objects */
     /********************/
 
-    plaintank		= makeTank();
-    slagtank		= makeSlagTank();
-    masertank		= makeMaserTank();
-    slagmasertank	= makeSlagMaserTank();
-    launchertank	= makeLauncherTank();
-    slaglaunchertank	= makeSlagLauncherTank();
-    helo		= makeHelo();
-    slagHelo		= makeSlagHelo();
-    bigRotor		= makeBigRotor();
-    smallRotor		= makeSmallRotor();
-    propeller		= makePropeller();
-    
-    monsterleg		= makeLeg();
-    monsterHead		= makeHead();
-    monsterSimpleHead	= makeSimpleHead();
-    monsterSimpleTail	= makeSimpleTail();
-    monsterTail		= makeTail();
-    monsterBody		= makeBody();
-    flutterHead		= makeFlutterHead();
-    techsBody		= makeTechsBody();
-    techsHead		= makeTechsHead();
-    techsSimpleBody	= makeTechsSimpleBody();
-    techsSimpleHead	= makeTechsSimpleHead();
-    techsShadow		= makeTechsShadow();
-
-    tankShadow		= makeTankShadow();
-    planeShadow		= makePlaneShadow();
-    fighterShadow	= makeFighterShadow();
- 
-    shellObj		= glGenLists(1);     
-    shell2Obj		= makeshell2();
-    heroshellObj	= makeHeroShell();
-    watershellObj	= makeWaterShell();
-
-    titleObj		= makeTitles(1);
-    titleObjOO		= makeTitles(0);
-    titleObjOOO		= makeTitles(-1);
-    
-    planeDotsObj	= makePlaneDots(1);
-    planeDotsObjD0	= makePlaneDots(0);
-
-    powerTower		= makePowerTower(); 
-    genericWindows	= makeGenericWindows(); 
-
-    strip1Obj		= makeStrip1(1);
-    strip2Obj		= makeStrip2(1);
-    strip3Obj		= makeStrip3(1);
-    strip1ObjD0		= makeStrip1(0);
-    strip2ObjD0		= makeStrip2(0);
-    strip3ObjD0		= makeStrip3(0);
-
-    building1Obj	= makebuilding1(1); 
-    building1ObjD0	= makebuilding1(0); 
-    building2Obj	= makebuilding2(1);
-    building2ObjD0	= makebuilding2(0);
-    building5Obj	= makebuilding5(1);
-    building5ObjD0	= makebuilding5(0);
-    building7Obj	= makebuilding7();
-    building9Obj	= makebuilding9(0);
-    building9ObjOO	= makebuilding9(1);
-    
-    building10Obj	= makebuilding10();
-    
-    building12Obj	= makebuilding12(1);
-    building12ObjD0	= makebuilding12(0);
-    building14Obj	= makebuilding14();
-    building19Obj	= makebuilding19(1);
-    building19ObjD0	= makebuilding19(0);
-    building20Obj	= makebuilding20(1);
-    building20ObjD0	= makebuilding20(0);
-    building21Obj	= makebuilding21(1);
-    building21ObjD0	= makebuilding21(0);
-    building31Obj	= makebuilding31();
-    building32Obj	= makebuilding32();
-
-    lowDPlane		= makeLowDPlane();
-    highDPlane		= makeHighDPlane();
-    bigPlane		= makeBigPlane();
-
-    airplaneBody	= makeAirplaneBody();
-    fighterBody		= makeFighterBody();
-    flutterShadow	= makeFlutterShadow();
-    flutterXMas		= makeFlutterXMas();
-    flutterBody		= makeFlutterBody();
-    flutterWing1	= makeFlutterWing1();
-    flutterWing2	= makeFlutterWing2();
-
-    roundTreeShadow	= makeRoundTreeShadow();
-
     makeBooms();
-    
     initFonts();
-
 }
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -345,31 +211,71 @@ void makeCHH(int dam)
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
 void drawHelo(float percent,  int slag)
-    {
+{
     GLint shadeNow;
-    
     glGetIntegerv(GL_SHADE_MODEL, &shadeNow);
     
     /*************/
     /* draw body */
     /*************/
-
     glShadeModel(GL_FLAT);
 
-    if (!slag)
-	glCallList(helo);
-    else
-	glCallList(slagHelo);
-	
+    if (!slag){
+		//create object for an operational helicopter
+		makercube(0.0,  0.0,     0.0,    0.1, 0.1,    0.2, colorgrey2);
+		makercube(0.0, -0.0375, -0.225,  0.1, 0.0625, 0.025, colorgrey2);
+
+		makercubenobtm( -0.05, +0.0625, -0.2,  0.025, 0.025, 0.025, colorblack);
+		makercubenobtm(  0.05, +0.0625, -0.2,  0.025, 0.025, 0.025, colorblack);
+
+		makercube(0.0, 0.0,   0.3, 0.0375, 0.0375, 0.1, colorgrey1);
+		makercubenobtmnotop( 0.0, 0.125, 0.0, 0.025,  0.05,   0.025, colorgrey1);
+
+		/**************/
+		/* draw skids */
+		/**************/
+		makercube( 0.075, -0.2, 0.0,  0.025, 0.0125, 0.175, colorwhite);
+		makercube(-0.075, -0.2, 0.0,  0.025, 0.0125, 0.175, colorwhite);
+
+		makercubenobtm(  0.075, -0.15, 0.025,  0.0125, 0.05, 0.05, colorgrey1);
+		makercubenobtm( -0.075, -0.15, 0.025,  0.0125, 0.05, 0.05, colorgrey1);
+	}
+	else{
+		/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+		/* create object for melting helicopter                          */
+		/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+		makercube(0.0,  0.0,     0.0,    0.1, 0.1,    0.2, colorwhite);
+		makercube(0.0, -0.0375, -0.225,  0.1, 0.0625, 0.025, colorwhite);
+
+		makercubenobtm( -0.05, +0.0625, -0.2, 0.025, 0.025, 0.025,colorwhite);
+		makercubenobtm(  0.05, +0.0625, -0.2, 0.025, 0.025, 0.025, colorwhite);
+
+		makercube(0.0, 0.0,   0.3, 0.0375, 0.0375, 0.1, colorwhite);
+		makercubenobtmnotop( 0.0, 0.125, 0.0, 0.025,  0.05,   0.025, colorwhite);
+
+		/**************/
+		/* draw skids */
+		/**************/
+		makercube( 0.075, -0.2, 0.0,  0.025, 0.0125, 0.175, colorwhite);
+		makercube(-0.075, -0.2, 0.0,  0.025, 0.0125, 0.175, colorwhite);
+
+		makercubenobtm( 0.075, -0.15, 0.025, 0.0125, 0.05, 0.05, colorwhite);
+		makercubenobtm(-0.075, -0.15, 0.025, 0.0125, 0.05, 0.05, colorwhite);
+	}
     glShadeModel(shadeNow);
 
     /***************/
     /* draw rotors */
     /***************/
-
     glPushMatrix();
 	glRotatef(-percent, 0, 1, 0);
-	glCallList(bigRotor);	
+	
+	/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+	/* create object for main rotor of the helicopters               */
+	/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+	makercube(0.0, 0.175, 0.0, 0.025, 0.01, 0.3, colorwhite);
+	makercube(0.0, 0.175, 0.0, 0.3,   0.01, 0.025, colorwhite);
+
     glPopMatrix(
 		#ifdef ARM9
 		1
@@ -379,18 +285,21 @@ void drawHelo(float percent,  int slag)
     /********************/
     /* draw tail rotor  */
     /********************/
-
     glPushMatrix();
 	glTranslatef(0.04,  0,  0.375);
 	glRotatef( -percent, 1, 0, 0);
-	glCallList(smallRotor);
+	
+	/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+	/* create object for small rotor of the helicopters              */
+	/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+	makercube(0.0, 0.0, 0.0, 0.0025, 0.15, 0.02, colorwhite);
+
     glPopMatrix(
 		#ifdef ARM9
 		1
 		#endif
 	);
-	}
-
+}
     
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -400,19 +309,71 @@ void drawHelo(float percent,  int slag)
 void drawAirplane(int counter)
     {
     float percent;
-
     percent = counter * 10.0;
 
-    glCallList(airplaneBody);
-    
+    /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+	/* make bomber body                                              */
+	/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+	/*************/
+	/* draw body */
+	/*************/
+	makercube(0.0, 0.0, 0.0, 0.03, 0.03, 0.14, colorwhite);
+	glPushMatrix();
+		glTranslatef(0,  0,  -0.14);
+		glRotatef(-90, 1, 0, 0);
+		makeitPyr(1, colorwhite, 0.0, 0.08, 0.0, 0.03, 0.08, 0.03);
+	glPopMatrix(
+	#ifdef ARM9
+		1
+	#endif
+	);
+
+	/*************/
+	/* draw tail */
+	/*************/
+	makercube(0.0, 0.07, 0.11, 0.002, 0.04 ,0.02, colorwhite);
+	makeitPyr(1, colorwhite, 0.0, 0.03, 0.09, 0.002, 0.08, 0.02);
+
+	/**************/
+	/* draw wings */
+	/**************/
+	makercube(0.0, 0.0, -0.01, 0.16, 0.004, 0.02, colorgrey3);
+
+	glPushMatrix();
+		glTranslatef(0,  0,  -0.03);
+		glRotatef(-90,1, 0, 0);
+		makeitPyr(1, colorgrey2, 0.0, 0.03, 0, 0.16, 0.03, 0.004);
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
+
+	makercube(0.0, 0.0, 0.11, 0.08, 0.004, 0.015, colorgrey3);
+	glPushMatrix();
+		glTranslatef(0,  0,  0.095);
+		glRotatef(-90, 1, 0, 0);
+		makeitPyr(1, colorgrey2, 0.0, 0.02, 0.0, 0.08, 0.02, 0.004);
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
+	makercube(-0.09, -0.004-0.01, -0.07+0.02, 0.01, 0.01, 0.02, colorgrey1);
+	makercube( 0.09, -0.004-0.01, -0.07+0.02, 0.01, 0.01, 0.02, colorgrey1);
+
     /*******************/
     /* draw propellers */
     /*******************/
-
     glPushMatrix();
 	glTranslatef(-0.09,  -0.014,  -0.07);
 	glRotatef( -percent, 0, 0, 1);
-	glCallList(propeller);	
+	
+	/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+	/* create object for propeller for bomber                        */
+	/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+	makercube(0.0, 0.0, 0.0, 0.005, 0.05, 0.001, colorwhite);
+
     glPopMatrix(
 		#ifdef ARM9
 		1
@@ -422,7 +383,12 @@ void drawAirplane(int counter)
     glPushMatrix();
 	glTranslatef(+0.09,  -0.014,  -0.07);
 	glRotatef( -percent, 0, 0, 1);
-	glCallList(propeller);	
+	
+	/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+	/* create object for propeller for bomber                        */
+	/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+	makercube(0.0, 0.0, 0.0, 0.005, 0.05, 0.001, colorwhite);
+
     glPopMatrix(
 		#ifdef ARM9
 		1
@@ -435,12 +401,71 @@ void drawAirplane(int counter)
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /* draw a fighter                                                 */
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+void drawFighter(void){
+    /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+	/* make fighter body                                              */
+	/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+	makercube(0.0, 0.0, 0.0, 0.03, 0.03, 0.14, colorwhite);
 
-void drawFighter(void)
-    {
-    glCallList(fighterBody);    
-    }
-	
+	glPushMatrix();
+		glTranslatef(0,  0,  -0.14);
+		glRotatef(-90, 1, 0, 0);
+		makeitPyr(1, colorwhite, 0.0, 0.08, 0.0, 0.03, 0.08, 0.03);
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
+
+	/*************/
+	/* draw tail */
+	/*************/
+	glPushMatrix();
+		glTranslatef(-0.05, 0.05, 0.11);
+		glRotatef(45, 0, 0, 1);
+		makercube(0.0, 0, 0, 0.002, 0.04 ,0.02, colorgrey3);
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
+
+	glPushMatrix();
+		glTranslatef(0.05, 0.05, 0.11);
+		glRotatef(-45, 0, 0, 1);
+		makercube(0.0, 0, 0, 0.002, 0.04 ,0.02, colorgrey3);
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
+
+	/**************/
+	/* draw wings */
+	/**************/
+	glPushMatrix();
+		glTranslatef(0,  0,  0.03);
+		glRotatef(90, 1, 0, 0);
+		makeitPyr(1, colorgrey3, 0.0, 0.01, 0, 0.16, 0.085, 0.004);
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
+
+	glPushMatrix();
+		glTranslatef(0,  0,  0.03);
+		glRotatef(-90, 1, 0, 0);
+		makeitPyr(1, colorgrey3, 0.0, 0.2, 0, 0.1, 0.04, 0.004);
+	glPopMatrix(
+	#ifdef ARM9
+			1
+	#endif
+	);
+    
+	makercube(-0.09, -0.004-0.01, 0.02, 0.01, 0.01, 0.04, colorred);
+	makercube( 0.09, -0.004-0.01, 0.02, 0.01, 0.01, 0.04, colorred);
+}
 
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -468,11 +493,27 @@ static    float googShadow3[3] = {-0.1, SHADOWS, -0.5};
 	/********/
 	/* head */
 	/********/
-
 	glPushMatrix();
 	    glRotatef(.1*monster.headVertRotate, 1, 0, 0);
 
-	    glCallList(monsterHead);
+	    /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+		/* create object for Googelon's head                             */
+		/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+		makercube(0.0, PLANEY+1.15,  0.0,  0.22, 0.15, 0.1, colorred);
+		makercube(0.0, PLANEY+1.15, -0.1,  0.1,  0.1,  0.1, colorred);
+
+		/**********/
+		/* pupils */
+		/**********/
+		makercube( 0.15, PLANEY+1.21, 0.1, 0.03, 0.03, 0.06, colorblack);
+		makercube(-0.15, PLANEY+1.21, 0.1, 0.03, 0.03, 0.06, colorblack);
+
+		/********/
+		/* eyes */
+		/********/
+		makercube( 0.15, PLANEY+1.20, 0.1, 0.06, 0.06, 0.05, colorwhite);
+		makercube(-0.15, PLANEY+1.20, 0.1, 0.06, 0.06, 0.05, colorwhite);
+
 	    	    
 	    if (itsChristmas)
 		{
@@ -524,21 +565,37 @@ static    float googShadow3[3] = {-0.1, SHADOWS, -0.5};
 		#endif
 	);  
 
-	/********/
-	/* body */
-	/********/
+	/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+	/* create object for an Googelon's body                          */
+	/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+	makercube(     0.0, PLANEY+0.5, 0.0,  0.2,  0.3, 0.2,  colorred);
+	makercubenobtm(0.0, PLANEY+0.9, 0.0,  0.15, 0.2, 0.15, colorred);
 
-	glCallList(monsterBody);
-    
 	/***********************/
 	/* legs, feet and toes */
 	/***********************/
 
 	glPushMatrix();
 	    glTranslatef(0.2,  monster.rot1,  monster.rot2);
-	    glCallList(monsterleg);
+	    
+		/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+		/* create object for Googelon's leg                              */
+		/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+		makercube( 0.0,   PLANEY+0.2,  0.0,   0.1,  0.2,  0.1,  colorred);
+		makercube( 0.0,   PLANEY+0.06, 0.17,  0.1,  0.06, 0.08, colorred);
+		makercube( 0.05,  PLANEY+0.05, 0.25,  0.03, 0.04, 0.05, colorwhite);
+		makercube(-0.05,  PLANEY+0.05, 0.25,  0.03, 0.04, 0.05, colorwhite);
+
 	    glTranslatef(-0.4,   -2*monster.rot1,  -2*monster.rot2);
-	    glCallList(monsterleg);
+	    
+		/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+		/* create object for Googelon's leg                              */
+		/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+		makercube( 0.0,   PLANEY+0.2,  0.0,   0.1,  0.2,  0.1,  colorred);
+		makercube( 0.0,   PLANEY+0.06, 0.17,  0.1,  0.06, 0.08, colorred);
+		makercube( 0.05,  PLANEY+0.05, 0.25,  0.03, 0.04, 0.05, colorwhite);
+		makercube(-0.05,  PLANEY+0.05, 0.25,  0.03, 0.04, 0.05, colorwhite);
+
 	glPopMatrix(
 		#ifdef ARM9
 		1
@@ -557,10 +614,20 @@ static    float googShadow3[3] = {-0.1, SHADOWS, -0.5};
 	/********/
 	/* tail */
 	/********/
-    
 	    glRotatef(sin(counter * 0.15915)*10, 0, 1, 0); /* 1/(2 * pi) */
 
-	    glCallList(monsterTail);
+	    /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+		/* create object for Googelon's tail                             */
+		/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+		makercube(0.0, PLANEY+0.23, -0.2,   0.1, 0.15, 0.2, colorred);
+		makercube(0.0, PLANEY+0.13, -0.35,  0.1, 0.1,  0.15, colorred);
+		makeitPyr(2, colorred, 0, PLANEY+0.13, -0.6,  0.1, 0.1, 0.1);
+
+		/****************/
+		/* dorsal spine */
+		/****************/
+		makercubenobtm(0.0, PLANEY+0.4, -0.20, 0.02, 0.06, 0.08, colorwhite);
+		makercube(     0.0, PLANEY+0.7, -0.19, 0.02, 0.06, 0.07, colorwhite);
 
 	    if (itsChristmas)
 		{
@@ -631,11 +698,27 @@ void drawSimpleMonster(struct monsterInfo monster, int counter,
 	/********/
 	/* head */
 	/********/
-
 	glPushMatrix();
 	    glRotatef(.1*monster.headVertRotate, 1, 0, 0);
 
-	    glCallList(monsterSimpleHead);
+		//head start
+	    makercubenobtm(0.0, PLANEY+1.15,  0.0,  0.22, 0.15, 0.1, colorred);
+		makercubeTopBack(0.0, PLANEY+1.15, -0.1,  0.1,  0.1,  0.1, colorred);
+    
+		/********/
+		/* eyes */
+		/********/
+
+		makercubenobtm( 0.15, PLANEY+1.20, 0.1, 0.06, 0.06, 0.05, colorwhite);
+		makercubenobtm(-0.15, PLANEY+1.20, 0.1, 0.06, 0.06, 0.05, colorwhite);
+    
+		/**********/
+		/* pupils */
+		/**********/
+    
+		makercubenobtm( 0.15, PLANEY+1.21, 0.1, 0.03, 0.03, 0.06, colorblack);
+		makercubenobtm(-0.15, PLANEY+1.21, 0.1, 0.03, 0.03, 0.06, colorblack);
+		//head end
 	    	    
 	    if (itsChristmas)
 		{
@@ -727,10 +810,14 @@ void drawSimpleMonster(struct monsterInfo monster, int counter,
 	    /********/
 	    /* tail */
 	    /********/
-    
 	    glRotatef(sin(counter * 0.15915)*10, 0, 1, 0); /* 1/(2 * pi) */
+	    makercubenobtm(0.0, PLANEY+0.23, -0.2,   0.1, 0.15, 0.2, colorred);
 
-	    glCallList(monsterSimpleTail);
+		/****************/
+		/* dorsal spine */
+		/****************/
+		makercubenobtm(0.0, PLANEY+0.4, -0.20, 0.02, 0.06, 0.08, colorwhite);
+		makercube(     0.0, PLANEY+0.7, -0.19, 0.02, 0.06, 0.07, colorwhite);
 
 	    if (itsChristmas)
 		{
@@ -835,41 +922,130 @@ void drawFlutter(struct monsterInfo monster, int counter,
 	/* shadow */
 
 	if (!monster.monsterIsDead)
-	    {
-	    
-	    if (thaView == MONSTERVIEW)
-		{
-		
-		}
+	{
     
-	    glCallList(flutterShadow); 
-	    }
+	    /********************/
+		/* flutter's shadow */
+		/********************/
+		float flutshad1[3]	= { 0.1,  SHADOWS, -0.1};   
+		float flutshad2[3]	= {-0.1,  SHADOWS, -0.1};   
+		float flutshad3[3]	= { 0.1,  SHADOWS,  0.1};   
+		float flutshad4[3]	= {-0.1,  SHADOWS,  0.1};   
+		float flutshad5[3]	= {   0,  SHADOWS, -0.3};   
+		float flutshad6[3]	= {0.25,  SHADOWS,  0.5};   
+		float flutshad7[3]	= {0.25,  SHADOWS, -0.5};   
+		float flutshad8[3]	= {-0.25, SHADOWS, -0.5};   
+		float flutshad9[3]	= {-0.25, SHADOWS,  0.5};   
+		float flutshad10[3]	= { 0.5,  SHADOWS,  0.0};   
+		float flutshad11[3]	= {-0.5,  SHADOWS,  0.0};   
+    
+		glColor4fv(colorblack);
+    
+		drawShadow (0,  0,  0.1,  0.1);
 
-   
- 
+		glBegin(GL_TRIANGLES);
+		glVertex3fv(flutshad1);
+		glVertex3fv(flutshad5);
+		glVertex3fv(flutshad2);
+
+		glVertex3fv(flutshad6);
+		glVertex3fv(flutshad10);
+		glVertex3fv(flutshad7);
+
+		glVertex3fv(flutshad8);
+		glVertex3fv(flutshad11);
+		glVertex3fv(flutshad9);
+		glEnd();
+
+		glBegin(GL_QUADS);
+		glVertex3fv(flutshad3);
+		glVertex3fv(flutshad6);
+		glVertex3fv(flutshad7);
+		glVertex3fv(flutshad1);
+
+		glVertex3fv(flutshad2);
+		glVertex3fv(flutshad8);
+		glVertex3fv(flutshad9);
+		glVertex3fv(flutshad4);
+		glEnd();
+
+	}
+
 	glPushMatrix();
 	    glRotatef(offsetX * 10, 0, 0, 1);
 
-	    if (itsChristmas)
-		glCallList(flutterXMas);		
-		
+	    if (itsChristmas){
+			float v[4];
+			glPushMatrix();
+				glTranslatef(0, PLANEY+1.25, -0.1);
+				glScalef(1.2,  0.45,  1.2);
+				glColor3fv(colorwhite);
+				v[0] = v[1] = v[2] = 0;
+				v[3] = 0.14;
+				andysphdraw(v, 4);
+			glPopMatrix(
+			#ifdef ARM9
+					1
+			#endif
+			);
+
+			glPushMatrix();
+				glTranslatef(-0.15,  PLANEY+1.45,  -0.25);
+				glScalef(0.15,  0.2,  0.15);
+				drawClosedCone(healthGreen, healthGreen, 1);
+			glPopMatrix(
+			#ifdef ARM9
+					1
+			#endif
+			);
+
+			glPushMatrix();
+				glTranslatef(-0.09,  PLANEY+1.65,  -0.06);
+				glRotatef(.1*(1100), 1, 0, 0);
+				glRotatef(.1*(450), 0, 0, 1);
+				glScalef(0.04,  0.11,  0.1);
+				drawClosedCone(healthGreen, healthGreen, 1);
+			glPopMatrix(
+			#ifdef ARM9
+					1
+			#endif
+			);
+
+			glColor3fv(colorwhite);
+			v[0] = -0.15;
+			v[1] = PLANEY+1.50;
+			v[2] = -0.0;
+			v[3] = 0.05;
+			andysphdraw(v, 4);		    
+		}
+
 	    glPushMatrix();
 		glRotatef(monster.headVertRotate * 0.05, 1, 0, 0);
 
-		glCallList(flutterHead);
+		/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+		/* create object for flutter's head                              */
+		/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+		makercube( 0.0,  PLANEY+1.15, 0.05, 0.1,  0.1,  0.05, colorbrown);
+		makercube( 0.07, PLANEY+1.23, 0.11, 0.02, 0.02, 0.02, colorblack);
+		makercube(-0.07, PLANEY+1.23, 0.11, 0.02, 0.02, 0.02, colorblack);
+		makercube( 0.07, PLANEY+1.23, 0.08, 0.04, 0.04, 0.04, colorwhite);
+		makercube(-0.07, PLANEY+1.23, 0.08, 0.04, 0.04, 0.04, colorwhite);
+
 	    glPopMatrix(
 			#ifdef ARM9
 			1
 			#endif
 		);
 
-	    glCallList(flutterBody);
+	    makercube(0.0, PLANEY+1.15, 0.0, 0.1, 0.08, 0.1, colorbrown);
+	    makeitPyr(2, coloryellow, 0.0, PLANEY+1.15, -0.2, 0.1, 0.1, 0.1);
     
 	    glTranslatef(0, PLANEY+1.15, 0);
 
 	    glPushMatrix();
 		glRotatef(  rotAmt, 0, 0, 1); /* 1/(2 * pi) */
-		glCallList(flutterWing1);
+		makeitPyr(10, colorbrown, 0.25, 0, 0, 0.15, 0.03, 0.5);
+		makeitPyr(7, colorbrown, 0.25, 0, 0, 0.25, 0.03, 0.5);
 	    glPopMatrix(
 			#ifdef ARM9
 			1
@@ -878,7 +1054,10 @@ void drawFlutter(struct monsterInfo monster, int counter,
 	    
 	    glPushMatrix();
 		glRotatef( - rotAmt, 0, 0, 1); /* 1/(2 * pi) */
-		glCallList(flutterWing2);
+		
+		makeitPyr(9, colorbrown, -0.25, 0, 0, 0.15, 0.03, 0.5);
+	    makeitPyr(8, colorbrown, -0.25, 0, 0, 0.25, 0.03, 0.5);
+
 	    glPopMatrix(
 			#ifdef ARM9
 			1
@@ -917,19 +1096,44 @@ void drawTechs(struct monsterInfo monster, int detail)
 	{    
 	glPushMatrix();
 	    glRotatef(0.1 * monster.headVertRotate, 1, 0, 0);
-	    glCallList(techsHead);    
+	    
+		makercube(0, PLANEY+1.2, 0, 0.15, 0.15, 0.1, colorgrey3);
+		makercube(0, PLANEY+1.2, 0.13, 0.06, 0.06, 0.04, colorblack);
+		makercube(0, PLANEY+1.2, -0.15, 0.075, 0.11, 0.1, colorgrey2);
+
 	glPopMatrix(
 		#ifdef ARM9
 		1
 		#endif
 	);   
 
-	glCallList(techsBody);
+
+	/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+	/* create object for tech's body                                 */
+	/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+		{
+			int sph;
+			float sp[4];
+			sph =3;
+			glColor3fv(colorgrey1);
+
+			sp[0] = sp[2] = 0;
+			sp[1] = PLANEY+ 0.2;
+			sp[3] = 0.15;
+			andysphdraw(sp, sph);
+			makercubenobtm(0, PLANEY+0.6, 0, 0.07, 0.5, 0.07, colorgrey1);
+			makercube( 0, PLANEY+0.5, 0, 0.2, 0.05, 0.05, colorgrey3);
+			makercube( 0.22,  PLANEY+0.5, 0, 0.025, 0.2, 0.15, colorblack);
+			makercube( 0.2,    PLANEY+0.5, 0, 0.03, 0.25, 0.2, colorgrey2);
+			makercube(-0.22, PLANEY+0.5, 0, 0.025, 0.2, 0.15, colorblack);
+			makercube(-0.2,   PLANEY+0.5, 0, 0.03, 0.25, 0.2, colorgrey2);
+		}
+
 	}
     
     if ((!monster.monsterIsDead) && (detail > 0))
 	{
-	glCallList(techsShadow);
+		makeTechsShadow();
 	}
 	
     glPopMatrix(
@@ -982,19 +1186,39 @@ void drawSimpleTechs(struct monsterInfo monster, int detail)
 	{    
 	glPushMatrix();
 	    glRotatef(0.1 * monster.headVertRotate, 1, 0, 0);
-	    glCallList(techsSimpleHead);    
-	glPopMatrix(
-		#ifdef ARM9
-		1
-		#endif
-	);   
+	    
+		makercube(0, PLANEY+1.2, 0, 0.15, 0.15, 0.1, colorgrey3);
+		makercubenobtm(0, PLANEY+1.2, 0.13, 0.06, 0.06, 0.04, colorblack);
+		makercubeTopBack(0, PLANEY+1.2, -0.15, 0.075, 0.11, 0.1, colorgrey2);
 
-	glCallList(techsSimpleBody);
+		glPopMatrix(
+			#ifdef ARM9
+			1
+			#endif
+		);   
+
+		{
+			int sph;
+			float sp[4];
+			sph =3;
+			glColor3fv(colorgrey1);
+
+			sp[0] = sp[2] = 0;
+			sp[1] = PLANEY+ 0.2;
+			sp[3] = 0.15;
+			andysphdraw(sp, sph);
+
+			makercubeTopBack(0, PLANEY+0.6, 0, 0.07, 0.5, 0.07, colorgrey1);
+			makercubeTopBack( 0, PLANEY+0.5, 0, 0.2, 0.05, 0.05, colorgrey3);
+
+			makercubenobtm( 0.2,    PLANEY+0.5, 0, 0.03, 0.25, 0.2, colorgrey2);
+			makercubenobtm(-0.2,   PLANEY+0.5, 0, 0.03, 0.25, 0.2, colorgrey2);
+		}
 	}
     
     if ((!monster.monsterIsDead) && (detail > 0))
 	{
-	glCallList(techsShadow);
+		makeTechsShadow();
 	}
 	
     glPopMatrix(
@@ -1758,8 +1982,28 @@ void wxminus(float x,  float y,  float z,  float wy,  float wz)
 void drawBuilding0(float * colour, int detail)
     {
     makercubenobtm(0.0, 0.4, 0.0, 0.3, 0.4, 0.3, colour);
-    if (detail > 0)
-	glCallList(genericWindows);
+		if (detail > 0){
+			glColor3fv(colorblack);
+			wzminus(-0.15, 0.6,  -0.303,  0.05,  0.1);
+			wzminus( 0.0,  0.6,  -0.303,  0.05,  0.1);
+			wzminus( 0.15, 0.6,  -0.303,  0.05,  0.1);
+			wzminus(-0.15, 0.3,  -0.303,  0.05,  0.1);
+			wzminus( 0.0,  0.3,  -0.303,  0.05,  0.1);
+			wzminus( 0.15, 0.3,  -0.303,  0.05,  0.1);
+
+			wzplus(-0.15, 0.6,  0.303,  0.05,  0.1);
+			wzplus( 0.0,  0.6,  0.303,  0.05,  0.1);
+			wzplus(-0.15, 0.3,  0.303,  0.05,  0.1);
+			wzplus( 0.0,  0.3,  0.303,  0.05,  0.1);
+
+			wxplus( 0.303,  0.6,  -0.15, 0.1, 0.05);
+			wxplus( 0.303,  0.6,   0.0,  0.1, 0.05);
+			wxplus( 0.303,  0.6,   0.15, 0.1, 0.05);
+
+			wxminus(-0.303, 0.6,  -0.15, 0.1, 0.05);
+			wxminus(-0.303, 0.6,   0.0,  0.1, 0.05);
+			wxminus(-0.303, 0.6,   0.15, 0.1, 0.05);
+		}
     }
 
 
@@ -2445,19 +2689,81 @@ void drawBattlefield(struct road * roads,  float xshift,  float zshift,
 					-0.5, PLANEY + 0.01, -1.0,
 				 	 0.5, PLANEY + 0.01, -1.0};
          
-    if (itsChristmas)
-	glColor3fv(colorsnow);
-    else
-	glColor3fv(planeGreen);
+    if (itsChristmas){
+		glColor3fv(colorsnow);
+	}
+	else{
+		glColor3fv(planeGreen);
+	}
+
+    if (view == MAPVIEW){
+	    /*******************************/
+		/* the battlefield in map view */
+		/*******************************/
+
+		float Bplane[4][3] = {
+		- 200,  PLANEY,  - 200, 
+		- 200,  PLANEY,  + 200, 
+		+ 200,  PLANEY,  + 200, 
+		+ 200,  PLANEY,  - 200};
+
+    
+		glBegin(GL_QUADS);
+		glVertex3fv(Bplane[0]);
+		glVertex3fv(Bplane[1]);
+		glVertex3fv(Bplane[2]);
+		glVertex3fv(Bplane[3]);
+		glEnd();
+	}
+    else if (detail <= 1){
+	        /********************/
+			/* the battlefield  */
+			/********************/
+
+			float Gplane[4][3] = {
+			- PLANESIZE,  PLANEY,  - PLANESIZE, 
+			- PLANESIZE,  PLANEY,  + PLANESIZE, 
+			+ PLANESIZE,  PLANEY,  + PLANESIZE, 
+			+ PLANESIZE,  PLANEY,  - PLANESIZE};
 
 
-    if (view == MAPVIEW)
-	    glCallList(bigPlane);    
-    else if (detail <= 1)
-	    glCallList(lowDPlane);    
-    else
-	    glCallList(highDPlane);
+		/* trying to replace this with 2 triangular polygons for
+		mac mesa generates some very wacky results */
 
+			glBegin(GL_QUADS);
+				glVertex3fv(Gplane[0]);
+				glVertex3fv(Gplane[1]);
+				glVertex3fv(Gplane[2]);
+				glVertex3fv(Gplane[3]);
+			glEnd();		
+
+	}
+	else{
+	    float ratio;
+		register int i, j;
+		float plane[4][3];
+
+		ratio = PLANESIZE * 0.1;
+		plane[0][1] = plane[1][1] = plane[2][1] = plane[3][1] = PLANEY;
+
+		for (i=0;i<=19;i++)
+			for(j=0;j<=19;j++)
+			{
+			plane[0][0] = plane[1][0] = (i*ratio) - PLANESIZE;
+			plane[2][0] = plane[3][0] = ((i+1)*ratio) - PLANESIZE;
+
+			plane[0][2] = plane[3][2] = (j*ratio) - PLANESIZE;
+			plane[1][2] = plane[2][2] = ((j+1)*ratio) - PLANESIZE;
+		
+			glBegin(GL_QUADS);
+				glVertex3fv(plane[0]);
+				glVertex3fv(plane[1]);
+				glVertex3fv(plane[2]);
+				glVertex3fv(plane[3]);
+			glEnd();
+			}
+
+	}
 
     /***************/
     /* draw roads  */
@@ -2932,7 +3238,10 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
 			glPushMatrix();
 			    glColor3fv(colorblack);
 			    glTranslatef(x,  SHADOWS,   z);
-			    glCallList(roundTreeShadow);
+			    
+				glRotatef(-90, 1, 0, 0);
+				drawCircle(32, 1, 0., 0.3);
+
 			glPopMatrix(
 				#ifdef ARM9
 				1
@@ -2957,20 +3266,20 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
 			    case 0:	drawBuilding0(colorwhite, detail);
 					break;
 			    case 1:	if (detail == 0)
-					    glCallList(building1ObjD0);
+					    makebuilding1(0);
 					else
-					    glCallList(building1Obj);
+					    makebuilding1(1);
 					break;
 			    case 2:	if (detail == 0)
-					    glCallList(building2ObjD0);
+					    makebuilding2(0);
 					else
-					    glCallList(building2Obj);
+					    makebuilding2(1);
 					break;
 			    case 3:	{
 					if (allTreesOnPlane[treeCounter].deathCount && allTreesOnPlane[treeCounter].death2)
 					    drawTower(allTreesOnPlane[treeCounter].deathCount, allTreesOnPlane[treeCounter].death2);
 					else
-					    glCallList(powerTower);
+					    makePowerTower();
 						}
 					break;
 			    case 4:	
@@ -2986,13 +3295,13 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
 					    }
 					break;
 			    case 5:	if (detail == 0)	 /* home */
-					    glCallList(building5ObjD0);
+					    makebuilding5(0);
 					else
-					    glCallList(building5Obj);
+					    makebuilding5(1);
 					break;
 			    case 6:	drawBuilding6(counter, colorred, coloryellow, detail); /* fast food */
 					break;
-			    case 7:	glCallList(building7Obj);
+			    case 7:	makebuilding7();
 					break;
 			    case 8:	drawBuilding8(colorbeige,  colorbrown, detail);
 					break;
@@ -3000,21 +3309,21 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
 					if (detail < 0)
 					    {
 					    glShadeModel(GL_FLAT);
-					    glCallList(building9ObjOO);
+					    makebuilding9(1);
 					    }
 					else if (detail == 0)
 					    {
 					    glShadeModel(GL_FLAT);
-					    glCallList(building9Obj);
+					    makebuilding9(0);
 					    }
 					else
 					    {
 					    glShadeModel(GL_SMOOTH);
-					    glCallList(building9Obj);	    /*water tower*/
+					    makebuilding9(0);	    /*water tower*/
 					    }
 					break;
 			    case 10:{   
-					glCallList(building10Obj);
+					makebuilding10();
 					}break;
 			    case 11:    
 					if (detail <= 0)
@@ -3024,23 +3333,23 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
 					drawBuilding11(detail);		    /* factory smokestacks*/
 					break;
 			    case 12:    if (detail == 0)
-					    glCallList(building12ObjD0);
+					    makebuilding12(0);
 					else
-					    glCallList(building12Obj);
+					    makebuilding12(1);
 					break;
 			    case 13:    glRotatef(180, 0, 1, 0);
 					if (detail == 0)
-					    glCallList(building5ObjD0);
+					    makebuilding5(0);
 					else
-					    glCallList(building5Obj);
+					    makebuilding5(1);
 					break;
-			    case 14:    glCallList(building14Obj);
+			    case 14:    makebuilding14();
 					break;
-			    case 15:    glCallList(strip1Obj); 	/* strip mall */
+			    case 15:    makeStrip1(1); 	/* strip mall */
 					break;
-			    case 16:    glCallList(strip2Obj); 	/* strip mall */
+			    case 16:    makeStrip2(1); 	/* strip mall */
 					break;
-			    case 17:    glCallList(strip3Obj); 	/* strip mall */
+			    case 17:    makeStrip3(1); 	/* strip mall */
 					break;
 			    }
 		    else
@@ -3049,19 +3358,19 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
 					drawBuilding0(colorgrey1, detail);
 					break;
 			    case 19:    if (detail == 0)
-					    glCallList(building19ObjD0);
+					    makebuilding19(0);
 					else
-					    glCallList(building19Obj);
+					    makebuilding19(1);
 					break;
 			    case 20:    if (detail == 0)
-					    glCallList(building20ObjD0);
+					    makebuilding20(0);
 					else
-					    glCallList(building20Obj);
+					    makebuilding20(1);
 					break;
 			    case 21:    if (detail == 0)
-					    glCallList(building21ObjD0);
+					    makebuilding21(0);
 					else
-					    glCallList(building21Obj);
+					    makebuilding21(1);
 					break;
 			    case 22:    drawBuilding22(colorgrey1);
 					break;
@@ -3082,9 +3391,9 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
 					break;
 			    case 30:    drawBuilding8(colorbeige,  colorgrey2, detail);
 					break;
-			    case 31:    glCallList(building31Obj); /* maser battery */
+			    case 31:    makebuilding31(); /* maser battery */
 					break;
-			    case 32:    glCallList(building32Obj); /* helo pad */
+			    case 32:    makebuilding32(); /* helo pad */
 					break;
 			    case 33:    drawBuilding33(allTreesOnPlane[treeCounter].deathCount, detail); /* hero entrance */
 					break;
@@ -3166,24 +3475,136 @@ void drawSlagTanks(struct tank * allSlags, int counter, int detail)
 	    glPushMatrix();
 	
 	    switch(ttank->type){
-		case TANK:	glTranslatef(ttank->x, ttank->y-0.015, ttank->z);
+		case TANK:	{
+				glTranslatef(ttank->x, ttank->y-0.015, ttank->z);
 				glScalef(1+0.015*c,  1-0.015*c,  1+0.015*c);
 				glRotatef(angle2, 0, 1, 0);
-				glCallList(slagtank);
-				break;
+				{
+				/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+				/* create object for melting plain tank                          */
+				/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+				/***************/
+					/* tank barrel */
+					/****************/
+
+					float gun[8][3] = {
+					-0.03, 0.280, 0.23,
+					-0.03, 0.220, 0.24,
+					 0.03, 0.220, 0.24, 
+					 0.03, 0.280, 0.23,
+  					 0.03, 0.225, 0.09,
+					 0.03, 0.165, 0.09,
+					-0.03, 0.165, 0.09,
+					-0.03, 0.225, 0.09 };
+
+    
+					makeitPyr(11, colorwhite, -0.12, 0.075, 0.0, 0.075, 0.075, 0.18);
+					makeitPyr(11, colorwhite,  0.12, 0.075, 0.0, 0.075, 0.075, 0.18);
+
+					makercubenobtm(0.0, 0.15,  0.0,  0.15, 0.03,  0.225, colorwhite);
+					makercubenobtm(0.0, 0.195, 0.0,  0.09, 0.045, 0.09,  colorwhite);
+
+					maker(gun, 0,  0,  0, 1, 1, 1, colorwhite, 1, 0.8, 0.66, 0.5);
+
+				}
+		}
+		break;
 	
-		case LAUNCHER:	glTranslatef(ttank->x, ttank->y-0.015, ttank->z);
-				glScalef(1+0.015*c,  1-0.015*c,  1+0.015*c);
-				glRotatef(angle2, 0, 1, 0);
-				glCallList(slaglaunchertank);
-				break;
+		case LAUNCHER:{
+			glTranslatef(ttank->x, ttank->y-0.015, ttank->z);
+			glScalef(1+0.015*c,  1-0.015*c,  1+0.015*c);
+			glRotatef(angle2, 0, 1, 0);
+			{
+				makeitPyr(11, colorwhite, -0.12, 0.075, 0.0, 0.075, 0.075, 0.18);
+				makeitPyr(11, colorwhite,  0.12, 0.075, 0.0, 0.075, 0.075, 0.18);
+
+				makercubenobtm(0.0, 0.15,  0.0,  0.15, 0.03,  0.225, colorwhite);
+
+				makercube(0.0, 0.26, 0.075,  0.12, 0.01, 0.075,  colorgrey2);
+
+				makercubenobtm(-0.05, 0.2, 0.075,  0.01, 0.07, 0.01,  colorwhite);
+				makercubenobtm(0.05, 0.2, 0.075,  0.01, 0.07, 0.01,  colorwhite);
+
+				makercube(0.0, 0.28, 0.075,  0.02, 0.02, 0.1,  colorwhite);
+				makercube(-0.05, 0.28, 0.075,  0.02, 0.02, 0.1,  colorwhite);
+				makercube(0.05, 0.28, 0.075,  0.02, 0.02, 0.1,  colorwhite);
+				makercube(-0.1, 0.28, 0.075,  0.02, 0.02, 0.1,  colorwhite);
+				makercube(0.1, 0.28, 0.075,  0.02, 0.02, 0.1,  colorwhite);
+
+				makercube(0.0, 0.28, 0.05,  0.021, 0.021, 0.02,  colorwhite);
+				makercube(-0.05, 0.28, 0.05,  0.021, 0.021, 0.02,  colorwhite);
+				makercube(0.05, 0.28, 0.05,  0.021, 0.021, 0.02,  colorwhite);
+				makercube(-0.1, 0.28, 0.05,  0.021, 0.021, 0.02,  colorwhite);
+				makercube(0.1, 0.28, 0.05,  0.021, 0.021, 0.02,  colorwhite);
+			}
+		}
+		break;
 	
 		    	    
-		case MASERTANK:	glTranslatef(ttank->x, ttank->y-0.015, ttank->z);
+		case MASERTANK:{
+			glTranslatef(ttank->x, ttank->y-0.015, ttank->z);
 				glScalef(0.15+0.002*c,  0.15-0.004*c,  0.15+0.002*c);
 				glRotatef(angle2, 0, 1, 0);
-				glCallList(slagmasertank);
-				break;
+				{
+					/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+					/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+					/* create object for melting maser tank                          */
+					/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+					/**********************/
+						/* maser tank support */
+						/**********************/
+
+						float support1[8][3] = {
+						-0.1,  1.8,  -1.3,
+						-0.1,  1.2,   0.0,
+						 0.1,  1.2,   0.0, 
+						 0.1,  1.8,  -1.3,
+  						 0.1,  1.8,  -1.7,
+						 0.1,  1.2,  -0.4,
+						-0.1,  1.2,  -0.4,
+						-0.1,  1.8,  -1.7 };
+
+						float support2[8][3] = {
+						-0.1,  2.5,  -0.6,
+						-0.1,  1.8,  -1.3,
+						 0.1,  1.8,  -1.3, 
+						 0.1,  2.5,  -0.6,
+  						 0.1,  2.5,  -1.0,
+						 0.1,  1.8,  -1.7,
+						-0.1,  1.8,  -1.7,
+						-0.1,  2.5,  -1.0 };
+
+						makercubenobtm( -0.8, 0.5, 0,  0.5,0.5,1.2, colorwhite);
+						makercubenobtm(0.8, 0.5 ,0,  0.5,0.5,1.2, colorwhite);
+
+						makercubenobtm(  0, 1, 0,  1.1, 0.2, 1.75, colorwhite);
+						makercubenobtm(  0, 1, -.5,  .5, 0.3, .5, colorwhite);
+						makercube(0.0, 1.5, 1.25,  1.1, 0.3, 0.5, colorwhite);
+
+						makercube(0.0, 1.5, 1.751, 0.6, 0.1, 0.01, colorwhite);
+
+						makercube(0.0, 2.5,  0.0,  0.4, 0.4, 0.1, colorwhite);
+						makercube(0.0, 2.5, -0.8,  0.2, 0.2, 0.91, colorwhite);
+    
+						glColor3fv(colorwhite);
+
+						glBegin(GL_QUAD_STRIP);
+						glVertex3fv(support1[0]);glVertex3fv(support1[1]);glVertex3fv(support1[3]);glVertex3fv(support1[2]);
+						glVertex3fv(support1[4]);glVertex3fv(support1[5]); 
+						glVertex3fv(support1[7]);glVertex3fv(support1[6]);
+						glVertex3fv(support1[0]);glVertex3fv(support1[1]);
+						glEnd();
+
+						glBegin(GL_QUAD_STRIP);
+						glVertex3fv(support2[0]);glVertex3fv(support2[1]);glVertex3fv(support2[3]);glVertex3fv(support2[2]);
+						glVertex3fv(support2[4]);glVertex3fv(support2[5]); 
+						glVertex3fv(support2[7]);glVertex3fv(support2[6]);
+						glVertex3fv(support2[0]);glVertex3fv(support2[1]);
+						glEnd();
+
+				}
+		}
+		break;
   
 		case HELO:	glTranslatef(ttank->x, ttank->y, ttank->z);
 				glRotatef(c*4.0, 1, 0, 0);
@@ -3340,18 +3761,18 @@ void drawTanks(struct tank * allTanks,  int counter, struct monsterInfo G,
 		{
 		case TANK:	glTranslatef(cTank.x, cTank.y, cTank.z);
   				glRotatef(angle2, 0, 1, 0);
-				glCallList(plaintank);
+				makeTank();
 				break;
 
 		case LAUNCHER:	glTranslatef(cTank.x, cTank.y, cTank.z);
   				glRotatef(angle2, 0, 1, 0);
-				glCallList(launchertank);
+				makeLauncherTank();
 				break;
 			
 		case MASERTANK:	glTranslatef(cTank.x, cTank.y, cTank.z);
   				glRotatef(angle2, 0, 1, 0);
 				glScalef(0.15,  0.15,  0.15);
-				glCallList(masertank);
+				makeMaserTank();
 				break;
 
 		case HELO:	glTranslatef(cTank.x, cTank.y, cTank.z);
@@ -3413,9 +3834,10 @@ void drawTanks(struct tank * allTanks,  int counter, struct monsterInfo G,
 		    switch (cTank.type){
 		    case TANK:
 		    case LAUNCHER:
-		    case MASERTANK:	glCallList(tankShadow);
-					break;
-		    
+		    case MASERTANK:{	
+				glColor4fv(colorblack);
+				drawShadow (0, 0 ,  0.16,  0.16);
+			}break;
 		    case HELO:	    	glColor4fv(colorblack);
 					drawShadow (0, 0, 0.14, 0.18);
 					drawShadow (0, -0.22, 0.04, 0.1);
@@ -3431,11 +3853,64 @@ void drawTanks(struct tank * allTanks,  int counter, struct monsterInfo G,
 					drawShadow (0, 0, 0.12, 0.08);
 					break;
 		    
-		    case AIRPLANE:	glCallList(planeShadow);
-					break;
+		    case AIRPLANE:	{
+				float p1[3] = {0.12,  SHADOWS, 0.4};
+				float p2[3] = {-0.12, SHADOWS, 0.4};
+				float p3[3] = {0,     SHADOWS, 0.8};
 
-		    case FIGHTER:	glCallList(fighterShadow);	
-					break;
+				float p4[3] = {0.4,   SHADOWS, 0.1};
+				float p5[3] = {-0.4,  SHADOWS, 0.1};
+				float p6[3] = {0,     SHADOWS, 0.2};
+    
+				glColor4fv(colorblack);
+    
+				drawShadow (0, -0.1 ,  0.12,  0.5);
+				drawShadow (0, 0 ,  0.4,  0.1);
+				drawShadow (0, -.5 ,  0.2,  0.05);
+
+				glBegin(GL_TRIANGLES);
+				glVertex3fv(p1);
+				glVertex3fv(p2);
+				glVertex3fv(p3);
+
+				glVertex3fv(p4);
+				glVertex3fv(p5);
+				glVertex3fv(p6);
+				glEnd();
+			}break;
+
+		    case FIGHTER:{	
+				float p7[3] = {0.2,   SHADOWS, 0.13};
+				float p8[3] = {-0.2,  SHADOWS, 0.13};
+				float p9[3] = {0,     SHADOWS, 0.33};
+ 
+				float p10[3] = {0,    SHADOWS, -0.33};
+				float p11[3] = {-0.33, SHADOWS, 0};
+				float p12[3] = {0.33,  SHADOWS, 0};
+
+				float p13[3] = {0.08,  SHADOWS, 0.26};
+				float p14[3] = {-0.08, SHADOWS, 0.26};
+				float p15[3] = {0,     SHADOWS, 0.54};
+    
+				glColor4fv(colorblack);
+
+				drawShadow (0, -0.066 ,  0.08,  0.33);
+				drawShadow (0, -.33 ,  0.13,  0.033); 
+
+				glBegin(GL_TRIANGLES);
+				glVertex3fv(p13);
+				glVertex3fv(p14);
+				glVertex3fv(p15);
+
+				glVertex3fv(p7);
+				glVertex3fv(p8);
+				glVertex3fv(p9);
+
+				glVertex3fv(p10);
+				glVertex3fv(p11);
+				glVertex3fv(p12);
+				glEnd();
+			}break;
 
 		    default:		showError("Bogus Vehicle in Tank List! (drawTanks)");
 					break;
@@ -3920,10 +4395,76 @@ void drawRoads(struct road * roads, float xshift, float zshift,
 	
 	glPushMatrix();
 	    glTranslatef(cprime, 0, dprime);
-	    if (detail == 0)
-		glCallList(planeDotsObjD0);
-	    else
-		glCallList(planeDotsObj);
+	    if (detail == 0){
+			float grass1[3], grass2[3], grass3[3], grass4[3];
+			register int j, i;
+
+			grass1[1] = grass2[1] = grass3[1] = grass4[1] = PLANEY;
+    
+			if (detail == 0)
+			{
+			glBegin(GL_POINTS);
+			for(i=-PLANESIZE+1; i<=PLANESIZE; i+=1)
+				{
+				grass1[0] = i;
+
+				for(j=-PLANESIZE + 1; j <= PLANESIZE; j += 1)
+				{
+				grass1[2] = j;
+
+				glVertex3fv(grass1); 	/* a single point */
+				}
+				}
+			}
+			else
+			{
+			glBegin(GL_QUADS);
+			grass1[2] = grass4[2] =  0.015;
+			grass2[2] = grass3[2] = 0.015;
+
+			glVertex3fv(grass1);
+			glVertex3fv(grass2);
+
+			glVertex3fv(grass3);
+			glVertex3fv(grass4);
+			}
+			glEnd();
+		}
+		else{
+			float grass1[3], grass2[3], grass3[3], grass4[3];
+			register int j, i;
+
+			grass1[1] = grass2[1] = grass3[1] = grass4[1] = PLANEY;
+    
+			if (detail == 0)
+			{
+			glBegin(GL_POINTS);
+			for(i=-PLANESIZE+1; i<=PLANESIZE; i+=1)
+				{
+				grass1[0] = i;
+
+				for(j=-PLANESIZE + 1; j <= PLANESIZE; j += 1)
+				{
+				grass1[2] = j;
+
+				glVertex3fv(grass1); 	/* a single point */
+				}
+				}
+			}
+			else
+			{
+			glBegin(GL_QUADS);
+			grass1[2] = grass4[2] =  0.015;
+			grass2[2] = grass3[2] = 0.015;
+
+			glVertex3fv(grass1);
+			glVertex3fv(grass2);
+
+			glVertex3fv(grass3);
+			glVertex3fv(grass4);
+			}
+			glEnd();
+		}
 	glPopMatrix(
 		#ifdef ARM9
 		1
@@ -4143,20 +4684,6 @@ void drawProjectiles(struct projectile * allProjs, int counter,
     
     floatRatio = rotRatio * 0.1;
 
-    glDeleteLists( shellObj, 1);
-    glNewList(shellObj, GL_COMPILE);
-
-	if (detail <= 0)
-	    makerrotcubexyflat(0.035, 0.035, 0.035, rotRatio, colorwhite);	
-	else
-	    makerrotcubexy(0.05,  0.05,  0.05, rotRatio, colorwhite);	
-
-	if (itsChristmas)
-	    {
-            makerrotcubexy(0.01, 0.051, 0.051, rotRatio, colorred);
-	    makerrotcubexy(0.051, 0.051, 0.01, rotRatio, colorred);
-	    }
-    glEndList();
 
     beamCounter = 0;
     for (temp = allProjs->next;temp != NULL;temp = temp->next)
@@ -4174,7 +4701,18 @@ void drawProjectiles(struct projectile * allProjs, int counter,
 		case PROJTANK:
 		case PROJROCKET:glPushMatrix();		/* white cube shells */
 				    glTranslatef(x,  y,  z);
-				    glCallList(shellObj);			
+					{
+					if (detail <= 0)
+						makerrotcubexyflat(0.035, 0.035, 0.035, rotRatio, colorwhite);	
+					else
+						makerrotcubexy(0.05,  0.05,  0.05, rotRatio, colorwhite);	
+
+					if (itsChristmas)
+						{
+							makerrotcubexy(0.01, 0.051, 0.051, rotRatio, colorred);
+						makerrotcubexy(0.051, 0.051, 0.01, rotRatio, colorred);
+						}
+					}
 				glPopMatrix(
 					#ifdef ARM9
 					1
@@ -4191,7 +4729,12 @@ void drawProjectiles(struct projectile * allProjs, int counter,
 				    glTranslatef(x,  y,  z);
 				    glRotatef(floatRatio, 1, 0, 0);
 				    glRotatef(floatRatio, 0, 1, 0);
-				    glCallList(shell2Obj);
+					{
+						/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+						/* create object for tech's shell                                */
+						/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+						makerbluecube(0, 0, 0, 0.04, 0.04, 0.04, colorred2);
+					}
 				glPopMatrix(
 					#ifdef ARM9
 					1
@@ -4215,7 +4758,7 @@ void drawProjectiles(struct projectile * allProjs, int counter,
 				    
 		case PROJWATER: glPushMatrix();		/* water */
 				    glTranslatef(x,  y,  z);
-				    glCallList(watershellObj);
+				    makerbluecube(0, 0, 0, 0.02, 0.02, 0.02, colormaserblue2);
 				glPopMatrix(
 					#ifdef ARM9
 					1
@@ -4227,7 +4770,7 @@ void drawProjectiles(struct projectile * allProjs, int counter,
 				    glTranslatef(x,  y,  z);
 				    glRotatef(floatRatio, 1, 0, 0);
 				    glRotatef(floatRatio, 0, 1, 0);
-				    glCallList(heroshellObj);
+				    makerbluecube(0, 0, 0, 0.03, 0.03, 0.03, colormaserblue2);
 				glPopMatrix(
 					#ifdef ARM9
 					1

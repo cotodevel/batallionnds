@@ -72,16 +72,6 @@ extern float  healthGreen[4];
 extern float  treeColor[4];
 extern float  treeColor2[4];
 
-
-
-extern GLuint titleObj;
-extern GLuint titleObjOO;
-extern GLuint titleObjOOO;
-
-extern GLuint plaintank;
-extern GLuint masertank;  
-extern GLuint launchertank;
-
     GLuint strokeBase;
     char textline[80];
 
@@ -1067,20 +1057,19 @@ void showText2(long winX, int soundOn, int noSound, int musicOn,
 /* draw the 'andy johnson's battalion' title                     */
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
-void showText3(int detail)
-    {
-
+void showText3(int detail){
 
     /************************/
     /* print battalion logo */
     /************************/
-
-    if (detail > 0)
-		glCallList(titleObj);
-    else if (detail == 0)
-		glCallList(titleObjOO);
-    else if (detail == -1){
-		glCallList(titleObjOOO);
+    if (detail > 0){
+		makeTitles(1);
+	}
+	else if (detail == 0){
+		makeTitles(0);
+	}
+	else if (detail == -1){
+		makeTitles(-1);
 	}
 	
     glColor3fv(colorwhite); 
@@ -1088,7 +1077,6 @@ void showText3(int detail)
     /**************************/
     /* print "andy johnsons'" */
     /**************************/
-
     glPushMatrix();
 	glTranslatef(1.6 ,  +3.85,  0);
 	glScalef(0.57, 0.83, 1);
@@ -1538,7 +1526,7 @@ static    float summaryBox[4][3] = {
 	    glTranslatef(-.65,  -.1,  7.1);
 	    glRotatef(.1*angle + 270, 0, 1, 0);
 	    glScalef(0.33,  0.33,  0.33);
-	    glCallList(plaintank);
+	    makeTank();
 	glPopMatrix(
 	#ifdef ARM9
 			1
@@ -1552,7 +1540,7 @@ static    float summaryBox[4][3] = {
 	    glTranslatef(.5,  -.35,  7.1);
 	    glRotatef(.1*angle + 270, 0, 1, 0);
 	    glScalef(0.33,  0.33,  0.33);
-	    glCallList(launchertank);
+	    makeLauncherTank();
 	glPopMatrix(
 	#ifdef ARM9
 			1
@@ -1566,7 +1554,7 @@ static    float summaryBox[4][3] = {
 	    glTranslatef(-0.1,  -.42,  7.1);
 	    glRotatef(.1*angle + 45, 0, 1, 0);
 	    glScalef(0.05,  0.05,  0.05);
-	    glCallList(masertank);
+	    makeMaserTank();
 	glPopMatrix(
 	#ifdef ARM9
 			1

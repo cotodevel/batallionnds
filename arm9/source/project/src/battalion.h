@@ -808,17 +808,12 @@ GLuint makeWaterShell(void);
 
 GLuint makeTankShadow(void);
 GLuint makeFighterShadow(void);
-GLuint makePlaneShadow(void);
 
 GLuint makeTank(void);
 GLuint makeSlagTank(void);
 GLuint makeLauncherTank(void);
-GLuint makeSlagLauncherTank(void);
 GLuint makeMaserTank(void);
-GLuint makeSlagMaserTank(void);
 
-GLuint makeHelo(void);
-GLuint makeSlagHelo(void);
 GLuint makeBigRotor(void);
 GLuint makeSmallRotor(void);
 GLuint makePropeller(void);
@@ -840,8 +835,6 @@ GLuint makeFlutterWing1(void);
 GLuint makeFlutterWing2(void);
 
 GLuint makeTechsBody(void);
-GLuint makeTechsHead(void);
-GLuint makeTechsSimpleBody(void);
 GLuint makeTechsSimpleHead(void);
 GLuint makeTechsShadow(void);
 
@@ -866,12 +859,9 @@ GLuint makeStrip3(int);
 
 GLuint makeTitles(int);
 
-GLuint makeLowDPlane(void);
 GLuint makeHighDPlane(void);
 GLuint makeBigPlane(void);
 GLuint makePlaneDots(int);
-
-GLuint makeRoundTreeShadow(void);
 
 /*****************************************
  * text.c
