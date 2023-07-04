@@ -520,7 +520,7 @@ char** levelNames;
 
 int frames;
 int moreThanOne;
-int viewW,  viewH;
+int viewW=640,  viewH=480;
 int alone;
 int oldview,  view;
 int showOptions;
