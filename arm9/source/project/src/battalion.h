@@ -13,7 +13,7 @@
 /* from header file v 1.4b2                                            */
 /***********************************************************************/
 
-#define ARM9 //BatallionNDS is ARM9 mode now (through NDS DL VS2012)
+//#define ARM9 //BatallionNDS is ARM9 mode now (through NDS DL VS2012)
 
 #ifndef BATTALION_H
 #define BATTALION_H
@@ -38,10 +38,6 @@
     #define MEMWATCH
     #define MEMWATCH_STDIO
     #include "memwatch.h"
-#endif
-
-#if !defined(M_PI) 
-#define M_PI (3.14159265358979323846)
 #endif
 
 #define RECONNECT_TIME		15
@@ -660,11 +656,7 @@ void addNewTank(struct targetInfo *, float, float, int, struct tank *,
 void updateBooms(struct boom *, struct tank *);
 
 void buildHillPart(struct tree, int, float, float);
-
-void setPlayConditions(void);
 void addRandomTarget(void);
-
-void initialization(void);
 
 void goto3d(void);
 void goto1d(void);
@@ -676,7 +668,6 @@ GLenum MouseUp(int, int, GLenum);
 void demoKeys(int);
 void playKeys(int);
 void playNoPauseKeys(int);
-void processNormalKey(unsigned char key, int x, int y);
 void processKey(int key, int x, int y);
 void processKeyRelease(int key, int x, int y);
 void checkInput (void);
@@ -695,8 +686,6 @@ void goToOverView(int);
 void drawAMonster(float, struct monsterInfo, float, int, int);
 struct monsterInfo autopilot(float, float, struct monsterInfo);
 
-void reshape( int, int);
-static void doDisplay(void);
 void id(void);
 
 void showCommands(char *);
@@ -736,7 +725,6 @@ void addNetworkTarget(long, int, float, float, float, float, float,
  * gprim.c
  * holds the graphics primitives
  *******************************/
-extern void drawCylinder(int numMajor, int numMinor, float height, float radius);
 void drawClosedCylinder(float *, float *,  int, int);
 
 void drawCone(float *, float *, float, int,  int);
@@ -961,20 +949,8 @@ void drawProjectiles(struct projectile *, int, struct fireType*, int, int, int);
 
 void andysphdraw(float loc[4], int);
 
-extern void drawSphere(float r, int lats, int longs);
-extern void drawCircle(GLfloat x, GLfloat y, GLfloat r, GLfloat BALL_RADIUS);
-
 extern void showCityName(char* name, int detail);
-
 extern int startBatallion(int argc, char **argv);
-
 extern GLuint texturesBatallionGL[5];
-
-extern GLint DLDUMMY;
-extern GLint DLDUMMY2;
-extern void setupDLEnableDisable2DTextures();
-
-extern GLvoid ReSizeGLScene(GLsizei width, GLsizei height);
-extern int InitGL();
 
 #endif

@@ -29,8 +29,6 @@ USA
 #include "math.h"
 #include "imagepcx.h"
 #include "keypadTGDS.h"
-#include "CubeImported.h"
-#include "timerTGDS.h"
 
 #ifdef ARM9
 __attribute__((section(".itcm")))
@@ -85,8 +83,6 @@ void Timer3handlerUser(){
 		msCounter = 0;	
 	}
 	msCounter++;
-	
-	//printf("timer: %d", getTimerCounter());
 }
 
 #ifdef ARM9
@@ -101,14 +97,13 @@ __attribute__((section(".itcm")))
 #endif
 void VblankUser(){	
 	
-	//Timing reserved for 2D/3D rendering
 }
 
 #ifdef ARM9
 __attribute__((section(".itcm")))
 #endif
-void VcounterUser(){	
-	handleARM9SVC();	/* Do not remove, handles TGDS services */
+void VcounterUser(){
+	
 }
 
 //Note: this event is hardware triggered from ARM7, on ARM9 a signal is raised through the FIFO hardware

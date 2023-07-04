@@ -86,8 +86,7 @@ void HandleFifoEmptyWeakRef(uint32 cmd1,uint32 cmd2){
 #ifdef ARM9
 
 void BgMusic(){
-	REG_IE = REG_IE & ~(IRQ_VBLANK);
-	REG_IE |= IRQ_VCOUNT;
+	REG_IE &= ~IRQ_VCOUNT;
 	
 	//Play WAV/ADPCM 
 	memset(curChosenBrowseFile, 0, sizeof(curChosenBrowseFile));

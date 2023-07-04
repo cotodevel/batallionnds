@@ -27,9 +27,6 @@ USA
 #include "utilsTGDS.h"
 #include "VideoGL.h"
 
-
-#define TGDSPROJECTNAME ((char*) "batallion")
-
 //project 1 multimedia list
 #define videoIntro ((char*)"0:/sth1.tvs") //video intro
 #define videoTest ((char*)"0:/test.tvs") 
@@ -62,12 +59,7 @@ extern char args[8][MAX_TGDSFILENAME_LENGTH];
 extern char *argvs[8];
 extern bool get_pen_delta( int *dx, int *dy );
 	
-extern int TWLPrintf(const char *fmt, ...);
-extern int startAquarium(int argc, char *argv[]);
 extern int pendPlay;
-
-
-extern void doDisplay(void);
 
 #ifdef __cplusplus
 }

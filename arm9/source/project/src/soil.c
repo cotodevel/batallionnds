@@ -1,6 +1,4 @@
-#include "battalion.h" //disable when TGDS ARM9
-
-#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
+#ifdef _MSC_VER
 
 //disable _CRT_SECURE_NO_WARNINGS message to build this in VC++
 #pragma warning(disable:4996)
@@ -23,7 +21,7 @@
 
 #define SOIL_CHECK_FOR_GL_ERRORS 0
 
-#ifdef _MSC_VER
+#ifdef _WIN32
 	#define WIN32_LEAN_AND_MEAN
 	#include <windows.h>
 	#include <wingdi.h>
@@ -1972,7 +1970,7 @@ int query_DXT_capability( void )
 		{
 			/*	and find the address of the extension function	*/
 			P_SOIL_GLCOMPRESSEDTEXIMAGE2DPROC ext_addr = NULL;
-			#ifdef _MSC_VER
+			#ifdef WIN32
 				ext_addr = (P_SOIL_GLCOMPRESSEDTEXIMAGE2DPROC)
 						wglGetProcAddress
 						(

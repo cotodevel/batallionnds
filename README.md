@@ -1,6 +1,4 @@
 ![ToolchainGenericDS](img/TGDS-Logo.png)
-![ToolchainGenericDS](img/aq1.png)
-![ToolchainGenericDS](img/aq2.png)
 
 NTR/TWL SDK: TGDS1.65
 
@@ -20,7 +18,11 @@ make <enter>
 
 After compiling, run the example in NDS. 
 
-Project Specific description: batallion NintendoDS port.
+Project Specific description: TGDS Project + OpenGL frontend for both WIN32 and NintendoDS. 
+Provides a minimal API for rendering a 3D scene (of any model standard to OpenGL and/or native GX DisplayList payload) and manipulating camera.
+Useful for porting OpenGL 3D games into NintendoDS, where you require the game engine to run through Visual Studio 2012 WIN32 debugger on the fly.
+
+and
 
 source: https://www.evl.uic.edu/aej/AndyBattalion.html
 

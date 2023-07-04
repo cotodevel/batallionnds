@@ -39,10 +39,10 @@ int main(int argc, char **argv) {
 	installWifiFIFO();		
 	
 	/*			TGDS 1.6 Standard ARM7 Init code end	*/
-	
+	REG_IE &= ~IRQ_VCOUNT;
     while (1) {
 		handleARM7SVC();	/* Do not remove, handles TGDS services */
-		IRQWait(0, IRQ_VBLANK | IRQ_VCOUNT | IRQ_IPCSYNC | IRQ_RECVFIFO_NOT_EMPTY | IRQ_SCREENLID);
+		IRQWait(0, IRQ_VBLANK | IRQ_IPCSYNC | IRQ_RECVFIFO_NOT_EMPTY | IRQ_SCREENLID);
 	}
 	return 0;
 }

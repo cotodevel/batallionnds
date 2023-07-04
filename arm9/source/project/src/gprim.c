@@ -13,7 +13,7 @@
 /* primitive graphics routines for battalion                           */
 /***********************************************************************/
 #include "battalion.h"
-
+#include "Scene.h"
 
 
     float   pt1[3] = {1, -1, 1};
