@@ -311,8 +311,7 @@ if(screen == 0){
 		, 1.0
 #endif	
 	);
-	glShadeModel(GL_SMOOTH);
-
+	
 	// depth testing used on with less than testing
 #ifdef _MSC_VER
 	glDepthFunc(GL_LESS);
@@ -398,7 +397,7 @@ if(screen == 0){
 
 	glDisable(GL_CULL_FACE); 
 	glCullFace (GL_NONE);
-
+	glShadeModel(GL_SMOOTH);
 	setupTGDSProjectOpenGLDisplayLists();
 	return 0;
 }
@@ -553,9 +552,7 @@ int startTGDSProject(int argc, char *argv[])
     glMaterialShinnyness();
 	glReset(); //Depend on GX stack to render scene
 	while(1==1){
-		//Handle Input & game logic
-		scanKeys();
-		keyboardReleaseNormal((int)keysHeld(), 0, 0);
+		
 		
 		//sound
 		switch(pendPlay){

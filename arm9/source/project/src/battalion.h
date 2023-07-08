@@ -155,12 +155,7 @@
 /**********************/
 /* game stuff         */
 /**********************/
-
-
-
-    #define MAXTRIBUTES	    25
-
-
+#define MAXTRIBUTES	    25
 
 #define ARRIVALRATE	    62
 #define STARTACCURACY	    300
@@ -194,17 +189,7 @@
 /**********************/
 /* battlefield stuff  */
 /**********************/
-
-#ifdef MESAVERSION
-
-    #define PLANESIZE	    6
-
-#else
-
-    #define PLANESIZE	    30
-
-#endif	    
-
+#define PLANESIZE	    20
 
 
 /******************/
@@ -229,7 +214,7 @@
 				    /* PLANEY + 0.001 */
 #define ROADS		    -0.999
 
-#define MAXROADSONPLANE	    1000
+#define MAXROADSONPLANE	    100
 #define ROADLINETHICKNESS   0.04
 #define ROADLINELENGTH	    0.13   
 
@@ -662,7 +647,7 @@ GLenum MouseDown(int, int, GLenum);
 GLenum MouseUp(int, int, GLenum);
 void demoKeys(int);
 void playKeys(int);
-void playNoPauseKeys(int);
+void playNoPauseKeys(u32);
 void processKey(int key, int x, int y);
 void processKeyRelease(int key, int x, int y);
 void checkInput (void);

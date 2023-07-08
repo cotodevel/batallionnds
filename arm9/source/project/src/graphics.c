@@ -149,7 +149,9 @@ void makeObjects(char * dataPath)
 
 void drawShadow (float x, float z, float wx, float wz)
     {
-    float v[3];
+#if !defined(ARM9)
+
+	float v[3];
     v[1] = SHADOWS;
 
     glBegin(GL_QUADS);
@@ -165,7 +167,8 @@ void drawShadow (float x, float z, float wx, float wz)
 	v[2] = z+wz;
 	glVertex3fv(v);
     glEnd();
-    }
+#endif    
+}
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -213,13 +216,9 @@ void makeCHH(int dam)
 
 void drawHelo(float percent,  int slag)
 {
-    GLint shadeNow;
-    glGetIntegerv(GL_SHADE_MODEL, &shadeNow);
-    
     /*************/
     /* draw body */
     /*************/
-    glShadeModel(GL_FLAT);
 
     if (!slag){
 		//create object for an operational helicopter
@@ -263,7 +262,6 @@ void drawHelo(float percent,  int slag)
 		makercubenobtm( 0.075, -0.15, 0.025, 0.0125, 0.05, 0.05, colorwhite);
 		makercubenobtm(-0.075, -0.15, 0.025, 0.0125, 0.05, 0.05, colorwhite);
 	}
-    glShadeModel(shadeNow);
 
     /***************/
     /* draw rotors */
@@ -2260,9 +2258,9 @@ void drawBuilding37(float * color, int detail)
 	} 
 	      
     glEnd();
-
+#if !defined(ARM9)
     glDisable(GL_TEXTURE_2D);
-
+#endif
     glPopMatrix(
 		#ifdef ARM9
 		1
@@ -2443,9 +2441,9 @@ void drawBuilding26(int rorl, int detail)
 		glVertex3fv(vec4);
 	    
 	    glEnd();
-	
+#if !defined(ARM9)
 	    glDisable(GL_TEXTURE_2D);
-
+#endif
 
 	glPopMatrix(
 		#ifdef ARM9
@@ -3144,24 +3142,11 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
     float x, y, z;
     register int treeCounter;
     int sph;
-    GLint shadeNow;
-    
-    glGetIntegerv(GL_SHADE_MODEL, &shadeNow);
-  
-    if (detail >= 2)
-	sph = 5;
-    else if (detail == 1)
-	sph = 4;
-    else
 	sph = 2;
 
 
     for (treeCounter=0; treeCounter < numTreesOnPlane; treeCounter++)
 	{
-	if (detail >= 2)
-	    glShadeModel(GL_SMOOTH);
-	else
-	    glShadeModel(GL_FLAT);
 
 
 	if (((fabs(allTreesOnPlane[treeCounter].x) <= PLANESIZE) && (fabs(allTreesOnPlane[treeCounter].z) <= PLANESIZE)) || (view == MAPVIEW))
@@ -3170,18 +3155,18 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
 	    y = allTreesOnPlane[treeCounter].y;
 	    z = allTreesOnPlane[treeCounter].z;
 
-	    /**********************************/
-	    /* tree                           */
-	    /**********************************/
-
+	    ////////////////////////////////////
+	    // tree                           
+	    ////////////////////////////////////
+	    
 	    if (allTreesOnPlane[treeCounter].type == 0)
 		{	    
 		if ((allTreesOnPlane[treeCounter].treeshape == 0) || (itsChristmas))
 		    {
-		    /*************/
-		    /* pine tree */
-		    /*************/
-		    
+		    ///////////////
+			// pine tree //
+		    ///////////////
+			
 		    if (detail >= 2)
 			{
 			glBindTexture(GL_TEXTURE_2D, texturesBatallionGL[TEX_TREEWOOD]); 
@@ -3190,9 +3175,10 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
 
 
 		    makercubenobtmnotopTEX( x, y+0.2, z, 0.075, 0.2, 0.075, colorbrown);
+#if !defined(ARM9)
 		    glDisable(GL_TEXTURE_2D);
-    
-		    /* regular pine tree colour is too dark in vector mode */
+#endif    
+		    // regular pine tree colour is too dark in vector mode 
     
 		    if (detail > -1)
 			makeitPyr(1, treeColor, x, y+0.8, z, 0.2, 0.4, 0.2);
@@ -3213,10 +3199,10 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
 			}
 		    }
 		else
-		    /**************/
-		    /* round tree */
-		    /**************/
-		    {
+		    ////////////////
+		    // round tree //
+		    ////////////////
+			{
 		    if (detail >= 2)
 			{
 			glBindTexture(GL_TEXTURE_2D, texturesBatallionGL[TEX_TREEWOOD]); 
@@ -3225,8 +3211,9 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
 			}
 
 		    makercubenobtmnotopTEX(x, y+0.4, z, 0.1, 0.4, 0.1, colorbrown);
+#if !defined(ARM9)
 		    glDisable(GL_TEXTURE_2D);
-    
+#endif    
 		    glColor3fv(treeColor2);
 		    spheredat[0] = x;
 		    spheredat[1] = y+1;
@@ -3284,16 +3271,7 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
 						}
 					break;
 			    case 4:	
-					if (detail <= 0)
-					    {
-					    glShadeModel(GL_FLAT);
-					    drawCoolingTower(detail);
-					    }
-					else
-					    {
-					    glShadeModel(GL_SMOOTH);
-					    drawCoolingTower(detail);    /* cooling tower */
-					    }
+					drawCoolingTower(detail);    /* cooling tower */
 					break;
 			    case 5:	if (detail == 0)	 /* home */
 					    makebuilding5(0);
@@ -3307,30 +3285,12 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
 			    case 8:	drawBuilding8(colorbeige,  colorbrown, detail);
 					break;
 			    case 9:	
-					if (detail < 0)
-					    {
-					    glShadeModel(GL_FLAT);
-					    makebuilding9(1);
-					    }
-					else if (detail == 0)
-					    {
-					    glShadeModel(GL_FLAT);
-					    makebuilding9(0);
-					    }
-					else
-					    {
-					    glShadeModel(GL_SMOOTH);
-					    makebuilding9(0);	    /*water tower*/
-					    }
+					makebuilding9(1); /*water tower*/
 					break;
 			    case 10:{   
 					makebuilding10();
 					}break;
 			    case 11:    
-					if (detail <= 0)
-					    glShadeModel(GL_FLAT);
-					else
-					    glShadeModel(GL_SMOOTH);
 					drawBuilding11(detail);		    /* factory smokestacks*/
 					break;
 			    case 12:    if (detail == 0)
@@ -3450,7 +3410,6 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
 		}	    
 	    }
 	}
-	glShadeModel(shadeNow);
     }
 
 
@@ -3977,11 +3936,7 @@ void drawHeroWeapon(float targetx, float targetz, float x, float y,
     float rad,  angle,  r;
     float midPoint;
     GLboolean backNow;
-    
-    GLint shadeNow;
-    
-    glGetIntegerv(GL_SHADE_MODEL, &shadeNow);
-    
+
     rad = sqrt(x * x + z * z);
     
     if (rad == 0)
@@ -4000,8 +3955,6 @@ void drawHeroWeapon(float targetx, float targetz, float x, float y,
     angle += PI;
      
     midPoint = 0.5 * (height - bottom) + bottom;
-    
-    glShadeModel(GL_SMOOTH);
     
     glBegin(GL_QUADS);
 	glColor3fv(color);
@@ -4047,7 +4000,6 @@ void drawHeroWeapon(float targetx, float targetz, float x, float y,
 	glVertex3fv(loc2);
     glEnd();
 	
-    glShadeModel(shadeNow);
     }
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -4224,15 +4176,11 @@ void drawBeam(float x, float z, int horz, int vert, int monsterName,
     float R;
     register int i, nlines;
 
-    GLint shadeNow;
-    glGetIntegerv(GL_SHADE_MODEL, &shadeNow);
-    
     if (monsterName == FLUTTER)
 	col = colororange;
     else
 	col = colorblue;
-
-	    
+    
     /**********************************/
     /* draw beam                      */
     /**********************************/
@@ -4279,11 +4227,9 @@ void drawBeam(float x, float z, int horz, int vert, int monsterName,
 		break;
 		
 	case 1:	nlines = 25;
-		glShadeModel(GL_SMOOTH);
 		break;
 		
 	case 2:	nlines = 40;
-		glShadeModel(GL_SMOOTH);
 		break;
 	}
 
@@ -4305,8 +4251,6 @@ void drawBeam(float x, float z, int horz, int vert, int monsterName,
 	    glVertex3fv(loc3);
 	glEnd();
 	}
-	
-    glShadeModel(shadeNow);
 
     if (detail > 0)
 	{
@@ -4552,9 +4496,9 @@ void drawRoads(struct road * roads, float xshift, float zshift,
 		}
 	    }
 	glEnd();
-
+#if !defined(ARM9)
 	glDisable(GL_TEXTURE_2D);
-
+#endif
 	}
 
     /*******************/

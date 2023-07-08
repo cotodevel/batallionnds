@@ -1540,7 +1540,7 @@ void initialization()
     no3D	    = 0;
     mode3D	    = 0;
     doBigClear	    = 0;
-    showOptions	    = 0;
+    showOptions	    = 1; //toggle to 0 to show hi scores
     showframes	    = 0;
     paused	    = 0;
 
@@ -5471,30 +5471,40 @@ void demoKeys(int key)
 	case ' ':  
             showOptions = 1;
 			break;
-			
-	case '6':	mode = PLAYMODE;
+#ifdef WIN32
+	case '6':
+#endif
+#ifdef ARM9
+	case KEY_START:
+#endif
+	{
+		mode = PLAYMODE;
 			    showOptions = 0;
 			    Googelon.monster = GOOGELON;
 			    setPlayConditions();
-			    break;
+				playKeys('1'); //enter monster view
+	}break;
 
 	case '7':	mode = PLAYMODE;
 			    showOptions = 0;
 			    Googelon.monster = TECHS;
 			    setPlayConditions();
-			    break;
+				playKeys('1'); //enter monster view
+	break;
 
 	case '8':	mode = PLAYMODE;
 			    showOptions = 0;
 			    Googelon.monster = VAPOUR;
 			    setPlayConditions();
-			    break;
+				playKeys('1'); //enter monster view
+	break;
 
 	case '9':	mode = PLAYMODE;
 			    showOptions = 0;
 			    Googelon.monster = FLUTTER;
 			    setPlayConditions();
-			    break;
+				playKeys('1'); //enter monster view
+	break;
 			    
 	}
 }
@@ -5533,23 +5543,36 @@ void doMapView()
 
 void releaseSpKey(int key, int x, int y)
 {
-
-#if (defined(_MSC_VER) && !defined(ARM9))  //BatallionNDS is VS2012? 
-    switch(key)
-    {
-   	    case GLUT_KEY_LEFT:
-                    keycontrol &= ~BAT_KEY_LEFT; 
-			        break;
+#ifdef WIN32
+	switch(key){
+		case GLUT_KEY_LEFT:
+			keycontrol &= ~BAT_KEY_LEFT;  
+		break;
 		case GLUT_KEY_RIGHT:
-                    keycontrol &= ~BAT_KEY_RIGHT; 
-			        break;
+			keycontrol &= ~BAT_KEY_RIGHT; 
+		break;
 		case GLUT_KEY_UP:
-                    keycontrol &= ~BAT_KEY_FORW; 
-                    break;
-        case GLUT_KEY_DOWN:
-                    keycontrol &= ~BAT_KEY_BACK; 
-			        break;
-     }
+			keycontrol &= ~BAT_KEY_FORW;
+		break;
+			case GLUT_KEY_DOWN:
+			keycontrol &= ~BAT_KEY_BACK; 
+		break;
+	}
+#endif
+
+#ifdef ARM9
+	if(key&KEY_LEFT){
+		keycontrol &= ~BAT_KEY_LEFT; 
+	}
+	if(key&KEY_RIGHT){
+		keycontrol &= ~BAT_KEY_RIGHT; 
+	}
+	if(key&KEY_UP){
+		keycontrol &= ~BAT_KEY_FORW;
+	}
+	if(key&KEY_DOWN){
+		keycontrol &= ~BAT_KEY_BACK;
+	}
 #endif
 }
 
@@ -5563,10 +5586,11 @@ void processSpKey(int key, int x, int y)
 	//directional input keypad in-game happens here
 	if ((mode == PLAYMODE) && !paused)
 	{
-		#if ((defined(_MSC_VER) && !defined(ARM9)) )  //BatallionNDS is VS2012?
+
+#ifdef WIN32
 		switch(key){
 			case GLUT_KEY_LEFT:
-				keycontrol |= BAT_KEY_LEFT; 
+				keycontrol |= BAT_KEY_LEFT;
 				break;
 			case GLUT_KEY_RIGHT:
 				keycontrol |= BAT_KEY_RIGHT; 
@@ -5578,31 +5602,32 @@ void processSpKey(int key, int x, int y)
 				keycontrol |= BAT_KEY_BACK; 
 				break;
 		}
-		#endif
-		  
-		#if (!defined(_MSC_VER) && defined(ARM9))  //BatallionNDS on TGDS ARM9?
-			scanKeys();
-			if(keysHeld()&KEY_LEFT){
-				keycontrol |= BAT_KEY_LEFT;
-			}
-			if(keysHeld()&KEY_RIGHT){
-				keycontrol |= BAT_KEY_RIGHT;
-			}
-			if(keysHeld()&KEY_UP){
-				keycontrol |= BAT_KEY_FORW;
-			}
-			if(keysHeld()&KEY_DOWN){
-				keycontrol |= BAT_KEY_BACK; 
-			}
-		#endif
+#endif
+
+#ifdef ARM9
+	if(key&KEY_LEFT){
+		keycontrol |= BAT_KEY_LEFT;
+	}
+	if(key&KEY_RIGHT){
+		keycontrol |= BAT_KEY_RIGHT; 
+	}
+	if(key&KEY_UP){
+		keycontrol |= BAT_KEY_FORW; 
+	}
+	if(key&KEY_DOWN){
+		keycontrol |= BAT_KEY_BACK;  
+	}
+#endif
+
 	}
 }
 
 
 void playKeys(int key)
 {
-    switch(key)
+	switch(key)
 	{
+
 	case '1':	doMonsterView();
 			    break;
 
@@ -5615,9 +5640,9 @@ void playKeys(int key)
 	case '4':	doMapView();
 			    break;
 
-
 /********************************************/
 /*          process pressed key             */
+#ifdef WIN32
 	case 'i':
 	case 'I':	keycontrol |= BAT_KEY_MAPU; 
 			    break;
@@ -5633,29 +5658,45 @@ void playKeys(int key)
 	case 'l':
 	case 'L':	keycontrol |= BAT_KEY_MAPR; 
 			    break;
-			    
+#endif
+
      }
+
+#ifdef ARM9
+	processSpKey(key, 0, 0); //handle directional input while ingame
+#endif
 }
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
-void playNoPauseKeys(int key)
+void playNoPauseKeys(u32 key)
 {
+#ifdef ARM9
+	if(key&KEY_L){
+		keycontrol |= BAT_KEY_UP; 
+	}
+	if(key&KEY_R){
+		keycontrol |= BAT_KEY_DOWN; 
+	}
+	if(key&KEY_A){
+		keycontrol |= BAT_KEY_FIRE; 
+	}
+
+#endif
+#ifdef WIN32
     switch(key)
     {    
-
 	case 'a':
-	case 'A':	keycontrol |= BAT_KEY_UP; 
+	case 'A':	
+		keycontrol |= BAT_KEY_UP; 
 			    break;
-
-	case 'z':
-	case 'Z':	keycontrol |= BAT_KEY_DOWN; 
+		keycontrol |= BAT_KEY_DOWN; 
 			    break;
-
     case 'x': 
     case 'X':
-                keycontrol |= BAT_KEY_FIRE; 
-			    break;
+        keycontrol |= BAT_KEY_FIRE; 
+		break;
 	}
+#endif
 } 
  
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -5686,12 +5727,23 @@ void id()
 
     /* near 25 fps if possible */
 	#ifdef WIN32
-    if(now_time-last_time > 40)
+    if(now_time-last_time > 40){
 	#endif
 	#ifdef ARM9
-    if(now_time-last_time > 25)
-	#endif
+    //NDS has no framelimit because slow CPU
 	{
+		//Handle Input & game logic
+		scanKeys();
+		u32 keysD = keysHeld();
+		if((keysD > 0) && !(keysD&(KEY_UP&KEY_RIGHT))){
+			keyboardInput(keysD, 0, 0);	
+		}
+		else{
+			keyboardReleaseNormal(~keysD, 0, 0); //game lockups if multiple keys are being held, unpress them
+		}
+	#endif
+	
+		
 
         /* after last building destroyed only projectiles are updated */
         if(levelEndCount > 0)
@@ -5812,7 +5864,12 @@ void id()
              /**************************************/
              /* update the frames / second counter */
              /**************************************/
-             if (now_time - time_second >= 1000)
+#if defined(WIN32)
+			if (now_time - time_second >= 1000)
+#endif
+#if defined(ARM9)
+			if (now_time - time_second >= 100)
+#endif
              {
                  showframes  = frames;
                  frames	    = 0;
@@ -5971,56 +6028,18 @@ void id()
 
 
 /// Processes special keyboard keys like F1, F2, etc
-void keyboardReleaseNormal(unsigned char key, int x, int y){
-	
-#ifdef ARM9
-	switch(key){
-		//WIN32 & NDS Shared
-		#ifdef _MSC_VER
-		case GLUT_KEY_LEFT:
-		#endif
-		#ifdef ARM9
-		case KEY_UP:
-		#endif
-		{
-			anticlockwise(&scene.camera);
-		}break;
-
-		#ifdef _MSC_VER
-		case GLUT_KEY_RIGHT:
-		#endif
-		#ifdef ARM9
-		case KEY_DOWN:
-		#endif
-		{
-			clockwise(&scene.camera);
-		}break;
-		#ifdef _MSC_VER
-		case GLUT_KEY_UP:
-		#endif
-		#ifdef ARM9
-		case KEY_LEFT:
-		#endif
-		{
-			inc(&scene.camera);
-		}break;
-
-		#ifdef _MSC_VER
-		case GLUT_KEY_DOWN:
-		#endif
-		#ifdef ARM9
-		case KEY_RIGHT:
-		#endif
-		{
-			dec(&scene.camera);
-		}break;
-	}
+#ifdef WIN32
+void keyboardReleaseNormal(unsigned char key, int x, int y)
 #endif
-
+#ifdef ARM9
+void keyboardReleaseNormal(u32 key, int x, int y)
+#endif
+{
 	switch(key)
     {
+#ifdef WIN32
         /********************************************/
-        /*          process pressed key             */
+        /*          process JUST released key             */
         case 'i':
         case 'I':	keycontrol &= ~BAT_KEY_MAPU; 
 			        break;
@@ -6036,27 +6055,43 @@ void keyboardReleaseNormal(unsigned char key, int x, int y){
         case 'l':
 	    case 'L':	keycontrol &= ~BAT_KEY_MAPR; 
 		    	    break;
-
-        case 'a':
-        case 'A':	keycontrol &= ~BAT_KEY_UP; 
-		    	    break;
-   	    case 'z':
-   	    case 'Z':	keycontrol &= ~BAT_KEY_DOWN; 
-		   	   	    break;
-   	    case 'x': 
-   	    case 'X':
-                    keycontrol &= ~BAT_KEY_FIRE; 
-                    break;
-
+		case 'a':
+		case 'A':	
+			keycontrol &= ~BAT_KEY_UP; 
+		break;
+		case 'z':
+		case 'Z':
+			keycontrol &= ~BAT_KEY_DOWN; 
+		break;
+		case 'x': 
+		case 'X':
+			keycontrol &= ~BAT_KEY_FIRE; 
+		break;
+#endif
     }
 
-	
+#ifdef ARM9
+	if(key&KEY_L){
+		keycontrol &= ~BAT_KEY_UP; 
+	}
+	if(key&KEY_R){
+		keycontrol &= ~BAT_KEY_DOWN;  
+	}
+	if(key&KEY_A){
+		keycontrol &= ~BAT_KEY_FIRE;  
+	}
+	releaseSpKey(key, 0, 0);
+#endif
 }
 
 
-
 /// Handles keyboard input for normal keys
+#ifdef WIN32
 void keyboardInput(unsigned char key, int x, int y)
+#endif
+#ifdef ARM9
+void keyboardInput(u32 key, int x, int y)
+#endif
 {
 	if (mode == DEMOMODE){
 	    demoKeys(key);
@@ -6067,37 +6102,6 @@ void keyboardInput(unsigned char key, int x, int y)
     if (mode == PLAYMODE){
 	    playKeys(key);
 	}
-
-
-
-#ifdef WIN32
-	switch (key){
-		case 'W':
-		case 'w':
-		{
-			anticlockwise(&scene.camera);
-		}break;
-
-		case 'S':
-		case 's':
-		{
-			clockwise(&scene.camera);
-		}break;
-		case 'A':
-		case 'a':
-		{
-			inc(&scene.camera);
-		}break;
-
-		case 'D':
-		case 'd':
-		{
-			dec(&scene.camera);
-		}break;
-	}
-#endif
-
-
 
 
     switch(key)
@@ -6249,7 +6253,6 @@ bool renderCube;
 #endif
 /// Renders a single frame of the scene
 void drawScene(){
-	//batallion render code
 	struct Scene * Inst = &scene;
 	GLint tmp[4];
     struct targetInfo * temptarget;
@@ -6262,6 +6265,7 @@ void drawScene(){
 	}
 	#endif
 
+
 	#if (defined(_MSC_VER) && !defined(ARM9)) //BatallionNDS is ARM9 mode now (through NDS DL VS2012)
 	if (lod == -1){
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -6271,13 +6275,12 @@ void drawScene(){
 	}
 	#endif
 
-	if (lod >= 2){
-		glShadeModel(GL_SMOOTH);
-	}
-	else{
-		glShadeModel(GL_FLAT);
-	}
-
+	// draw element(s) in the scene + light source(s)
+	#ifdef ARM9
+		updateGXLights(); //Update GX 3D light scene!
+		glColor3f(1.0, 1.0, 1.0); //clear last scene color/light vectors
+	#endif
+	
 	glPushMatrix();
 	
 	if (view == MONSTERVIEW){
@@ -6292,7 +6295,7 @@ void drawScene(){
     else {
 		 goToOverView(eyeball);
 	}
-	
+
 	//rotate and adjust cam scene
 	if (xrot != 0){
 	    glRotatef(0.1 * xrot, 1,0,0);
@@ -6446,57 +6449,4 @@ void drawScene(){
     //handleARM9SVC();	// Do not remove, handles TGDS services 
     IRQVBlankWait();
     #endif
-	
-
-	/*
-	//basic circle render code
-	struct Scene * Inst = &scene;
-
-	#ifdef ARM9
-	//NDS: Dual 3D Render implementation. Must be called right before a new 3D scene is drawn
-	if(Inst->TGDSProjectDual3DEnabled == true){
-		TGDS_ProcessDual(render3DUpperScreen, render3DBottomScreen);
-	}
-	#endif
-
-	#ifdef WIN32
-	// clear scene
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
-	#endif
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-	//position camera
-	position(&Inst->camera); 
-	
-	// draw element(s) in the scene + light source(s)
-	#ifdef ARM9
-		updateGXLights(); //Update GX 3D light scene!
-		glColor3f(1.0, 1.0, 1.0); //clear last scene color/light vectors
-	#endif
-
-	if(renderCube == false){
-		#ifdef WIN32
-		drawSphere(32, 32, 32);
-		#endif
-
-		#ifdef ARM9
-		drawSphere(3, 3, 3);
-		#endif
-	}
-	else{
-		glut2SolidCube0_06f();
-	}
-	
-	#ifdef WIN32
-	glutSwapBuffers();
-	#endif
-
-	#ifdef ARM9
-    glFlush();
-	handleARM9SVC();	// Do not remove, handles TGDS services 
-    IRQVBlankWait();
-    #endif
-	*/
 }

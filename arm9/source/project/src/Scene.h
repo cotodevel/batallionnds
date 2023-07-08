@@ -71,8 +71,23 @@ extern int widthScene;	/// the width of the window
 extern int heightScene;	/// the height of the window
 
 extern void animateScene(int type);	/// animates the scene (GLUT)
+
+#ifdef WIN32
 extern void keyboardInput(unsigned char key, int x, int y);	/// handles keyboard input
-extern void keyboardReleaseNormal(unsigned char key, int x, int y);	/// handles keyboard input (special)
+#endif
+#ifdef ARM9
+extern void keyboardInput(u32 key, int x, int y);	/// handles keyboard input
+#endif
+
+/// handles keyboard input (special)
+#ifdef WIN32
+extern void keyboardReleaseNormal(unsigned char key, int x, int y);
+#endif
+#ifdef ARM9
+extern void keyboardReleaseNormal(u32 key, int x, int y);
+#endif
+
+
 extern void drawScene(void);	/// Renders a single frame of the scene
 extern struct Scene scene;	/// the scene we render
 
