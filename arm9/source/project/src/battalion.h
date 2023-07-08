@@ -137,16 +137,11 @@
 /* misc stuff         */
 /**********************/
 
-#ifndef PI
-	#define PI	    3.14159265
-#endif
+#define PI 3.14159
+#define TWOPI		    (PI*2)
 
-#define TWOPI		    6.2831853
-
-
-    #define	CYLINDERSIDES	    6
-    #define	MORECYLINDERSIDES   12
-
+#define	CYLINDERSIDES	    6
+#define	MORECYLINDERSIDES   12
 
 #define CYLINDER_EPSILON    0.0001
 #define NEARZERO	    0.0001

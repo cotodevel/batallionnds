@@ -284,6 +284,16 @@ if(screen == 0){
         glutCreateWindow    ("Battalion-2004");
 }
 
+#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
+    glutDisplayFunc(id);
+	glutReshapeFunc(ReSizeGLScene);
+    glutKeyboardFunc(keyboardInput);
+	glutKeyboardUpFunc(keyboardReleaseNormal);
+	glutSpecialFunc(processSpKey);
+	glutSpecialUpFunc(releaseSpKey);
+	glutIgnoreKeyRepeat(1);
+#endif
+
 //batallion NDS init gl code end
 
 
@@ -488,22 +498,12 @@ int startTGDSProject(int argc, char *argv[])
 	time_t time1 = time(NULL);
 	TWLPrintf("-- Program starting: %d\n", (unsigned int)time1);
 	srand(time1);
+
 	InitGL(argc, argv);
 
 	// register our call-back functions
 	TWLPrintf("-- Registering callbacks\n");
-
     
-#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
-    glutDisplayFunc(id);
-	glutReshapeFunc(ReSizeGLScene);
-    glutKeyboardFunc(keyboardInput);
-	glutKeyboardUpFunc(keyboardReleaseNormal);
-	glutSpecialFunc(processSpKey);
-	glutSpecialUpFunc(releaseSpKey);
-	glutIgnoreKeyRepeat(1);
-#endif
-
 #ifdef SOUND
     /* openAL initialization */
     alutInit(NULL,0);
@@ -518,7 +518,7 @@ int startTGDSProject(int argc, char *argv[])
 	initializeScene(&scene);
 	
 #ifdef ARM9
-	InitGL(argc, argv); //todo: remove later when rendering implemented at ARM9
+	InitGL(argc, argv); 
 #endif
 
 	// setup lighting and fog: re-enable these when using default NDS render
@@ -529,6 +529,7 @@ int startTGDSProject(int argc, char *argv[])
 	keyboardInput((unsigned char)'2', 0, 0);
 	keyboardInput((unsigned char)'F', 0, 0);
 	*/
+
 	// start the timer and enter the mail GLUT loop
 #ifdef _MSC_VER
 	glutTimerFunc(50, animateScene, 0);
