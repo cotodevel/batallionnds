@@ -82,7 +82,6 @@ extern int vsnprintf( char* buffer, size_t buf_size, const char* format, va_list
 
 #ifdef _MSC_VER
 	#include <windows.h> 
-	#include "..\..\..\..\..\ndsdisplaylistutils-dev\ndsDisplayListUtils\winDir.h"
 #endif
 
 #include <stdio.h>
