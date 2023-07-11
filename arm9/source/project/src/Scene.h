@@ -92,7 +92,6 @@ extern void drawScene(void);	/// Renders a single frame of the scene
 extern struct Scene scene;	/// the scene we render
 
 extern void initializeCamera(struct Camera * Inst);	/// initialized the camera to default position
-extern void position(struct Camera * Inst);	/// sets up camera at current position
 extern void dec(struct Camera * Inst);	/// decreases distance to origin
 extern void inc(struct Camera * Inst);	/// increases distance to origin
 extern void clockwise(struct Camera * Inst);	/// rotate scene clockwise

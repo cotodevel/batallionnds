@@ -189,7 +189,7 @@
 /**********************/
 /* battlefield stuff  */
 /**********************/
-#define PLANESIZE	    20
+#define PLANESIZE	    100
 
 
 /******************/
@@ -228,6 +228,15 @@
 #define MAPVIEW		    4
 
 #define NOTANKONPLANE	    -9999
+
+#ifdef WIN32
+#define GL_PERSPECTIVE	  ((GLfloat)1)
+#endif
+
+#ifdef ARM9
+#define GL_PERSPECTIVE	  ((GLfloat)256.0 / 192.0)
+#endif
+
 
 /**********************/
 /* modes              */
