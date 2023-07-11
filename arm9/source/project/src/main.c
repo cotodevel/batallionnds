@@ -72,6 +72,7 @@ extern int vsnprintf( char* buffer, size_t buf_size, const char* format, va_list
 #include <gl/freeglut.h>
 #pragma comment(lib, "opengl32.lib")
 #include "SOIL.h"
+#include "..\windir.h"
 #endif
 
 #ifndef _MSC_VER					// //
@@ -802,7 +803,7 @@ void goToMonsterView(int eyeball)
     
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-	gluPerspective(70,  1,   0.1,   PLANESIZE);
+	gluPerspective(70,  GL_PERSPECTIVE,   0.1,   PLANESIZE);
 	glMatrixMode(GL_MODELVIEW);
     
     switch(eyeball){
@@ -906,7 +907,7 @@ void goToArmyView(int eyeball)
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(65,  1,   0.1,   PLANESIZE);
+    gluPerspective(65,  GL_PERSPECTIVE,   0.1,   PLANESIZE);
     glMatrixMode(GL_MODELVIEW);
 	    
     switch(eyeball){
@@ -1044,7 +1045,7 @@ void goToOverView(int eyeball)
     
 	glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(65,  1,   0.1,   PLANESIZE);
+    gluPerspective(65,  GL_PERSPECTIVE,   0.1,   PLANESIZE);
     glMatrixMode(GL_MODELVIEW);
 	
 	switch(eyeball){
@@ -1618,7 +1619,7 @@ void initialization()
 #else
 
 #if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
-    strcpy(dataPath, "../src/battalion.data/");
+    getCWDWin(dataPath, "\\..\\..\\..\\..\\release\\arm7dldi-ntr\\battalion.data\\");
 #endif
 
 #if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
@@ -6376,14 +6377,27 @@ void drawScene(){
 	// print the overlays             //
 	////////////////////////////////////
 	glGetIntegerv(GL_VIEWPORT, tmp);
+	
+#ifdef WIN32
 	viewL = tmp[0];
 	viewR = viewL+tmp[2] - 1;
+#endif
+
+#ifdef ARM9
+	viewL = tmp[1];
+	viewR = viewL+tmp[0] - 1;
+#endif
 
 	glPushMatrix();
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(60,  1,   0.1,   PLANESIZE);
+#ifdef WIN32
+	gluPerspective(60,  GL_PERSPECTIVE,   0.1,   PLANESIZE);
+#endif
+#ifdef ARM9
+	gluPerspective((60/2)-3,  GL_PERSPECTIVE,   0.1,   PLANESIZE); //The field of view angle, in degrees, in the y-direction: half and closer
+#endif
 	glMatrixMode(GL_MODELVIEW);
 
 	switch(eyeball){

@@ -18,6 +18,7 @@
     <ClInclude Include="..\src\SOIL.h" />
     <ClInclude Include="..\src\tgaload.h" />
     <ClInclude Include="..\src\TGDSTypes.h" />
+    <ClInclude Include="..\winDir.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\audio.c" />
@@ -35,6 +36,7 @@
     <ClCompile Include="..\src\text.c" />
     <ClCompile Include="..\src\tgaload.c" />
     <ClCompile Include="..\src\update.c" />
+    <ClCompile Include="..\winDir.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F347282B-F24B-470D-BF8F-FCB92FFF2649}</ProjectGuid>

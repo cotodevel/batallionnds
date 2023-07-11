@@ -36,6 +36,9 @@
     <ClInclude Include="..\src\tgaload.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\winDir.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Scene.c">
@@ -81,6 +84,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\update.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\winDir.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
