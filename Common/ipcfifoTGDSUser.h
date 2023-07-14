@@ -53,6 +53,7 @@ struct sIPCSharedTGDSSpecific {
 #define FIFO_STOPSOUNDSTREAM_FILE (u32)(0xFFFFABCC)
 
 #define FIFO_PLAYSOUNDEFFECT_FILE (u32)(0xFFFFABCD)
+#define FIFO_STOPSOUNDEFFECT_FILE (u32)(0xFFFFABCE)
 
 #define workBufferSoundEffect0 (s16*)((int)0x06000000 + (96*1024) - (4096*4))
 
@@ -69,14 +70,11 @@ extern void HandleFifoNotEmptyWeakRef(u32 cmd1, uint32 cmd2);
 extern void HandleFifoEmptyWeakRef(uint32 cmd1,uint32 cmd2);
 extern struct sIPCSharedTGDSSpecific* getsIPCSharedTGDSSpecific();
 
-extern bool soundGameOverEmitted;
 extern void gameoverSound();
-
-extern void MunchFoodSound();
-
-extern void BgMusic();
-extern void BgMusicOff();
-extern bool bgMusicEnabled;
+extern void playStreamEffect(char * fname, bool loopStream);
+extern void playStream(char * fname);
+extern void stopStream();
+extern void stopStreamEffect();
 
 #ifdef ARM9
 extern u32 playSoundStreamFromFile(char * videoStructFDFilename, bool loop, u32 streamType);

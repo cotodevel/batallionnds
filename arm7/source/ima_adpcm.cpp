@@ -579,8 +579,6 @@ void IMA_Adpcm_Player::stop()		{
 	stream.close();
 	active=false;
 	setvolume( 0 );
-	//Audio stop here....
-	playerStopARM7();
 }
 
 #if (defined(__GNUC__) && !defined(__clang__))
