@@ -78,6 +78,14 @@ void HandleFifoNotEmptyWeakRef(u32 cmd1, uint32 cmd2){
 			playSoundStreamARM7();
 		}
 		break;
+		
+		case(FIFO_STOPSOUNDEFFECT_FILE):{
+			SoundEffect0Player.stop();
+		}
+		break;
+		
+		
+		
 		#endif
 		
 		#ifdef ARM9
@@ -95,7 +103,6 @@ void HandleFifoEmptyWeakRef(uint32 cmd1,uint32 cmd2){
 //project specific stuff
 
 #ifdef ARM9
-bool soundGameOverEmitted = false;
 void gameoverSound(){
 	//ARM7 ADPCM playback 
 	char filename[256];
@@ -106,31 +113,26 @@ void gameoverSound(){
 	playSoundStreamFromFile((char*)&filen[2], false, streamType);
 }
 
-void MunchFoodSound(){
-	//ARM7 ADPCM playback 
-	char filename[256];
-	strcpy(filename, "0:/munch.wav");
-	char * filen = FS_getFileName(filename);
-	strcat(filen, ".ima");
+void playStreamEffect(char * fname, bool loopStream){
+	stopStreamEffect();
 	u32 streamType = FIFO_PLAYSOUNDEFFECT_FILE;
-	playSoundStreamFromFile((char*)&filen[2], false, streamType);
+	playSoundStreamFromFile((char*)((int)fname + 2), loopStream, streamType);
 }
 
-void BgMusic(){
+void playStream(char * fname){
+	stopStream();
 	//ARM7 ADPCM playback 
-	char filename[256];
-	strcpy(filename, "0:/rock.wav");
-	char * filen = FS_getFileName(filename);
-	strcat(filen, ".ima");
 	u32 streamType = FIFO_PLAYSOUNDSTREAM_FILE;
-	playSoundStreamFromFile((char*)&filen[2], true, streamType);
+	playSoundStreamFromFile((char*)((int)fname + 2), true, streamType);
 }
 
-bool bgMusicEnabled = false;
-void BgMusicOff(){
+void stopStream(){
 	SendFIFOWords(FIFO_STOPSOUNDSTREAM_FILE, 0xFF);
 }
 
+void stopStreamEffect(){
+	SendFIFOWords(FIFO_STOPSOUNDEFFECT_FILE, 0xFF);
+}
 
 void updateStreamCustomDecoder(u32 srcFrmt){
 
