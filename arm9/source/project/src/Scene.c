@@ -482,11 +482,6 @@ int startTGDSProject(int argc, char *argv[])
 	// register our call-back functions
 	TWLPrintf("-- Registering callbacks\n");
     
-#ifdef SOUND
-    /* openAL initialization */
-    alutInit(NULL,0);
-#endif
-
     // Init openGL and game parameters
 	initialization();
 	setPlayConditions();
@@ -526,11 +521,6 @@ int startTGDSProject(int argc, char *argv[])
 #endif
 
 #if defined(ARM9)
-	//init sound: todo, once ARM7 core is ported, implement sound events accordingly to batallionNDS
-	bgMusicEnabled = false;
-	BgMusicOff();
-	BgMusic();
-	
 	startTimerCounter(tUnitsMilliseconds, 1);
     glMaterialShinnyness();
 	glReset(); //Depend on GX stack to render scene

@@ -56,9 +56,11 @@ and toolchaingenericds-multiboot-config.txt (update here, the computer's IP you 
 - And finally boot ToolchainGenericDS-multiboot, and press (X), wait a few seconds and TGDS Project should boot remotely.
   After that, everytime you want to remoteboot a TGDS Project, repeat the last 2 steps. ;-)
 
-Note: 
+Notes: 
 - /release folder has the latest binary precompiled for your convenience. Copy all contents from either /arm7dldi-ntr or /arm7dldi-twl folder depending on NintendoDS model.
-- Preferably, use toolchaingenericds-multiboot and load snakeGL from there. It's guaranteed to work.
+- Preferably, use toolchaingenericds-multiboot and load it from there. It's guaranteed to work.
+
+OST is Pacific Rim Theme "Epic Rock" Cover/Remix (Little V), you rock dude!
 
 Latest stable release:
 https://bitbucket.org/Coto88/batallionnds/get/TGDS1.65.zip

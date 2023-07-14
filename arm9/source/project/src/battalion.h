@@ -14,6 +14,7 @@
 /***********************************************************************/
 
 //#define ARM9 //BatallionNDS is ARM9 mode now (through NDS DL VS2012)
+#define SOUND 1
 
 #ifndef BATTALION_H
 #define BATTALION_H
@@ -28,10 +29,6 @@
 //disable _CRT_SECURE_NO_WARNINGS message to build this in VC++
 #pragma warning(disable:4996)
 #pragma warning(disable:4703)
-#endif
-
-#ifdef SOUND
-  #include <AL/al.h>
 #endif
 
 #ifdef DEBUG
@@ -267,12 +264,10 @@
 
 #define MUSIC_OFFSET   10
 
-#define PLAY_MUSIC      0
-#define DEMO_MUSIC      1
-#define DEFEAT_MUSIC    2
-#define SUCCESS_MUSIC   3
-
-
+#define PLAY_MUSIC      ((int)0)
+#define DEMO_MUSIC      ((int)1)
+#define DEFEAT_MUSIC    ((int)2)
+#define SUCCESS_MUSIC   ((int)3)
 
 #define MUSIC		    8	
 
@@ -408,7 +403,7 @@ struct tank
 	char subtype;		    /* sub type (for hero) */
 	
 #ifdef SOUND
-    ALuint source;
+    int source;
 #endif
 
 	};
@@ -445,7 +440,7 @@ struct monsterInfo
 	int monsterBack;	    /* is the monster going backward? */
 	int monsterMoving;	    /* is the monster moving? */
 #ifdef SOUND
-    ALuint source;
+    int source;
 #endif
 	};
 
@@ -596,15 +591,14 @@ int initSoundBatallion();
 void exitSoundBatallion();
  
 #ifdef SOUND
-int doSound(ALuint nsource, int nbuffer, ALboolean loop);
-int doSoundAt(ALuint nsource, int nbuffer, ALboolean loop,
+int doSound(int nsource, int nbuffer, bool loop);
+int doSoundAt(int nsource, int nbuffer, bool loop,
                float x, float y, float z);
-int stopSound(ALuint source);
+int stopSoundBatallion(int source);
 int stopAllSounds();
-ALuint getPlayersSource();
-ALuint getFreeSource();
 
-int playMusic(int source, ALboolean loop);
+
+int playMusic(int source, bool loop);
 #endif
 
 /****************************************************
