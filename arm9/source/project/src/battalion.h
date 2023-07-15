@@ -186,8 +186,13 @@
 /**********************/
 /* battlefield stuff  */
 /**********************/
+#ifdef WIN32
 #define PLANESIZE	    100
+#endif
 
+#ifdef ARM9
+#define PLANESIZE	    11
+#endif
 
 /******************/
 /* set up the fog */
@@ -196,10 +201,10 @@
     #define MONSTERFOGSTART	    2.5
     #define MONSTERFOGEND	    PLANESIZE
 
-    #define ARMYFOGSTART	    4
+    #define ARMYFOGSTART	    2.5
     #define ARMYFOGEND		    PLANESIZE
 
-    #define OVERVIEWFOGSTART	    6
+    #define OVERVIEWFOGSTART	2.5
     #define OVERVIEWFOGEND	    PLANESIZE
 
 
