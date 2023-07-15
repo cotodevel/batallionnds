@@ -105,7 +105,14 @@ extern void drawSphere(float r, int lats, int longs);
 extern void drawCircle(GLfloat x, GLfloat y, GLfloat r, GLfloat BALL_RADIUS);
 extern void drawCylinder(int numMajor, int numMinor, float height, float radius);
 extern GLint DLSOLIDCUBE0_06F;
+extern GLint DLCIRCLE;
+extern GLint DLPYRAMID;
+extern GLint DLBASETREE;
+extern float colorbrown[4];
+
 extern void glut2SolidCube0_06f();
+extern void glut2Pyramid0_06f();
+extern void glut2BaseTree0_06f();
 extern int InitGL(int argc, char *argv[]); /// initialises OpenGL
 extern void setupTGDSProjectOpenGLDisplayLists();
 extern void render3DUpperScreen();

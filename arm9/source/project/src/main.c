@@ -1485,11 +1485,11 @@ void initialization()
     glFogfv(GL_FOG_COLOR, fogColor);
    
 
-    glDisable(GL_LIGHTING);
+    glEnable(GL_LIGHTING);
     glEnable(GL_FOG);
     
     /* this helps zbuffering in mesa */
-	goToHighDetail();
+	goToLowDetail();
 	glMatrixMode(GL_MODELVIEW);
 	glClearDepth(1);
     glClearColor(0.8, 0.8, 1.0
@@ -6217,11 +6217,9 @@ void keyboardInput(u32 key, int x, int y)
 		case '1':{	// toggles light 0 on / off
 			scene.light0On = !scene.light0On;
 			if (scene.light0On){
-				glEnable(GL_LIGHTING);
 				glEnable(GL_LIGHT0);
 			}
 			else {
-				glDisable(GL_LIGHTING);
 				glDisable(GL_LIGHT0);
 			}
 		}break;
@@ -6229,11 +6227,9 @@ void keyboardInput(u32 key, int x, int y)
 		case '2':{	// toggles light 1 on / off
 			scene.light1On = !scene.light1On;
 			if (scene.light1On){
-				glEnable(GL_LIGHTING);
 				glEnable(GL_LIGHT1);
 			}
 			else {
-				glDisable(GL_LIGHTING);
 				glDisable(GL_LIGHT1);
 			}
 		}break;

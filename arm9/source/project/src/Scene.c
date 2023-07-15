@@ -102,16 +102,16 @@ void initializeScene(struct Scene * Inst){
 
 	// set up our directional overhead lights
 	Inst->light0On = false;
-	Inst->light1On = false;
+	Inst->light1On = true;
 	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient0Scene);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse0Scene);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, specular0Scene);
 	glLightfv(GL_LIGHT0, GL_POSITION, position0Scene);
 	
-	glLightfv(GL_LIGHT1, GL_AMBIENT, ambient1Scene);
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, diffuse1Scene);
-	glLightfv(GL_LIGHT1, GL_SPECULAR, specular1Scene);
-	glLightfv(GL_LIGHT1, GL_POSITION, position1Scene);
+	//glLightfv(GL_LIGHT1, GL_AMBIENT, ambient1Scene);
+	//glLightfv(GL_LIGHT1, GL_DIFFUSE, diffuse1Scene);
+	//glLightfv(GL_LIGHT1, GL_SPECULAR, specular1Scene);
+	//glLightfv(GL_LIGHT1, GL_POSITION, position1Scene);
 	
 	Inst->fogMode = false;
 	Inst->wireMode = false;		/// wireframe mode on / off
@@ -132,36 +132,15 @@ void render3DBottomScreen(){
 
 //glutSolidSphere(radius, 16, 16);  -> NDS GX Replacement
 void drawSphere(float r, int lats, int longs) {
-	#ifdef _MSC_VER
-	int i, j;
-	for (i = 0; i <= lats; i++) {
-		double lat0 = PI * (-0.5 + (double)(i - 1) / lats);
-		double z0 = sin(lat0);
-		double zr0 = cos(lat0);
-
-		double lat1 = PI * (-0.5 + (double)i / lats);
-		double z1 = sin(lat1);
-		double zr1 = cos(lat1);
-		glBegin(GL_QUAD_STRIP);
-		for (j = 0; j <= longs; j++) {
-			double lng = 2 * PI * (double)(j - 1) / longs;
-			double x = cos(lng);
-			double y = sin(lng);
-
-			glNormal3f(x * zr0, y * zr0, z0);
-			glVertex3f(r * x * zr0, r * y * zr0, r * z0);
-			glNormal3f(x * zr1, y * zr1, z1);
-			glVertex3f(r * x * zr1, r * y * zr1, r * z1);
-		}
-		glEnd();
-	}
-	#endif
-
+	glScalef(r, r, r);
+	
 	#ifdef ARM9
 	#include "Sphere008.h"
-	glScalef(r, r, r);
-	// Execute the display list
-    glCallListGX((u32*)&Sphere008); //comment out when running on NDSDisplayListUtils
+	glCallListGX((u32*)&Sphere008); //comment out when running on NDSDisplayListUtils
+	#endif
+
+	#ifdef WIN32
+	glCallList(DLCIRCLE);
 	#endif
 }
 
@@ -217,12 +196,31 @@ void drawCylinder(int numMajor, int numMinor, float height, float radius){
 }
 
 GLint DLSOLIDCUBE0_06F=-1;
+GLint DLCIRCLE=-1;
+GLint DLPYRAMID=-1;
+GLint DLBASETREE=-1;
 
 void glut2SolidCube0_06f() {
 #ifdef ARM9
 	updateGXLights(); //Update GX 3D light scene!
 #endif
+	glScalef(0.2, 0.2, 0.2);
 	glCallList(DLSOLIDCUBE0_06F);
+	glColor3b(255,255,255);
+}
+
+void glut2Pyramid0_06f() {
+#ifdef ARM9
+	updateGXLights(); //Update GX 3D light scene!
+#endif
+	glScalef(0.2, 0.2, 0.2);
+	glCallList(DLPYRAMID);
+	glColor3b(255,255,255);
+}
+
+void glut2BaseTree0_06f() {
+	glCallList(DLBASETREE);
+	//glColor3b(255,255,255);
 }
 
 /// Sets up the OpenGL state machine environment
@@ -237,33 +235,31 @@ __attribute__((optnone))
 #endif
 #endif
 int InitGL(int argc, char *argv[]){
-	int screen = 0;
 	TWLPrintf("-- Setting up OpenGL context\n");
 
 #ifdef _MSC_VER
-glutInit(&argc, argv);
-glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+{
+	int screen = 0;
+	glutInit(&argc, argv);
+	glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 
-//batallion NDS init gl code start
-if(argc == 3){	  
-	if (strcmp(argv[1],"-f") == 0 ){
-		printf("trying gamemode: %s\n",argv[2]);	
-		glutGameModeString(argv[2]);
+	if(argc == 3){	  
+		if (strcmp(argv[1],"-f") == 0 ){
+			printf("trying gamemode: %s\n",argv[2]);	
+			glutGameModeString(argv[2]);
   	     
-		// enter full screen
-		if (glutGameModeGet(GLUT_GAME_MODE_POSSIBLE)){
-			glutEnterGameMode();
-			screen = 1;
+			// enter full screen
+			if (glutGameModeGet(GLUT_GAME_MODE_POSSIBLE)){
+				glutEnterGameMode();
+				screen = 1;
+			}
 		}
 	}
-}
-if(screen == 0){  
-        glutInitWindowPosition  (100,100);
-        glutInitWindowSize  (640,480);
-        glutCreateWindow    ("Battalion-2004");
-}
-
-#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
+	if(screen == 0){  
+			glutInitWindowPosition  (100,100);
+			glutInitWindowSize  (640,480);
+			glutCreateWindow    ("Battalion-2004");
+	}
     glutDisplayFunc(id);
 	glutReshapeFunc(ReSizeGLScene);
     glutKeyboardFunc(keyboardInput);
@@ -271,67 +267,7 @@ if(screen == 0){
 	glutSpecialFunc(processSpKey);
 	glutSpecialUpFunc(releaseSpKey);
 	glutIgnoreKeyRepeat(1);
-#endif
-
-//batallion NDS init gl code end
-
-
-
-//default WIN32 init gl code start
-/*
-#ifdef WIN32
-
-	glutCreateWindow("TGDS Project through OpenGL (GLUT)");
-	glutFullScreen();
-
-// blue green background colour
-	glClearColor(0.0, 0.5, 0.55
-#ifdef _MSC_VER
-		, 1.0
-#endif	
-	);
-	
-	// depth testing used on with less than testing
-#ifdef _MSC_VER
-	glDepthFunc(GL_LESS);
-	glEnable(GL_DEPTH_TEST);
-#endif
-
-	// setup  fog, but disable for now
-#ifdef _MSC_VER
-	glDisable(GL_FOG);
-	glFogi(GL_FOG_MODE, GL_EXP);
-	{
-		GLfloat fogColor[4] = {0.0f, 0.5f, 0.55f, 1.0f};
-		glFogfv(GL_FOG_COLOR, fogColor);
-	}
-	glFogf(GL_FOG_DENSITY, 0.0075);
-	
-	// enable normalising of normals after scaling
-	glEnable(GL_NORMALIZE);
-#endif
-	// setup lighting, but disable for now
-	glDisable(GL_LIGHTING);
-#ifdef _MSC_VER
-	{
-		GLfloat ambient[] = {0.1f, 0.1f, 0.1f, 1.0};
-		glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambient);
-	}
-	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
-
-	// The actual lights are defined in the Scene class
-	
-
-	// set up line antialiasing
-	glLineWidth(1.0f);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-#endif
-	// setup backface culling
-	glCullFace(GL_BACK);
-	glEnable(GL_CULL_FACE);
-#endif
-*/
-//default WIN32 init gl code end
+}
 
 #endif
 
@@ -374,8 +310,10 @@ if(screen == 0){
 	glMaterialShinnyness();
 #endif
 
-	glDisable(GL_CULL_FACE); 
-	glCullFace (GL_NONE);
+	// setup backface culling
+	glCullFace(GL_BACK);
+	glEnable(GL_CULL_FACE);
+
 	glShadeModel(GL_SMOOTH);
 	setupTGDSProjectOpenGLDisplayLists();
 	return 0;
@@ -392,7 +330,6 @@ __attribute__((optnone))
 #endif
 void setupTGDSProjectOpenGLDisplayLists(){
 	DLSOLIDCUBE0_06F = (GLint)glGenLists(1);
-
 	//glut2SolidCube(); -> NDS GX Implementation
 	glNewList(DLSOLIDCUBE0_06F, GL_COMPILE);
 	{
@@ -429,7 +366,7 @@ void setupTGDSProjectOpenGLDisplayLists(){
 		for (i = 5; i >= 0; i--)
 		{
 			glBegin(GL_QUADS);
-			glNormal3fv(&n[i][0]);
+			//glNormal3fv(&n[i][0]); //object is black when lighting is off
 			glTexCoord2f(0, 0);
 			glVertex3fv(&v[faces[i][0]][0]);
 			glTexCoord2f(1, 0);
@@ -442,6 +379,87 @@ void setupTGDSProjectOpenGLDisplayLists(){
 		}
 	}
 	glEndList();
+
+	DLCIRCLE = (GLint)glGenLists(1);
+	//drawSphere(); -> NDS GX Implementation
+	glNewList(DLCIRCLE, GL_COMPILE);
+	{
+		float r=1; 
+		int lats=8; 
+		int longs=8;
+		int i, j;
+		for (i = 0; i <= lats; i++) {
+			float lat0 = PI * (-0.5 + (float)(i - 1) / lats);
+			float z0 = sin((float)lat0);
+			float zr0 = cos((float)lat0);
+
+			float lat1 = PI * (-0.5 + (float)i / lats);
+			float z1 = sin((float)lat1);
+			float zr1 = cos((float)lat1);
+			glBegin(GL_QUAD_STRIP);
+			for (j = 0; j <= longs; j++) {
+				float lng = 2 * PI * (float)(j - 1) / longs;
+				float x = cos(lng);
+				float y = sin(lng);
+				//glNormal3f(x * zr0, y * zr0, z0); //lights are off
+				glVertex3f(r * x * zr0, r * y * zr0, r * z0);
+				//glNormal3f(x * zr1, y * zr1, z1);
+				glVertex3f(r * x * zr1, r * y * zr1, r * z1);
+			}
+			glEnd();
+		}
+	}
+	glEndList();
+
+	DLPYRAMID = (GLint)glGenLists(1);
+	glNewList(DLPYRAMID, GL_COMPILE);
+	{
+		glScalef(2.0f, 2.0f, 2.0f);
+		glBegin(GL_TRIANGLES);           // Begin drawing the pyramid with 4 triangles
+		// Front
+		//glColor3f(1.0f, 0.0f, 0.0f);     // Red
+		glVertex3f( 0.0f, 1.0f, 0.0f);
+		//glColor3f(0.0f, 1.0f, 0.0f);     // Green
+		glVertex3f(-1.0f, -1.0f, 1.0f);
+		//glColor3f(0.0f, 0.0f, 1.0f);     // Blue
+		glVertex3f(1.0f, -1.0f, 1.0f);
+ 
+		// Right
+		//glColor3f(1.0f, 0.0f, 0.0f);     // Red
+		glVertex3f(0.0f, 1.0f, 0.0f);
+		//glColor3f(0.0f, 0.0f, 1.0f);     // Blue
+		glVertex3f(1.0f, -1.0f, 1.0f);
+		//glColor3f(0.0f, 1.0f, 0.0f);     // Green
+		glVertex3f(1.0f, -1.0f, -1.0f);
+ 
+		// Back
+		//glColor3f(1.0f, 0.0f, 0.0f);     // Red
+		glVertex3f(0.0f, 1.0f, 0.0f);
+		//glColor3f(0.0f, 1.0f, 0.0f);     // Green
+		glVertex3f(1.0f, -1.0f, -1.0f);
+		//glColor3f(0.0f, 0.0f, 1.0f);     // Blue
+		glVertex3f(-1.0f, -1.0f, -1.0f);
+ 
+		// Left
+		//glColor3f(1.0f,0.0f,0.0f);       // Red
+		glVertex3f( 0.0f, 1.0f, 0.0f);
+		//glColor3f(0.0f,0.0f,1.0f);       // Blue
+		glVertex3f(-1.0f,-1.0f,-1.0f);
+		//glColor3f(0.0f,1.0f,0.0f);       // Green
+		glVertex3f(-1.0f,-1.0f, 1.0f);
+		glEnd();   // Done drawing the pyramid
+
+	}
+	glEndList();
+
+	DLBASETREE = (GLint)glGenLists(1);
+	glNewList(DLBASETREE, GL_COMPILE);
+	{
+		makercube(1.15, 1.05, 1.2, 1.07, 1.07, 0.1, colorbrown);
+	}
+	glEndList();
+	
+	
 }
 
 #ifdef ARM9
@@ -489,19 +507,19 @@ int startTGDSProject(int argc, char *argv[])
 	//////////////////////////////////////////////////////////////// todo end////////////////////////////////////////////
 	// create the scene and set perspective projection as default
 	initializeScene(&scene);
-	
 #ifdef ARM9
 	InitGL(argc, argv); 
 #endif
-
-	// setup lighting and fog: re-enable these when using default NDS render
-	/*
+	// setup lighting and fog
+	glDisable(GL_LIGHTING);
+	
 	keyboardInput((unsigned char)'L', 0, 0);
 	keyboardInput((unsigned char)'0', 0, 0);
 	keyboardInput((unsigned char)'1', 0, 0);
 	keyboardInput((unsigned char)'2', 0, 0);
 	keyboardInput((unsigned char)'F', 0, 0);
-	*/
+	//glEnable(GL_LIGHTING); //disabled lights 
+	
 
 	// start the timer and enter the mail GLUT loop
 #ifdef _MSC_VER
