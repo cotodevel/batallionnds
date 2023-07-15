@@ -1564,7 +1564,7 @@ void initialization()
     no3D	    = 0;
     mode3D	    = 0;
     doBigClear	    = 0;
-    showOptions	    = 1; //toggle to 0 to show hi scores
+    showOptions	    = 0; //toggle to 0 to show hi scores
     showframes	    = 0;
     paused	    = 0;
 
@@ -5490,9 +5490,15 @@ void demoKeys(int key)
     {
     switch(key)
 	{
+#ifdef WIN32
 	case ' ':  
+#endif
+#ifdef ARM9
+	case KEY_TOUCH:
+#endif
+	{
             showOptions = 1;
-			break;
+	}break;
 #ifdef WIN32
 	case '6':
 #endif
@@ -5500,34 +5506,51 @@ void demoKeys(int key)
 	case KEY_START:
 #endif
 	{
-		mode = PLAYMODE;
+				mode = PLAYMODE;
 			    showOptions = 0;
 			    Googelon.monster = GOOGELON;
 			    setPlayConditions();
 				playKeys('1'); //enter monster view
 	}break;
-
-	case '7':	mode = PLAYMODE;
+#ifdef WIN32
+	case '7':
+#endif
+#ifdef ARM9
+	case KEY_L:
+#endif
+	{
+				mode = PLAYMODE;
 			    showOptions = 0;
 			    Googelon.monster = TECHS;
 			    setPlayConditions();
 				playKeys('1'); //enter monster view
-	break;
-
-	case '8':	mode = PLAYMODE;
+	}break;
+#ifdef WIN32
+	case '8':
+#endif
+#ifdef ARM9
+	case KEY_R:
+#endif
+	{
+				mode = PLAYMODE;
 			    showOptions = 0;
 			    Googelon.monster = VAPOUR;
 			    setPlayConditions();
 				playKeys('1'); //enter monster view
-	break;
-
-	case '9':	mode = PLAYMODE;
+	}break;
+#ifdef WIN32
+	case '9':	
+#endif
+#ifdef ARM9
+	case KEY_SELECT:
+#endif
+	{
+				mode = PLAYMODE;
 			    showOptions = 0;
 			    Googelon.monster = FLUTTER;
 			    setPlayConditions();
 				playKeys('1'); //enter monster view
-	break;
-			    
+	}break;		    
 	}
 }
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/

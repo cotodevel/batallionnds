@@ -26,7 +26,12 @@ https://www.evl.uic.edu/aej/AndyBattalion.html
 Buttons:
 
 D-PAD: Move sideways
-Start: Start game
+
+Start: Start game (Creature 1)
+L: Start game (Creature 2)
+R: Start game (Creature 3)
+Select: Start game (Creature 4)
+
 A: Shoot laser
 
 ____Remoteboot____
