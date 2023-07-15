@@ -798,7 +798,14 @@ void goToMonsterView(int eyeball)
     
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
+	
+#ifdef WIN32
 	gluPerspective(70,  GL_PERSPECTIVE,   0.1,   PLANESIZE);
+#endif
+#ifdef ARM9
+	gluPerspective((70/2)-3,  GL_PERSPECTIVE,   0.1,   PLANESIZE); //The field of view angle, in degrees, in the y-direction: half and closer
+#endif
+
 	glMatrixMode(GL_MODELVIEW);
     
     switch(eyeball){
@@ -905,7 +912,14 @@ void goToArmyView(int eyeball)
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(65,  GL_PERSPECTIVE,   0.1,   PLANESIZE);
+
+#ifdef WIN32
+	gluPerspective(65,  GL_PERSPECTIVE,   0.1,   PLANESIZE);
+#endif
+#ifdef ARM9
+	gluPerspective((65/2)-3,  GL_PERSPECTIVE,   0.1,   PLANESIZE); //The field of view angle, in degrees, in the y-direction: half and closer
+#endif
+
     glMatrixMode(GL_MODELVIEW);
 	    
     switch(eyeball){
@@ -1045,7 +1059,15 @@ void goToOverView(int eyeball)
     
 	glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(65,  GL_PERSPECTIVE,   0.1,   PLANESIZE);
+
+#ifdef WIN32
+	gluPerspective(65,  GL_PERSPECTIVE,   0.1,   PLANESIZE);
+#endif
+#ifdef ARM9
+	gluPerspective((65/2)-3,  GL_PERSPECTIVE,   0.1,   PLANESIZE); //The field of view angle, in degrees, in the y-direction: half and closer
+#endif
+
+
     glMatrixMode(GL_MODELVIEW);
 	
 	switch(eyeball){
