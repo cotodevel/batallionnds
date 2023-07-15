@@ -73,7 +73,7 @@
 
     float healthGreen[4]    	= {0.21, 0.49, 0.0,  0.0}; 
 
-    float treeColor[4] 		= {0.03, 0.34, 0.025, 0};
+    float treeColor[4] 		= {0.03, 0.36, 0.025, 0};
     float treeColor2[4] 	= {0.05, 0.4,  0.025, 0};
     
     /*************/
@@ -3158,85 +3158,40 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
 	    ////////////////////////////////////
 	    // tree                           
 	    ////////////////////////////////////
-	    
-	    if (allTreesOnPlane[treeCounter].type == 0)
-		{	    
-		if ((allTreesOnPlane[treeCounter].treeshape == 0) || (itsChristmas))
-		    {
-		    ///////////////
-			// pine tree //
-		    ///////////////
+	    if (allTreesOnPlane[treeCounter].type == 0){
 			
-		    if (detail >= 2)
+			///////////////
+			// pine tree //
+			///////////////	
 			{
-			glBindTexture(GL_TEXTURE_2D, texturesBatallionGL[TEX_TREEWOOD]); 
-			glEnable(GL_TEXTURE_2D);
+#ifdef ARM9
+				glStoreMatrix(0);
+#endif
+				glPushMatrix();
+				makercubenobtmnotopTEX(x, y+0.4, z, 0.1, 0.4, 0.1, colorbrown);	
+
+				//circle (fast)
+				
+				glColor3fv(treeColor);
+				spheredat[0] = x;
+				spheredat[1] = y+1;
+				spheredat[2] = z;
+				spheredat[3] = 0.3;
+				andysphdraw(spheredat, sph);
+				
+				//green pine (slow)
+				//makeitPyr(1, treeColor, x, y+0.8, z, 0.2, 0.4, 0.2);
+
+				glPopMatrix(
+					#ifdef ARM9
+					1
+					#endif
+				);	
+
+#ifdef ARM9				
+				glRestoreMatrix(0);
+#endif	
 			}
-
-
-		    makercubenobtmnotopTEX( x, y+0.2, z, 0.075, 0.2, 0.075, colorbrown);
-#if !defined(ARM9)
-		    glDisable(GL_TEXTURE_2D);
-#endif    
-		    // regular pine tree colour is too dark in vector mode 
-    
-		    if (detail > -1)
-			makeitPyr(1, treeColor, x, y+0.8, z, 0.2, 0.4, 0.2);
-		    else
-			makeitPyr(1, treeColor2, x, y+0.8, z, 0.2, 0.4, 0.2);
-    
-		    glColor4fv(colorblack);
-
-		    if (detail > 0)		    
-			drawShadow(x, z, 0.2, 0.2);
-		    
-		    if (itsChristmas)
-			{
-			makercube( x+0.09, y+0.9, z+0.09, 0.025, 0.025, 0.025, coloryellow);
-			makercube( x-0.12, y+0.7, z+0.12, 0.025, 0.025, 0.025, colorred);
-			makercube( x-0.1,  y+0.9, z-0.1,  0.025, 0.025, 0.025, colormaserblue);
-			makercube( x+0.12, y+0.7, z-0.12, 0.025, 0.025, 0.025, colororange);
-			}
-		    }
-		else
-		    ////////////////
-		    // round tree //
-		    ////////////////
-			{
-		    if (detail >= 2)
-			{
-			glBindTexture(GL_TEXTURE_2D, texturesBatallionGL[TEX_TREEWOOD]); 
-
-			glEnable(GL_TEXTURE_2D);
-			}
-
-		    makercubenobtmnotopTEX(x, y+0.4, z, 0.1, 0.4, 0.1, colorbrown);
-#if !defined(ARM9)
-		    glDisable(GL_TEXTURE_2D);
-#endif    
-		    glColor3fv(treeColor2);
-		    spheredat[0] = x;
-		    spheredat[1] = y+1;
-		    spheredat[2] = z;
-		    spheredat[3] = 0.3;
-		    andysphdraw(spheredat, sph);
-
-		    if (detail > 0)	
-			{
-			glPushMatrix();
-			    glColor3fv(colorblack);
-			    glTranslatef(x,  SHADOWS,   z);
-			    
-				glRotatef(-90, 1, 0, 0);
-				drawCircle(32, 1, 0., 0.3);
-
-			glPopMatrix(
-				#ifdef ARM9
-				1
-				#endif
-			);
-			}
-		    }
 		}
 
 	    /**********************************/

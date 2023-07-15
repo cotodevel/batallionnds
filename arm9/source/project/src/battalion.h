@@ -935,5 +935,6 @@ void andysphdraw(float loc[4], int);
 extern void showCityName(char* name, int detail);
 extern int startBatallion(int argc, char **argv);
 extern GLuint texturesBatallionGL[5];
+extern int stopMusicBatallion();
 
 #endif
