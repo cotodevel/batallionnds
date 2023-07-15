@@ -1142,7 +1142,8 @@ void andysphdraw(float loc[4], int count)
 	{
 		glPushMatrix();
 		glTranslatef(loc[0], loc[1], loc[2]);
-		drawSphere(loc[3], count*3, count*3); /* was count*4 */
+		
+		drawSphere(loc[3], count*2, count*2); /* was count*4 */
 	    glPopMatrix(
 			#ifdef ARM9
 			1
