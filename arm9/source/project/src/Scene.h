@@ -101,29 +101,15 @@ extern void tiltdown(struct Camera * Inst);	/// tilts camera downwards
 
 extern int TWLPrintf(const char *fmt, ...);
 
-extern void drawSphere(float r, int lats, int longs);
-extern void drawCircle(GLfloat x, GLfloat y, GLfloat r, GLfloat BALL_RADIUS);
-extern void drawCylinder(int numMajor, int numMinor, float height, float radius);
-extern GLint DLSOLIDCUBE0_06F;
-extern GLint DLCIRCLE;
-extern GLint DLPYRAMID;
-extern GLint DLBASETREE;
 extern float colorbrown[4];
 
-extern void glut2SolidCube0_06f();
-extern void glut2Pyramid0_06f();
-extern void glut2BaseTree0_06f();
 extern int InitGL(int argc, char *argv[]); /// initialises OpenGL
-extern void setupTGDSProjectOpenGLDisplayLists();
 extern void render3DUpperScreen();
 extern void render3DBottomScreen();
 extern int startTGDSProject(int argc, char *argv[]);
 extern void TGDSAPPExit(u32 fn_address);
-
-
 extern void processSpKey(int key, int x, int y);
 extern void releaseSpKey(int key, int x, int y);
-
 extern void setPlayConditions(void);
 extern void initialization(void);
 
@@ -132,6 +118,8 @@ extern bool renderCube;
 #ifdef __cplusplus
 }
 #endif
+
+extern void glut2SolidCubeCustom();
 
 extern GLvoid ReSizeGLScene(GLsizei width, GLsizei height);
 extern void id();
