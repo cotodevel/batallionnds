@@ -120,6 +120,6 @@ extern bool renderCube;
 #endif
 
 extern void glut2SolidCubeCustom();
-
 extern GLvoid ReSizeGLScene(GLsizei width, GLsizei height);
 extern void id();
+extern void drawSphereCustom(float r, int lats, int longs);

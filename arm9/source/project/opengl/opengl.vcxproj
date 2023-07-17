@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\ndsdisplaylistutils\ndsDisplayListUtils\ndsDisplayListUtils.h" />
+    <ClInclude Include="..\..\..\..\..\toolchaingenericds\src\common\libutils\arm9\source\ndsDisplayListUtils.h" />
     <ClInclude Include="..\src\battalion.h" />
     <ClInclude Include="..\src\language.h" />
     <ClInclude Include="..\src\memwatch.h" />
@@ -22,7 +22,7 @@
     <ClInclude Include="..\winDir.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\ndsdisplaylistutils\ndsDisplayListUtils\ndsDisplayListUtils.c" />
+    <ClCompile Include="..\..\..\..\..\toolchaingenericds\src\common\libutils\arm9\source\ndsDisplayListUtils.c" />
     <ClCompile Include="..\src\audio.c" />
     <ClCompile Include="..\src\font.c" />
     <ClCompile Include="..\src\gprim.c" />
