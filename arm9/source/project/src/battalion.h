@@ -79,6 +79,10 @@
 #include "..\..\..\..\..\ndsdisplaylistutils-dev\ndsDisplayListUtils\VideoGL.h"
 #endif
 
+#ifdef WIN32
+#include "..\..\..\..\..\ndsdisplaylistutils\ndsDisplayListUtils\ndsDisplayListUtils.h"
+#endif
+
 #include <time.h>
 #include <stdio.h>
 
@@ -133,9 +137,6 @@
 /**********************/
 /* misc stuff         */
 /**********************/
-
-#define PI 3.14159
-#define TWOPI		    (PI*2)
 
 #define	CYLINDERSIDES	    6
 #define	MORECYLINDERSIDES   12
