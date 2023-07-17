@@ -64,6 +64,7 @@ USA
 #include "Sphere008.h"
 #include "gui_console_connector.h"
 extern int vsnprintf( char* buffer, size_t buf_size, const char* format, va_list vlist );
+#include "ndsDisplayListUtils.h"
 #endif
 
 #if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
