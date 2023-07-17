@@ -14,7 +14,7 @@
 /***********************************************************************/
 #include "battalion.h"
 #include "Scene.h"
-
+#include "ndsDisplayListUtils.h"
 
     float   pt1[3] = {1, -1, 1};
     float   pt2[3] = {1, 1, 1};
@@ -1144,6 +1144,7 @@ void andysphdraw(float loc[4], int count)
 		glTranslatef(loc[0], loc[1], loc[2]);
 		
 		drawSphere(loc[3], count*2, count*2); /* was count*4 */
+
 	    glPopMatrix(
 			#ifdef ARM9
 			1

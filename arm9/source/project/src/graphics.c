@@ -15,6 +15,7 @@
 #include "battalion.h"
 #include "tgaload.h"
 #include "Scene.h"
+#include "ndsDisplayListUtils.h"
 
 #if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
 #include "gui_console_connector.h"

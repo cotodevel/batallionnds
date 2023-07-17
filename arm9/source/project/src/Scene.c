@@ -130,99 +130,6 @@ void render3DBottomScreen(){
 	renderCube = false;
 }
 
-//glutSolidSphere(radius, 16, 16);  -> NDS GX Replacement
-void drawSphere(float r, int lats, int longs) {
-	glScalef(r, r, r);
-	
-	#ifdef ARM9
-	#include "Sphere008.h"
-	glCallListGX((u32*)&Sphere008); //comment out when running on NDSDisplayListUtils
-	#endif
-
-	#ifdef WIN32
-	glCallList(DLCIRCLE);
-	#endif
-}
-
-
-//gluDisk(qObj, 0.0, RADIUS, 16, 16); -> NDS GX Implementation
-void drawCircle(GLfloat x, GLfloat y, GLfloat r, GLfloat BALL_RADIUS)
-{
-	#define SLICES_PER_CIRCLE ((int)16)
-	float angle = 360.f / SLICES_PER_CIRCLE;
-	float anglex = cos(angle);
-	float angley = sin(angle);
-	GLfloat lastX = 1;
-	GLfloat lastY = 0;
-	int c = 0; 
-	glBegin(GL_TRIANGLE_STRIP);
-	for (c = 1; c < SLICES_PER_CIRCLE; c++)
-	{
-		x = lastX * anglex - lastY * angley;
-		y = lastX * angley + lastY * anglex;
-		glVertex2f(x * BALL_RADIUS, y * BALL_RADIUS);
-		lastX = x;
-		lastY = y;
-	}
-	glEnd();
-}
-
-
-void drawCylinder(int numMajor, int numMinor, float height, float radius){
-	double majorStep = height / numMajor;
-	double minorStep = 2.0 * PI / numMinor;
-	int i, j;
-
-	for (i = 0; i < numMajor; ++i) {
-		GLfloat z0 = 0.5 * height - i * majorStep;
-		GLfloat z1 = z0 - majorStep;
-
-		//glBegin(GL_TRIANGLE_STRIP);
-		for (j = 0; j <= numMinor; ++j) {
-			double a = j * minorStep;
-			GLfloat x = radius * cos(a);
-			GLfloat y = radius * sin(a);
-			glNormal3f(x / radius, y / radius, 0.0);
-			
-			glTexCoord2f(j / (GLfloat) numMinor, i / (GLfloat) numMajor);
-			glVertex3f(x, y, z0);
-
-			glNormal3f(x / radius, y / radius, 0.0);
-			glTexCoord2f(j / (GLfloat) numMinor, (i + 1) / (GLfloat) numMajor);
-			glVertex3f(x, y, z1);
-		}
-		//glEnd();
-	}
-}
-
-GLint DLSOLIDCUBE0_06F=-1;
-GLint DLCIRCLE=-1;
-GLint DLPYRAMID=-1;
-GLint DLBASETREE=-1;
-
-void glut2SolidCube0_06f() {
-#ifdef ARM9
-	updateGXLights(); //Update GX 3D light scene!
-#endif
-	glScalef(0.2, 0.2, 0.2);
-	glCallList(DLSOLIDCUBE0_06F);
-	glColor3b(255,255,255);
-}
-
-void glut2Pyramid0_06f() {
-#ifdef ARM9
-	updateGXLights(); //Update GX 3D light scene!
-#endif
-	glScalef(0.2, 0.2, 0.2);
-	glCallList(DLPYRAMID);
-	glColor3b(255,255,255);
-}
-
-void glut2BaseTree0_06f() {
-	glCallList(DLBASETREE);
-	//glColor3b(255,255,255);
-}
-
 /// Sets up the OpenGL state machine environment
 /// All hints, culling, fog, light models, depth testing, polygon model
 /// and blending are set up here
@@ -268,7 +175,7 @@ int InitGL(int argc, char *argv[]){
 	glutSpecialUpFunc(releaseSpKey);
 	glutIgnoreKeyRepeat(1);
 }
-
+	setupGLUTObjects(); //WIN32 only
 #endif
 
 #ifdef ARM9
@@ -315,151 +222,7 @@ int InitGL(int argc, char *argv[]){
 	glEnable(GL_CULL_FACE);
 
 	glShadeModel(GL_SMOOTH);
-	setupTGDSProjectOpenGLDisplayLists();
 	return 0;
-}
-
-
-#ifdef ARM9
-#if (defined(__GNUC__) && !defined(__clang__))
-__attribute__((optimize("O0")))
-#endif
-#if (!defined(__GNUC__) && defined(__clang__))
-__attribute__((optnone))
-#endif
-#endif
-void setupTGDSProjectOpenGLDisplayLists(){
-	DLSOLIDCUBE0_06F = (GLint)glGenLists(1);
-	//glut2SolidCube(); -> NDS GX Implementation
-	glNewList(DLSOLIDCUBE0_06F, GL_COMPILE);
-	{
-		float size = 0.06f;
-		GLfloat n[6][3] =
-		{
-			{-1.0f, 0.0f, 0.0f},
-			{0.0f, 1.0f, 0.0f},
-			{1.0f, 0.0f, 0.0f},
-			{0.0f, -1.0f, 0.0f},
-			{0.0f, 0.0f, 1.0f},
-			{0.0f, 0.0f, -1.0f}
-		};
-		GLint faces[6][4] =
-		{
-			{0, 1, 2, 3},
-			{3, 2, 6, 7},
-			{7, 6, 5, 4},
-			{4, 5, 1, 0},
-			{5, 6, 2, 1},
-			{7, 4, 0, 3}
-		};
-		GLfloat v[8][3];
-		GLint i;
-
-		v[0][0] = v[1][0] = v[2][0] = v[3][0] = -size / 2;
-		v[4][0] = v[5][0] = v[6][0] = v[7][0] = size / 2;
-		v[0][1] = v[1][1] = v[4][1] = v[5][1] = -size / 2;
-		v[2][1] = v[3][1] = v[6][1] = v[7][1] = size / 2;
-		v[0][2] = v[3][2] = v[4][2] = v[7][2] = -size / 2;
-		v[1][2] = v[2][2] = v[5][2] = v[6][2] = size / 2;
-
-		glScalef(32.0f, 32.0f, 32.0f);
-		for (i = 5; i >= 0; i--)
-		{
-			glBegin(GL_QUADS);
-			//glNormal3fv(&n[i][0]); //object is black when lighting is off
-			glTexCoord2f(0, 0);
-			glVertex3fv(&v[faces[i][0]][0]);
-			glTexCoord2f(1, 0);
-			glVertex3fv(&v[faces[i][1]][0]);
-			glTexCoord2f(1, 1);
-			glVertex3fv(&v[faces[i][2]][0]);
-			glTexCoord2f(0, 1);
-			glVertex3fv(&v[faces[i][3]][0]);
-			glEnd();
-		}
-	}
-	glEndList();
-
-	DLCIRCLE = (GLint)glGenLists(1);
-	//drawSphere(); -> NDS GX Implementation
-	glNewList(DLCIRCLE, GL_COMPILE);
-	{
-		float r=1; 
-		int lats=8; 
-		int longs=8;
-		int i, j;
-		for (i = 0; i <= lats; i++) {
-			float lat0 = PI * (-0.5 + (float)(i - 1) / lats);
-			float z0 = sin((float)lat0);
-			float zr0 = cos((float)lat0);
-
-			float lat1 = PI * (-0.5 + (float)i / lats);
-			float z1 = sin((float)lat1);
-			float zr1 = cos((float)lat1);
-			glBegin(GL_QUAD_STRIP);
-			for (j = 0; j <= longs; j++) {
-				float lng = 2 * PI * (float)(j - 1) / longs;
-				float x = cos(lng);
-				float y = sin(lng);
-				//glNormal3f(x * zr0, y * zr0, z0); //lights are off
-				glVertex3f(r * x * zr0, r * y * zr0, r * z0);
-				//glNormal3f(x * zr1, y * zr1, z1);
-				glVertex3f(r * x * zr1, r * y * zr1, r * z1);
-			}
-			glEnd();
-		}
-	}
-	glEndList();
-
-	DLPYRAMID = (GLint)glGenLists(1);
-	glNewList(DLPYRAMID, GL_COMPILE);
-	{
-		glScalef(2.0f, 2.0f, 2.0f);
-		glBegin(GL_TRIANGLES);           // Begin drawing the pyramid with 4 triangles
-		// Front
-		//glColor3f(1.0f, 0.0f, 0.0f);     // Red
-		glVertex3f( 0.0f, 1.0f, 0.0f);
-		//glColor3f(0.0f, 1.0f, 0.0f);     // Green
-		glVertex3f(-1.0f, -1.0f, 1.0f);
-		//glColor3f(0.0f, 0.0f, 1.0f);     // Blue
-		glVertex3f(1.0f, -1.0f, 1.0f);
- 
-		// Right
-		//glColor3f(1.0f, 0.0f, 0.0f);     // Red
-		glVertex3f(0.0f, 1.0f, 0.0f);
-		//glColor3f(0.0f, 0.0f, 1.0f);     // Blue
-		glVertex3f(1.0f, -1.0f, 1.0f);
-		//glColor3f(0.0f, 1.0f, 0.0f);     // Green
-		glVertex3f(1.0f, -1.0f, -1.0f);
- 
-		// Back
-		//glColor3f(1.0f, 0.0f, 0.0f);     // Red
-		glVertex3f(0.0f, 1.0f, 0.0f);
-		//glColor3f(0.0f, 1.0f, 0.0f);     // Green
-		glVertex3f(1.0f, -1.0f, -1.0f);
-		//glColor3f(0.0f, 0.0f, 1.0f);     // Blue
-		glVertex3f(-1.0f, -1.0f, -1.0f);
- 
-		// Left
-		//glColor3f(1.0f,0.0f,0.0f);       // Red
-		glVertex3f( 0.0f, 1.0f, 0.0f);
-		//glColor3f(0.0f,0.0f,1.0f);       // Blue
-		glVertex3f(-1.0f,-1.0f,-1.0f);
-		//glColor3f(0.0f,1.0f,0.0f);       // Green
-		glVertex3f(-1.0f,-1.0f, 1.0f);
-		glEnd();   // Done drawing the pyramid
-
-	}
-	glEndList();
-
-	DLBASETREE = (GLint)glGenLists(1);
-	glNewList(DLBASETREE, GL_COMPILE);
-	{
-		makercube(1.15, 1.05, 1.2, 1.07, 1.07, 0.1, colorbrown);
-	}
-	glEndList();
-	
-	
 }
 
 #ifdef ARM9
@@ -550,3 +313,7 @@ int startTGDSProject(int argc, char *argv[])
 	return 0;
 }
 
+void glut2SolidCubeCustom() {
+	glut2SolidCube(0.2, 0.2, 0.2);
+	glColor3b(255,255,255);
+}
