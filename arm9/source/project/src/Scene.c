@@ -317,3 +317,33 @@ void glut2SolidCubeCustom() {
 	glut2SolidCube(0.2, 0.2, 0.2);
 	glColor3b(255,255,255);
 }
+
+void drawSphereCustom(float r, int lats, int longs){
+#ifdef WIN32
+	int i, j;
+	for (i = 0; i <= lats; i++) {
+		float lat0 = PI * (-0.5 + (float)(i - 1) / lats);
+		float z0 = sin((float)lat0);
+		float zr0 = cos((float)lat0);
+		float lat1 = PI * (-0.5 + (float)i / lats);
+		float z1 = sin((float)lat1);
+		float zr1 = cos((float)lat1);
+		glBegin(GL_QUAD_STRIP);
+		for (j = 0; j <= longs; j++) {
+			float lng = 2 * PI * (float)(j - 1) / longs;
+			float x = cos(lng);
+			float y = sin(lng);
+			glNormal3f(x * zr0, y * zr0, z0); //lights are off
+			glVertex3f(r * x * zr0, r * y * zr0, r * z0);
+			glNormal3f(x * zr1, y * zr1, z1);
+			glVertex3f(r * x * zr1, r * y * zr1, r * z1);
+		}
+		glEnd();
+	}
+#endif
+	#ifdef ARM9
+	#include "Sphere008.h"
+	glScalef(r, r, r);
+	glCallListGX((u32*)&Sphere008); //comment out when running on NDSDisplayListUtils
+	#endif
+}

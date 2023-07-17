@@ -39,7 +39,7 @@
     <ClInclude Include="..\winDir.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\ndsdisplaylistutils\ndsDisplayListUtils\ndsDisplayListUtils.h">
+    <ClInclude Include="..\..\..\..\..\toolchaingenericds\src\common\libutils\arm9\source\ndsDisplayListUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -92,7 +92,7 @@
     <ClCompile Include="..\winDir.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\ndsdisplaylistutils\ndsDisplayListUtils\ndsDisplayListUtils.c">
+    <ClCompile Include="..\..\..\..\..\toolchaingenericds\src\common\libutils\arm9\source\ndsDisplayListUtils.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
