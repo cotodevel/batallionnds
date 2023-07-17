@@ -72,6 +72,7 @@
 #if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
 #include "VideoTGDS.h"
 #include "VideoGL.h"
+#include "ndsDisplayListUtils.h"
 #endif
 
 #if defined(_MSC_VER) && defined(ARM9) //BatallionNDS is ARM9 mode now (through NDS DL VS2012)
@@ -79,8 +80,8 @@
 #include "..\..\..\..\..\ndsdisplaylistutils-dev\ndsDisplayListUtils\VideoGL.h"
 #endif
 
-#ifdef WIN32
-#include "..\..\..\..\..\ndsdisplaylistutils\ndsDisplayListUtils\ndsDisplayListUtils.h"
+#if defined(_MSC_VER)
+#include "..\..\..\..\..\toolchaingenericds\src\common\libutils\arm9\source\ndsDisplayListUtils.h"
 #endif
 
 #include <time.h>
