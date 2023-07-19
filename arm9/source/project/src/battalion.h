@@ -70,7 +70,7 @@
 #endif
 
 #if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
-#include "VideoTGDS.h"
+#include "videoTGDS.h"
 #include "VideoGL.h"
 #include "ndsDisplayListUtils.h"
 #endif
