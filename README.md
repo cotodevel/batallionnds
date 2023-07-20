@@ -25,8 +25,9 @@ https://www.evl.uic.edu/aej/AndyBattalion.html
 
 Buttons:
 
-D-PAD: Move sideways
-
+D-PAD Left: Choose last level
+D-PAD Right: Choose next level
+D-PAD: (In game) Move 
 Start: Start game (Creature 1)
 L: Start game (Creature 2)
 R: Start game (Creature 3)
