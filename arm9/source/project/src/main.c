@@ -1958,9 +1958,8 @@ void setPlayConditions()
 
 
     /*********************************/
-    /* load the first level        */
+    /* load the current level        */
     /*********************************/
-    currentLevel = 0;
     loadLevel(currentLevel);
     
     /*********************************/
@@ -5551,8 +5550,27 @@ void demoKeys(int key)
 			    Googelon.monster = FLUTTER;
 			    setPlayConditions();
 				playKeys('1'); //enter monster view
+
+
 	}break;		    
-	}
+
+//ARM9: Level select
+#ifdef ARM9
+	case KEY_LEFT:{
+		if(currentLevel > 0){
+			currentLevel--;
+		}
+		loadLevel(currentLevel);
+	}break;
+	case KEY_RIGHT:{
+		if(currentLevel < 2){
+			currentLevel++;
+		}
+		loadLevel(currentLevel);
+	}break;
+#endif
+
+}
 }
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
@@ -5591,18 +5609,44 @@ void releaseSpKey(int key, int x, int y)
 {
 #ifdef WIN32
 	switch(key){
-		case GLUT_KEY_LEFT:
-			keycontrol &= ~BAT_KEY_LEFT;  
-		break;
-		case GLUT_KEY_RIGHT:
-			keycontrol &= ~BAT_KEY_RIGHT; 
-		break;
-		case GLUT_KEY_UP:
-			keycontrol &= ~BAT_KEY_FORW;
-		break;
-			case GLUT_KEY_DOWN:
-			keycontrol &= ~BAT_KEY_BACK; 
-		break;
+		case GLUT_KEY_LEFT:{
+			if (mode == DEMOMODE){
+				if(currentLevel > 0){
+					currentLevel--;
+				}
+				loadLevel(currentLevel);
+			}
+			else{
+				keycontrol &= ~BAT_KEY_LEFT;
+			}
+		}break;
+		case GLUT_KEY_RIGHT:{
+			if (mode == DEMOMODE){
+				if(currentLevel < 2){
+					currentLevel++;
+				}
+				loadLevel(currentLevel);
+			}
+			else{
+				keycontrol &= ~BAT_KEY_RIGHT;
+			} 
+		}break;
+		case GLUT_KEY_UP:{
+			if (mode == DEMOMODE){
+				
+			}
+			else{
+				keycontrol &= ~BAT_KEY_FORW;
+			}
+		}break;
+		case GLUT_KEY_DOWN:{
+			if (mode == DEMOMODE){
+				
+			}
+			else{
+				keycontrol &= ~BAT_KEY_BACK;
+			}
+		}break;
 	}
 #endif
 
