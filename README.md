@@ -66,7 +66,13 @@ Notes:
 - /release folder has the latest binary precompiled for your convenience. Copy all contents from either /arm7dldi-ntr or /arm7dldi-twl folder depending on NintendoDS model.
 - Preferably, use toolchaingenericds-multiboot and load it from there. It's guaranteed to work.
 
-OST is Pacific Rim Theme "Epic Rock" Cover/Remix (Little V), you rock dude!
+OST: 
+-SYNAPTIC COLLAPSE - Cognitive Inhibition feat. RON JARZOMBEK
+-Harm And Half-Time Baking Shuffle - Spastic Ink
+-Pacific Rim Theme "Epic Rock" Cover/Remix (Little V), 
+-GAS GAS GAS - Initial D (Metal Cover by Little V) [MANUEL]
+
+Little V, you rock dude!
 
 Latest stable release:
 https://bitbucket.org/Coto88/batallionnds/get/TGDS1.65.zip
