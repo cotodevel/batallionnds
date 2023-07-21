@@ -148,6 +148,10 @@ int doSoundAt(int nsource, int nbuffer, bool loop,
     return 0;
 }
 
+#ifdef ARM9
+static int curPlayBGMus = 0;
+#endif
+
 int playMusic(int nmusic, bool loop)
 {
 	switch(nmusic){
@@ -158,7 +162,24 @@ int playMusic(int nmusic, bool loop)
 		}break;
 		case PLAY_MUSIC:{
 #ifdef ARM9
-			playStream("0:/play.ima");
+			if(curPlayBGMus == 0){
+				playStream("0:/play.ima");
+			}
+			else if(curPlayBGMus == 1){
+				playStream("0:/play2.ima");
+			}
+			else if(curPlayBGMus == 2){
+				playStream("0:/play3.ima");
+			}
+			else if(curPlayBGMus == 3){
+				playStream("0:/play4.ima");
+			}
+			if(curPlayBGMus < 3){
+				curPlayBGMus++;
+			}
+			else{
+				curPlayBGMus = 0;
+			}
 #endif
 		}break;
 		case DEFEAT_MUSIC:{
