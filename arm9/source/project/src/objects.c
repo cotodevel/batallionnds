@@ -691,27 +691,51 @@ GLuint makebuilding32(){
 /* create object for strip mall store                            */
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
-GLuint makeStrip1(int detail){
+GLuint makeStrip1(int detail)
+    {
+    GLuint O;
+    
+    O = glGenLists(1);
+    glNewList(O, GL_COMPILE);
+
     drawBuilding15(colorwhite,  colorred, detail);
-    return(0);
-}
+
+    glEndList();
+    return(O);
+    }
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /* create object for strip mall store                            */
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
-GLuint makeStrip2(int detail){
+GLuint makeStrip2(int detail)
+    {
+    GLuint O;
+    
+    O = glGenLists(1);
+    glNewList(O, GL_COMPILE);
+
     drawBuilding15(colorgrey2, coloryellow, detail);
-    return(0);
-}
+
+    glEndList();
+    return(O);
+    }
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /* create object for strip mall store                            */
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
-GLuint makeStrip3(int detail){
+GLuint makeStrip3(int detail)
+    {
+    GLuint O;
+    
+    O = glGenLists(1);
+    glNewList(O, GL_COMPILE);
+
     drawBuilding15(colorbeige, colorblue, detail);
-    return(0);
-}
+
+    glEndList();
+    return(O);
+    }
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/

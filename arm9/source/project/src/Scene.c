@@ -179,7 +179,7 @@ int InitGL(int argc, char *argv[]){
 #endif
 
 #ifdef ARM9
-	int TGDSOpenGLDisplayListWorkBufferSize = (256*1024);
+	int TGDSOpenGLDisplayListWorkBufferSize = (512*1024);
 	struct Scene * Inst = &scene;
 	glInit(TGDSOpenGLDisplayListWorkBufferSize); //NDSDLUtils: Initializes a new videoGL context
 	
