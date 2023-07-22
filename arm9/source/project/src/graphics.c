@@ -37,7 +37,7 @@
 
     float colorblack[4]	    	= {0.2,  0.2,  0.2,  0.95};
 
-    float colorred[4]	    	= {0.98, 0.17, 0.0,  0.7};
+    float colorred[4]	    	= {1.0,  0.0,  0.0,  0.0};
     float colorred_50[4]	= {0.49, 0.085, 0.0,  0.7}; /* colorred * 0.5 */
     float colorred2[4]	    	= {1.0,  0.0,  0.0,  0.0};
     float colorred3[4]	   	= {0.5,  0.08, 0.0,  0.7};
@@ -51,17 +51,24 @@
     float colorsnow[4]	    	= {0.8,  0.8,  0.9,  0.4};
     float colorsnow2[4]	    	= {0.7,  0.7,  0.8,  0.4};
 
-    float colorgrey1[4]	    	= {0.5,  0.5,  0.5,  0.8};
+    float colorgrey1[4]	    	= {0.7,  0.7,  0.7,  0.0};
     float colorgrey1_50[4]	= {0.25, 0.25, 0.25, 0.4}; /* colorgrey * 0.5 */
     float colorgrey2[4]	    	= {0.7,  0.7,  0.7,  0.0};
     float colorgrey3[4]	    	= {0.6,  0.6,  0.6,  0.0};
     float colorgrey3_50[4]    	= {0.3,  0.3,  0.3,  0.0}; /* colorgrey3 * 0.5 */
     float colorgrey4[4]	    	= {0.55, 0.55, 0.55, 0.0};
 
+#ifdef WIN32
     float colorbrown[4]	    	= {0.75, 0.33, 0.0,  0.8};
-    float colorbeige[4]	    	= {0.75, 0.75, 0.5,  0.7};
+#endif
 
-    float colorblue[4]	    	= {0.0,  0.0,  1.0,  0.6};
+#ifdef ARM9
+	float colorbrown[4]	    	= {0.59*0.1, 0.29*0.1, 0.0,  0.8};
+#endif
+
+	float colorbeige[4]	    	= {0.75, 0.75, 0.5,  0.7};
+
+    float colorblue[4]	    	= {0.0,  0.0,  0.7,  0.0};
     float colorblue2[4]	    	= {0.0,  0.0,  0.7,  0.0};
     float colorwater[4]	    	= {0.0,  0.25, 0.5,  0.0};
 
@@ -86,8 +93,12 @@
 	boom6Obj, boom7Obj, boom8Obj, boom9Obj, boom10Obj, 
 
 	boom1ObjD0, boom2ObjD0, boom3ObjD0, boom4ObjD0, boom5ObjD0, 
-	boom6ObjD0, boom7ObjD0, boom8ObjD0, boom9ObjD0, boom10ObjD0;
+	boom6ObjD0, boom7ObjD0, boom8ObjD0, boom9ObjD0, boom10ObjD0,
+	
+	strip1Obj, strip2Obj, strip3Obj, 
+	strip1ObjD0, strip2ObjD0, strip3ObjD0, 
 
+	powerTower;
     /***************************/
     /* texture mapping stuff   */
     /***************************/
@@ -138,6 +149,16 @@ void makeObjects(char * dataPath)
     /* make the objects */
     /********************/
 
+	powerTower		= makePowerTower(); 
+
+	strip1Obj		= makeStrip1(1);
+    strip2Obj		= makeStrip2(1);
+    strip3Obj		= makeStrip3(1);
+    strip1ObjD0		= makeStrip1(0);
+    strip2ObjD0		= makeStrip2(0);
+    strip3ObjD0		= makeStrip3(0);
+
+    
     makeBooms();
     initFonts();
 }
@@ -1980,29 +2001,7 @@ void wxminus(float x,  float y,  float z,  float wy,  float wz)
 
 void drawBuilding0(float * colour, int detail)
     {
-    makercubenobtm(0.0, 0.4, 0.0, 0.3, 0.4, 0.3, colour);
-		if (detail > 0){
-			glColor3fv(colorblack);
-			wzminus(-0.15, 0.6,  -0.303,  0.05,  0.1);
-			wzminus( 0.0,  0.6,  -0.303,  0.05,  0.1);
-			wzminus( 0.15, 0.6,  -0.303,  0.05,  0.1);
-			wzminus(-0.15, 0.3,  -0.303,  0.05,  0.1);
-			wzminus( 0.0,  0.3,  -0.303,  0.05,  0.1);
-			wzminus( 0.15, 0.3,  -0.303,  0.05,  0.1);
-
-			wzplus(-0.15, 0.6,  0.303,  0.05,  0.1);
-			wzplus( 0.0,  0.6,  0.303,  0.05,  0.1);
-			wzplus(-0.15, 0.3,  0.303,  0.05,  0.1);
-			wzplus( 0.0,  0.3,  0.303,  0.05,  0.1);
-
-			wxplus( 0.303,  0.6,  -0.15, 0.1, 0.05);
-			wxplus( 0.303,  0.6,   0.0,  0.1, 0.05);
-			wxplus( 0.303,  0.6,   0.15, 0.1, 0.05);
-
-			wxminus(-0.303, 0.6,  -0.15, 0.1, 0.05);
-			wxminus(-0.303, 0.6,   0.0,  0.1, 0.05);
-			wxminus(-0.303, 0.6,   0.15, 0.1, 0.05);
-		}
+    	makercubenobtm(0.0, 0.4, 0.0, 0.3, 0.4, 0.3, colour);
     }
 
 
@@ -3222,7 +3221,7 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
 					if (allTreesOnPlane[treeCounter].deathCount && allTreesOnPlane[treeCounter].death2)
 					    drawTower(allTreesOnPlane[treeCounter].deathCount, allTreesOnPlane[treeCounter].death2);
 					else
-					    makePowerTower();
+					    glCallList(powerTower);
 						}
 					break;
 			    case 4:	
@@ -3261,11 +3260,11 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
 					break;
 			    case 14:    makebuilding14();
 					break;
-			    case 15:    makeStrip1(1); 	/* strip mall */
+			    case 15:    glCallList(strip1Obj); 	/* strip mall */
 					break;
-			    case 16:    makeStrip2(1); 	/* strip mall */
+			    case 16:    glCallList(strip2Obj); 	/* strip mall */
 					break;
-			    case 17:    makeStrip3(1); 	/* strip mall */
+			    case 17:    glCallList(strip3Obj); 	/* strip mall */
 					break;
 			    }
 		    else
