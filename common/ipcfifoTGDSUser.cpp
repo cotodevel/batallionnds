@@ -80,7 +80,7 @@ void HandleFifoNotEmptyWeakRef(u32 cmd1, uint32 cmd2){
 		break;
 		
 		case(FIFO_STOPSOUNDEFFECT_FILE):{
-			SoundEffect0Player.stop();
+			//SoundEffect0Player.stop();
 		}
 		break;
 		
@@ -103,30 +103,20 @@ void HandleFifoEmptyWeakRef(uint32 cmd1,uint32 cmd2){
 //project specific stuff
 
 #ifdef ARM9
-void gameoverSound(){
-	//ARM7 ADPCM playback 
-	char filename[256];
-	strcpy(filename, "0:/ah.wav");
-	char * filen = FS_getFileName(filename);
-	strcat(filen, ".ima");
-	u32 streamType = FIFO_PLAYSOUNDSTREAM_FILE;
-	playSoundStreamFromFile((char*)&filen[2], false, streamType);
-}
-
 void playStreamEffect(char * fname, bool loopStream){
 	stopStreamEffect();
 	u32 streamType = FIFO_PLAYSOUNDEFFECT_FILE;
-	playSoundStreamFromFile((char*)((int)fname + 2), loopStream, streamType);
+	playSoundStreamFromFile((char*)&fname[2], loopStream, streamType);
 }
 
-void playStream(char * fname){
-	stopStream();
+void BgMusic(char * filename){
+	BgMusicOff();
 	//ARM7 ADPCM playback 
 	u32 streamType = FIFO_PLAYSOUNDSTREAM_FILE;
-	playSoundStreamFromFile((char*)((int)fname + 2), true, streamType);
+	playSoundStreamFromFile((char*)&filename[2], true, streamType);
 }
 
-void stopStream(){
+void BgMusicOff(){
 	SendFIFOWords(FIFO_STOPSOUNDSTREAM_FILE, 0xFF);
 }
 
@@ -164,8 +154,8 @@ u32 playSoundStreamFromFile(char * videoStructFDFilename, bool loop, u32 streamT
 		while(fifomsg[33] == (uint32)0xFFFFCCAA){
 			swiDelay(1);
 		}
-		return fifomsg[33];
 	}
+	return fifomsg[33];
 }
 
 #endif
