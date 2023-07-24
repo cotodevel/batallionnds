@@ -65,7 +65,7 @@ int initSoundBatallion()
 {
 #ifdef ARM9
 	//init sound: ARM7
-	stopStream();
+	BgMusicOff();
 #endif	
 	maxSources = 2;
     return 0;
@@ -157,22 +157,22 @@ int playMusic(int nmusic, bool loop)
 	switch(nmusic){
 		case DEMO_MUSIC:{
 #ifdef ARM9
-			playStream("0:/demo.wav");
+			BgMusic("0:/demo.wav");
 #endif
 		}break;
 		case PLAY_MUSIC:{
 #ifdef ARM9
 			if(curPlayBGMus == 0){
-				playStream("0:/play.ima");
+				BgMusic("0:/play.ima");
 			}
 			else if(curPlayBGMus == 1){
-				playStream("0:/play2.ima");
+				BgMusic("0:/play2.ima");
 			}
 			else if(curPlayBGMus == 2){
-				playStream("0:/play3.ima");
+				BgMusic("0:/play3.ima");
 			}
 			else if(curPlayBGMus == 3){
-				playStream("0:/play4.ima");
+				BgMusic("0:/play4.ima");
 			}
 			if(curPlayBGMus < 3){
 				curPlayBGMus++;
@@ -184,12 +184,12 @@ int playMusic(int nmusic, bool loop)
 		}break;
 		case DEFEAT_MUSIC:{
 #ifdef ARM9
-			playStream("0:/defeat.wav");
+			BgMusic("0:/defeat.wav");
 #endif
 		}break;
 		case SUCCESS_MUSIC:{
 #ifdef ARM9
-			playStream("0:/pass.wav");
+			BgMusic("0:/pass.wav");
 #endif
 		}break;
 	}
