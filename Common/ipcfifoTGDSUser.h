@@ -69,11 +69,9 @@ extern "C" {
 extern void HandleFifoNotEmptyWeakRef(u32 cmd1, uint32 cmd2);
 extern void HandleFifoEmptyWeakRef(uint32 cmd1,uint32 cmd2);
 extern struct sIPCSharedTGDSSpecific* getsIPCSharedTGDSSpecific();
-
-extern void gameoverSound();
 extern void playStreamEffect(char * fname, bool loopStream);
-extern void playStream(char * fname);
-extern void stopStream();
+extern void BgMusic(char * filename);
+extern void BgMusicOff();
 extern void stopStreamEffect();
 
 #ifdef ARM9
