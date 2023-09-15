@@ -222,6 +222,9 @@ int InitGL(int argc, char *argv[]){
 	glEnable(GL_CULL_FACE);
 
 	glShadeModel(GL_SMOOTH);
+	
+	glEnable(GL_COLOR_MATERIAL);	//allow to mix both glColor3f + light sources when lighting is enabled (glVertex + glNormal3f)
+
 	return 0;
 }
 
