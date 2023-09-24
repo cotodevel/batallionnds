@@ -200,19 +200,26 @@
 /* set up the fog */
 /******************/
 
-    #define MONSTERFOGSTART	    2.5
+    #define MONSTERFOGSTART	    4.5
     #define MONSTERFOGEND	    PLANESIZE
 
-    #define ARMYFOGSTART	    2.5
+    #define ARMYFOGSTART	    4.5
     #define ARMYFOGEND		    PLANESIZE
 
-    #define OVERVIEWFOGSTART	2.5
+    #define OVERVIEWFOGSTART	4.5
     #define OVERVIEWFOGEND	    PLANESIZE
 
 
 
 				    /* height of the battlefield */
+
+#ifdef WIN32
 #define PLANEY		    -1
+#endif
+
+#ifdef ARM9
+#define PLANEY		    -(256.0/192.0)
+#endif
 				    /* PLANEY + 0.003 */
 #define SHADOWS		    -0.997
 				    /* PLANEY + 0.001 */
