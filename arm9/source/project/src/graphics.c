@@ -2718,11 +2718,19 @@ void drawBattlefield(struct road * roads,  float xshift,  float zshift,
 			/* the battlefield  */
 			/********************/
 
+#ifdef WIN32
+#define PLANESIZE2 (PLANESIZE)
+#endif
+
+#ifdef ARM9
+#define PLANESIZE2 (PLANESIZE+ 139.0)
+#endif
+
 			float Gplane[4][3] = {
-			- PLANESIZE,  PLANEY,  - PLANESIZE, 
-			- PLANESIZE,  PLANEY,  + PLANESIZE, 
-			+ PLANESIZE,  PLANEY,  + PLANESIZE, 
-			+ PLANESIZE,  PLANEY,  - PLANESIZE};
+			- (PLANESIZE2),  PLANEY,  - (PLANESIZE2), 
+			- (PLANESIZE2),  PLANEY,  + (PLANESIZE2), 
+			+ (PLANESIZE2),  PLANEY,  + (PLANESIZE2), 
+			+ (PLANESIZE2),  PLANEY,  - (PLANESIZE2)};
 
 
 		/* trying to replace this with 2 triangular polygons for
