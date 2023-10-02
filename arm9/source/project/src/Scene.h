@@ -8,7 +8,7 @@
 #ifdef ARM9
 #include <math.h>
 #include "timerTGDS.h"
-#include "VideoGL.h"
+#include "videoGL.h"
 #include "soundTGDS.h"
 #include "main.h"
 #endif
