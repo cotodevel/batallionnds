@@ -61,7 +61,7 @@ USA
 #include "screenleft_tex.h"
 #include "screenright_tex.h"
 #include "treewood_tex.h"
-#include "Sphere008.h"
+#include "Sphere008_NoLight.h"
 #include "gui_console_connector.h"
 extern int vsnprintf( char* buffer, size_t buf_size, const char* format, va_list vlist );
 #include "ndsDisplayListUtils.h"
@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
 	/////////////////////////////////////////////////////////Reload TGDS Proj///////////////////////////////////////////////////////////
 	char tmpName[256];
 	char ext[256];
-	if(__dsimode == true){
+	if(1 == 0){
 		char TGDSProj[256];
 		char curChosenBrowseFile[256];
 		strcpy(TGDSProj,"0:/");

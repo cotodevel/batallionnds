@@ -345,8 +345,8 @@ void drawSphereCustom(float r, int lats, int longs){
 	}
 #endif
 	#ifdef ARM9
-	#include "Sphere008.h"
+	#include "Sphere008_NoLight.h"
 	glScalef(r, r, r);
-	glCallListGX((u32*)&Sphere008); //comment out when running on NDSDisplayListUtils
+	glCallListGX((u32*)&Sphere008_NoLight); //comment out when running on NDSDisplayListUtils
 	#endif
 }

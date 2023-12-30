@@ -299,6 +299,12 @@ void drawClosedCylinder(float * outcol, float * topcol, int top, int detail){
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /* draw a vertical cone                                          */
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("Ofast")))
+#endif
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void drawCone(float * outcol, float * topcol, float radius, int nsides, int top){
     float   n1a,  n1b,  n2a,  n2b;
     float   v0[3], v1[3], v2[3], v3[3];
@@ -402,7 +408,12 @@ void drawClosedCone(float * outcol, float * topcol,  int top)
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /* draw a generic6 sided object (box, damaged box, pyramid)      */
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
-
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("Ofast")))
+#endif
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void maker(float tail2[8][3], float x,  float y,  float z,
 		float u,  float v,  float w, 
 		float c[4],  float d1,  float d2,  float d3,  float d4)
@@ -475,7 +486,12 @@ void maker(float tail2[8][3], float x,  float y,  float z,
     }
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
-
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("Ofast")))
+#endif
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void makerVapour(float x,  float y,  float z,
 		float u,  float v,  float w)
     {
@@ -509,7 +525,12 @@ void makerVapour(float x,  float y,  float z,
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /* draw a damaged box                                            */
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
-
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("Ofast")))
+#endif
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void makeitd(int matrx,  float * color,  float x,  float y,  float z,
 		float u,  float v,  float w)
     {
@@ -520,7 +541,12 @@ void makeitd(int matrx,  float * color,  float x,  float y,  float z,
 }
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
-
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("Ofast")))
+#endif
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void makerP(float tail2[8][3], float c[4], float x,  float y,  float z,
 		float u,  float v,  float w)
     {
@@ -592,7 +618,12 @@ void makerP(float tail2[8][3], float c[4], float x,  float y,  float z,
 
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
-
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("Ofast")))
+#endif
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void makerFire(float c[4], float x,  float y,  float z,
 		float u,  float v,  float w)
     {
@@ -623,7 +654,12 @@ void makerFire(float c[4], float x,  float y,  float z,
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /* draw a pyramid                                                */
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
-
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("Ofast")))
+#endif
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void makeitPyr(int type,  float * color,  float x,  float y,  float z,
 		float u,  float v,  float w)
     {
@@ -661,7 +697,12 @@ void makeitPyr(int type,  float * color,  float x,  float y,  float z,
 }
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
-
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("Ofast")))
+#endif
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void makerlogo(float x,  float y,  float z,
 	       float u,  float v,  float w, int detail, int l, int r)
     {
@@ -727,7 +768,12 @@ void makerlogo(float x,  float y,  float z,
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /* draw a cube                                                   */
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
-
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("Ofast")))
+#endif
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void makercube(float x,  float y,  float z,
 		float u,  float v,  float w, 
 		float c[4])
@@ -779,7 +825,12 @@ void makercube(float x,  float y,  float z,
     }
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
-
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("Ofast")))
+#endif
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void makerbluecube(float x,  float y,  float z,
 		float u,  float v,  float w, 
 		float c[4])
@@ -813,7 +864,12 @@ void makerbluecube(float x,  float y,  float z,
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /* draw a cube with only a back and a top (for monsterview goog) */
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
-
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("Ofast")))
+#endif
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void makercubeTopBack(float x,  float y,  float z,
 		float u,  float v,  float w, 
 		float c[4])
@@ -846,7 +902,12 @@ void makercubeTopBack(float x,  float y,  float z,
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /* draw a cube with no bottom                                    */
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
-
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("Ofast")))
+#endif
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void makercubenobtm(float x,  float y,  float z,
 		float u,  float v,  float w, 
 		float c[4])
@@ -898,7 +959,12 @@ void makercubenobtm(float x,  float y,  float z,
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /* draw a cube with no bottom and no top                         */
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
-
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("Ofast")))
+#endif
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void makercubenobtmnotop(float x,  float y,  float z,
 		float u,  float v,  float w, 
 		float c[4])
@@ -944,7 +1010,12 @@ void makercubenobtmnotop(float x,  float y,  float z,
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /* draw a cube with no bottom and no top assigning texture coords*/
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
-
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("Ofast")))
+#endif
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void makercubenobtmnotopTEX(float x,  float y,  float z,
 		float u,  float v,  float w, 
 		float c[4])
@@ -1016,7 +1087,12 @@ void makercubenobtmnotopTEX(float x,  float y,  float z,
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /* draw a cube rotated around the x and y axis                   */
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
-
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("Ofast")))
+#endif
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void makerrotcubexy(float u,  float v,  float w, 
 		float theta, float c[4])
     {
@@ -1084,7 +1160,12 @@ void makerrotcubexy(float u,  float v,  float w,
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /* draw a 1 colour cube rotated around the x and y axis          */
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
-
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("Ofast")))
+#endif
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void makerrotcubexyflat(float u,  float v,  float w, 
 		float theta, float c[4])
     {
@@ -1127,7 +1208,12 @@ void makerrotcubexyflat(float u,  float v,  float w,
     }
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
-
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("Ofast")))
+#endif
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void andysphdraw(float loc[4], int count)
     {
     if (count == 0)
