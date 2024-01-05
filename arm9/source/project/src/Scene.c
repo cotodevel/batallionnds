@@ -197,10 +197,10 @@ int InitGL(int argc, char *argv[]){
 	arrayOfTextures[2] = (u32)&treewood_tex; //2: treewood_tex.bmp
 	arrayOfTextures[3] = (u32)&road_tex; //3: road_tex.bmp
 	arrayOfTextures[4] = (u32)&logo_tex; //4: logo_tex.bmp
-	int texturesInSlot = LoadLotsOfGLTextures((u32*)&arrayOfTextures, (int*)&texturesBatallionGL, 5); //Implements both glBindTexture and glTexImage2D 
+	int texturesInSlot = LoadLotsOfGLTextures((u32*)&arrayOfTextures, (sizeof(arrayOfTextures)/sizeof(u32)) ); //Implements both glBindTexture and glTexImage2D 
 	int i = 0;
 	for(i = 0; i < texturesInSlot; i++){
-		printf("Texture loaded: %d:textID[%d] Size: %d", i, texturesBatallionGL[i], getTextureBaseFromTextureSlot(activeTexture));
+		printf("Tex. index: %d: Tex. name[%d]", i, getTextureNameFromIndex(i));
 	}
 	#endif
 
