@@ -4119,22 +4119,23 @@ void drawRoads(struct road * roads, float xshift, float zshift,
 	
 	glPushMatrix();
 	    glTranslatef(cprime, 0, dprime);
-	    float grass1[3], grass2[3], grass3[3], grass4[3];
-		register int j, i;
+		{
+			float grass1[3], grass2[3], grass3[3], grass4[3];
+			register int j, i;
 
-		grass1[1] = grass2[1] = grass3[1] = grass4[1] = PLANEY;
+			grass1[1] = grass2[1] = grass3[1] = grass4[1] = PLANEY;
 
-		glBegin(GL_QUADS);
-		grass1[2] = grass4[2] =  0.015;
-		grass2[2] = grass3[2] = 0.015;
+			glBegin(GL_QUADS);
+			grass1[2] = grass4[2] =  0.015;
+			grass2[2] = grass3[2] = 0.015;
 
-		glVertex3fv(grass1);
-		glVertex3fv(grass2);
+			glVertex3fv(grass1);
+			glVertex3fv(grass2);
 
-		glVertex3fv(grass3);
-		glVertex3fv(grass4);
-		glEnd();
-		
+			glVertex3fv(grass3);
+			glVertex3fv(grass4);
+			glEnd();
+		}
 	glPopMatrix(
 		#ifdef ARM9
 		1
