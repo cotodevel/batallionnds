@@ -90,7 +90,6 @@ extern void keyboardReleaseNormal(u32 key, int x, int y);
 
 extern void drawScene(void);	/// Renders a single frame of the scene
 extern struct Scene scene;	/// the scene we render
-
 extern void initializeCamera(struct Camera * Inst);	/// initialized the camera to default position
 extern void dec(struct Camera * Inst);	/// decreases distance to origin
 extern void inc(struct Camera * Inst);	/// increases distance to origin
@@ -98,11 +97,8 @@ extern void clockwise(struct Camera * Inst);	/// rotate scene clockwise
 extern void anticlockwise(struct Camera * Inst);	/// rotate scene anticlockwise
 extern void tiltup(struct Camera * Inst);	/// tilts camera upwards
 extern void tiltdown(struct Camera * Inst);	/// tilts camera downwards
-
 extern int TWLPrintf(const char *fmt, ...);
-
 extern float colorbrown[4];
-
 extern int InitGL(int argc, char *argv[]); /// initialises OpenGL
 extern void render3DUpperScreen();
 extern void render3DBottomScreen();
@@ -112,8 +108,24 @@ extern void processSpKey(int key, int x, int y);
 extern void releaseSpKey(int key, int x, int y);
 extern void setPlayConditions(void);
 extern void initialization(void);
-
 extern bool renderCube;
+extern GLfloat light_diffuse0Scene[4]; 
+extern GLfloat light_ambient0Scene[4]; 
+extern GLfloat light_specular0Scene[4]; 
+extern GLfloat light_position0Scene[4];
+
+// light 1 colours
+extern GLfloat light_ambient1Scene[4];
+extern GLfloat light_diffuse1Scene[4];
+extern GLfloat light_specular1Scene[4];
+extern GLfloat light_position1Scene[4];
+
+//material
+extern GLfloat mat_ambient[4]; 
+extern GLfloat mat_diffuse[4]; 
+extern GLfloat mat_specular[4]; 
+extern GLfloat mat_emission[4];
+extern GLfloat high_shininess[4];
 
 #ifdef __cplusplus
 }
