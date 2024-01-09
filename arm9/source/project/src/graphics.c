@@ -93,12 +93,8 @@
 	boom6Obj, boom7Obj, boom8Obj, boom9Obj, boom10Obj, 
 
 	boom1ObjD0, boom2ObjD0, boom3ObjD0, boom4ObjD0, boom5ObjD0, 
-	boom6ObjD0, boom7ObjD0, boom8ObjD0, boom9ObjD0, boom10ObjD0,
-	
-	strip1Obj, strip2Obj, strip3Obj, 
-	strip1ObjD0, strip2ObjD0, strip3ObjD0, 
+	boom6ObjD0, boom7ObjD0, boom8ObjD0, boom9ObjD0, boom10ObjD0;
 
-	powerTower;
     /***************************/
     /* texture mapping stuff   */
     /***************************/
@@ -149,16 +145,6 @@ void makeObjects(char * dataPath)
     /* make the objects */
     /********************/
 
-	powerTower		= makePowerTower(); 
-
-	strip1Obj		= makeStrip1(1);
-    strip2Obj		= makeStrip2(1);
-    strip3Obj		= makeStrip3(1);
-    strip1ObjD0		= makeStrip1(0);
-    strip2ObjD0		= makeStrip2(0);
-    strip3ObjD0		= makeStrip3(0);
-
-    
     makeBooms();
     initFonts();
 }
@@ -3175,19 +3161,9 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
 				glStoreMatrix(0);
 #endif
 				glPushMatrix();
-				makercubenobtmnotopTEX(x, y+0.4, z, 0.1, 0.4, 0.1, colorbrown);	
+				makercube(x, y+0.4, z, 0.1, 0.4, 0.1, colorbrown);	
 
-				//circle (fast)
-				
-				glColor3fv(treeColor);
-				spheredat[0] = x;
-				spheredat[1] = y+1;
-				spheredat[2] = z;
-				spheredat[3] = 0.3;
-				andysphdraw(spheredat, sph);
-				
-				//green pine (slow)
-				//makeitPyr(1, treeColor, x, y+0.8, z, 0.2, 0.4, 0.2);
+				makeitPyr(1, treeColor, x, y+0.8, z, 0.2, 0.4, 0.2);
 
 				glPopMatrix(
 					#ifdef ARM9
@@ -3229,7 +3205,7 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
 					if (allTreesOnPlane[treeCounter].deathCount && allTreesOnPlane[treeCounter].death2)
 					    drawTower(allTreesOnPlane[treeCounter].deathCount, allTreesOnPlane[treeCounter].death2);
 					else
-					    glCallList(powerTower);
+					    makePowerTower();
 						}
 					break;
 			    case 4:	
@@ -3247,7 +3223,7 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
 			    case 8:	drawBuilding8(colorbeige,  colorbrown, detail);
 					break;
 			    case 9:	
-					makebuilding9(1); /*water tower*/
+					makebuilding9(0); /*water tower*/
 					break;
 			    case 10:{   
 					makebuilding10();
@@ -3268,11 +3244,11 @@ void drawtrees(struct tree * allTreesOnPlane, int numTreesOnPlane, int counter,
 					break;
 			    case 14:    makebuilding14();
 					break;
-			    case 15:    glCallList(strip1Obj); 	/* strip mall */
+			    case 15:    makeStrip1(1); 	/* strip mall */
 					break;
-			    case 16:    glCallList(strip2Obj); 	/* strip mall */
+			    case 16:    makeStrip2(1); 	/* strip mall */
 					break;
-			    case 17:    glCallList(strip3Obj); 	/* strip mall */
+			    case 17:    makeStrip3(1); 	/* strip mall */
 					break;
 			    }
 		    else
@@ -3968,84 +3944,7 @@ void drawHeroWeapon(float targetx, float targetz, float x, float y,
 
 void makeBooms()
 {
-    int counter;
-    GLuint O;
-
-    float spheredat[4];
-	spheredat[0] = 0;
-	spheredat[1] = 0;
-	spheredat[2] = 0;
-    
-    for(counter=1;counter<=10;counter++)
-	{
-	O = glGenLists(1);
-	glNewList(O, GL_COMPILE);
-	   
-	spheredat[3] = 0.03 * counter;
-
-	andysphdraw(spheredat, 3);
-
-	glEndList();
-
-	switch(counter)
-	    {
-	    case 1: boom1Obj = O;
-		    break;
-	    case 2: boom2Obj = O;
-		    break;
-	    case 3: boom3Obj = O;
-		    break;
-	    case 4: boom4Obj = O;
-		    break;
-	    case 5: boom5Obj = O;
-		    break;
-	    case 6: boom6Obj = O;
-		    break;
-	    case 7: boom7Obj = O;
-		    break;
-	    case 8: boom8Obj = O;
-		    break;
-	    case 9: boom9Obj = O;
-		    break;
-	    case 10: boom10Obj = O;
-		    break;
-	    }
-
-	/* Build smaller booms for detail level 0 */
-
-	O = glGenLists(1);
-	glNewList(O, GL_COMPILE);
-	   
-	spheredat[3] = 0.02 * counter;
-
-	andysphdraw(spheredat, 1);
-
-	glEndList();
-
-	switch(counter)
-	    {
-	    case 1: boom1ObjD0 = O;
-		    break;
-	    case 2: boom2ObjD0 = O;
-		    break;
-	    case 3: boom3ObjD0 = O;
-		    break;
-	    case 4: boom4ObjD0 = O;
-		    break;
-	    case 5: boom5ObjD0 = O;
-		    break;
-	    case 6: boom6ObjD0 = O;
-		    break;
-	    case 7: boom7ObjD0 = O;
-		    break;
-	    case 8: boom8ObjD0 = O;
-		    break;
-	    case 9: boom9ObjD0 = O;
-		    break;
-	    case 10: boom10ObjD0 = O;
-		    break;
-	    }
-	}
+	
 }
 
 
@@ -4055,74 +3954,9 @@ void makeBooms()
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
 void drawBooms(struct boom * boomers, int detail)
-    {
-    struct boom  * tempboom;
-    struct boom b;
-
-    glColor3fv(coloryellow);
-
-    for(tempboom = boomers->next;tempboom != NULL;tempboom = tempboom->next)
-	{
-	b = *tempboom;
-		
-	if (detail >= 2)
-	    {
-	    coloryellow[3] = (11 - b.count) * 0.1;
-	    glColor4fv(coloryellow);
-	    }
-	
-	glPushMatrix();
-	    glTranslatef(b.x, b.y, b.z);
-
-	    if (detail == 0) {
-		/* Draw smaller 'flickering' explosions (Johan) */
-
-		switch(b.count) {
-		case 1: glCallList(boom1ObjD0);
-			break;
-		case 3: glCallList(boom3ObjD0);
-			break;
-		case 5: glCallList(boom5ObjD0);
-			break;
-		case 7: glCallList(boom7ObjD0);
-			break;
-		case 9: glCallList(boom9ObjD0);
-			break;
-		}
-
-	    } else {
-
-		switch(b.count) {
-		case 1: glCallList(boom1Obj);
-			break;
-		case 2: glCallList(boom2Obj);
-			break;
-		case 3: glCallList(boom3Obj);
-			break;
-		case 4: glCallList(boom4Obj);
-			break;
-		case 5: glCallList(boom5Obj);
-			break;
-		case 6: glCallList(boom6Obj);
-			break;
-		case 7: glCallList(boom7Obj);
-			break;
-		case 8: glCallList(boom8Obj);
-			break;
-		case 9: glCallList(boom9Obj);
-			break;
-		case 10: glCallList(boom10Obj);
-			break;
-		}
-	    }
-		glPopMatrix(
-			#ifdef ARM9
-			1
-			#endif
-		);
-	}
-	
-    }
+{
+    
+}
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
@@ -4185,13 +4019,13 @@ void drawBeam(float x, float z, int horz, int vert, int monsterName,
     switch (detail)
 	{
 	case -1:
-	case 0:	nlines = 4;
+	case 0:	nlines = 2;
 		break;
 		
-	case 1:	nlines = 25;
+	case 1:	nlines = 2;
 		break;
 		
-	case 2:	nlines = 40;
+	case 2:	nlines = 2;
 		break;
 	}
 
@@ -4211,23 +4045,6 @@ void drawBeam(float x, float z, int horz, int vert, int monsterName,
 	    glVertex3fv(loc1);
 		glColor3fv(c);
 	    glVertex3fv(loc3);
-	glEnd();
-	}
-
-    if (detail > 0)
-	{
-	/**********************************/
-	/* shadow of beam                 */
-	/**********************************/
-
-	glColor3fv(colorblack);
-	loc1[1] = SHADOWS;
-	loc3[1] = SHADOWS;
-
-	glBegin(GL_TRIANGLES);
-	    glVertex3fv(loc2);
-	    glVertex3fv(loc1);
-		glVertex3fv(loc3);
 	glEnd();
 	}
 
@@ -4302,29 +4119,12 @@ void drawRoads(struct road * roads, float xshift, float zshift,
 	
 	glPushMatrix();
 	    glTranslatef(cprime, 0, dprime);
-	    if (detail == 0){
+		{
 			float grass1[3], grass2[3], grass3[3], grass4[3];
 			register int j, i;
 
 			grass1[1] = grass2[1] = grass3[1] = grass4[1] = PLANEY;
-    
-			if (detail == 0)
-			{
-			glBegin(GL_POINTS);
-			for(i=-PLANESIZE+1; i<=PLANESIZE; i+=1)
-				{
-				grass1[0] = i;
 
-				for(j=-PLANESIZE + 1; j <= PLANESIZE; j += 1)
-				{
-				grass1[2] = j;
-
-				glVertex3fv(grass1); 	/* a single point */
-				}
-				}
-			}
-			else
-			{
 			glBegin(GL_QUADS);
 			grass1[2] = grass4[2] =  0.015;
 			grass2[2] = grass3[2] = 0.015;
@@ -4334,42 +4134,6 @@ void drawRoads(struct road * roads, float xshift, float zshift,
 
 			glVertex3fv(grass3);
 			glVertex3fv(grass4);
-			}
-			glEnd();
-		}
-		else{
-			float grass1[3], grass2[3], grass3[3], grass4[3];
-			register int j, i;
-
-			grass1[1] = grass2[1] = grass3[1] = grass4[1] = PLANEY;
-    
-			if (detail == 0)
-			{
-			glBegin(GL_POINTS);
-			for(i=-PLANESIZE+1; i<=PLANESIZE; i+=1)
-				{
-				grass1[0] = i;
-
-				for(j=-PLANESIZE + 1; j <= PLANESIZE; j += 1)
-				{
-				grass1[2] = j;
-
-				glVertex3fv(grass1); 	/* a single point */
-				}
-				}
-			}
-			else
-			{
-			glBegin(GL_QUADS);
-			grass1[2] = grass4[2] =  0.015;
-			grass2[2] = grass3[2] = 0.015;
-
-			glVertex3fv(grass1);
-			glVertex3fv(grass2);
-
-			glVertex3fv(grass3);
-			glVertex3fv(grass4);
-			}
 			glEnd();
 		}
 	glPopMatrix(
@@ -4606,30 +4370,17 @@ void drawProjectiles(struct projectile * allProjs, int counter,
 		
 	    switch(temp->type){
 		case PROJTANK:
-		case PROJROCKET:glPushMatrix();		/* white cube shells */
+		case PROJROCKET:
+				glPushMatrix();		/* white cube shells */
 				    glTranslatef(x,  y,  z);
-					{
-					if (detail <= 0)
-						makerrotcubexyflat(0.035, 0.035, 0.035, rotRatio, colorwhite);	
-					else
-						makerrotcubexy(0.05,  0.05,  0.05, rotRatio, colorwhite);	
-
-					if (itsChristmas)
-						{
-							makerrotcubexy(0.01, 0.051, 0.051, rotRatio, colorred);
-						makerrotcubexy(0.051, 0.051, 0.01, rotRatio, colorred);
-						}
-					}
+					makerrotcubexy(0.05,  0.05,  0.05, rotRatio, colorwhite);	
 				glPopMatrix(
 					#ifdef ARM9
 					1
 					#endif
 				);
-				if (detail > 0)
-				    {
-				    glColor4fv(colorblack);
-				    drawShadow (x, z, 0.05, 0.05);
-				    }
+				glColor4fv(colorblack);
+				drawShadow (x, z, 0.05, 0.05);
 				break;
 				
 		case PROJTECHS: glPushMatrix();		/* techs shell */
@@ -4647,11 +4398,8 @@ void drawProjectiles(struct projectile * allProjs, int counter,
 					1
 					#endif
 				);
-				if (detail > 0)
-				    {
-				    glColor4fv(colorblack);
-				    drawShadow (x, z, 0.05, 0.05);
-				    }
+				glColor4fv(colorblack);
+				drawShadow (x, z, 0.05, 0.05);
 				break;
 				
 		case PROJFIRE:  break;			/* flames */
@@ -4683,15 +4431,12 @@ void drawProjectiles(struct projectile * allProjs, int counter,
 					1
 					#endif
 				);
-				if (detail > 0)
-				    {
-				    glColor4fv(colorblack);
-				    drawShadow (x, z, 0.05, 0.05);
-				    }
+				glColor4fv(colorblack);
+				drawShadow (x, z, 0.05, 0.05);
 				break;
     
-		default:	showError("Bogus Projectile in Projectile List! (drawProjectiles)");
-				break;
+		default:	
+		break;
 		}
 	    }
 
@@ -4700,10 +4445,10 @@ void drawProjectiles(struct projectile * allProjs, int counter,
     /* draw fires                     */
     /**********************************/
 	    
-    for (i=0;i<fireCounter;i++)
+    for (i=0;i< (fireCounter - 4);i++)
 	{
 	col[1] = fires[i].col;
-	if ((fabs(fires[i].x) <= PLANESIZE) && (fabs(fires[i].z) <= PLANESIZE))
+	if ((fabs(fires[i].x) <= (PLANESIZE-4)) && (fabs(fires[i].z) <= (PLANESIZE-4)))
 	    makeitPyr(12, col, fires[i].x, PLANEY+fires[i].height, fires[i].z,
 		fires[i].xwid, fires[i].height, fires[i].zwid);
 	}
@@ -4739,110 +4484,3 @@ void drawProjectiles(struct projectile * allProjs, int counter,
 
 
     }
-
-
-/*
-#define J_SPACE 32
-#define J_DASH 34
-
-#define J_1 50
-#define J_2 51
-#define J_3 52
-#define J_4 53
-#define J_5 54
-#define J_6 55
-#define J_7 56
-#define J_8 57
-#define J_9 58
-
-
-#define J_H_A 65
-
-#define J_K_A 145
-#define J_K_I 146
-#define J_K_U 147
-#define J_K_E 148
-#define J_K_O 149
-
-#define J_K_KA 150
-#define J_K_KI 151
-#define J_K_KU 152
-#define J_K_KE 153
-#define J_K_KO 154
-
-#define J_K_SA 155
-#define J_K_SI 156
-#define J_K_SU 157
-#define J_K_SE 158
-#define J_K_SO 159
-
-#define J_K_TA 160
-#define J_K_TI 161
-#define J_K_TU 162
-#define J_K_TE 163
-#define J_K_TO 164
-
-#define J_K_NA 165
-#define J_K_NI 166
-#define J_K_NU 167
-#define J_K_NE 168
-#define J_K_NO 169
-
-#define J_K_HA 170
-#define J_K_HI 171
-#define J_K_HU 172
-#define J_K_HE 173
-#define J_K_HO 174
-
-#define J_K_MA 175
-#define J_K_MI 176
-#define J_K_MU 177
-#define J_K_ME 178
-#define J_K_MO 179
-
-#define J_K_YA 180
-#define J_K_YU 182
-#define J_K_YO 184
-
-#define J_K_RA 185
-#define J_K_RI 186
-#define J_K_RU 187
-#define J_K_RE 188
-#define J_K_RO 189
-
-#define J_K_GA 200
-#define J_K_GI 201
-#define J_K_GU 202
-#define J_K_GE 203
-#define J_K_GO 204
-
-#define J_K_ZA 205
-#define J_K_ZI 206
-#define J_K_ZU 207
-#define J_K_ZE 208
-#define J_K_ZO 209
-
-#define J_K_DA 210
-#define J_K_DE 213
-#define J_K_DO 214
-
-#define J_K_BA 215
-#define J_K_BI 216
-#define J_K_BU 217
-#define J_K_BE 218
-#define J_K_BO 219
-
-#define J_K_PA 220
-#define J_K_PI 221
-#define J_K_PU 222
-#define J_K_PE 223
-#define J_K_PO 224
-
-
-    char energyJapanese[]	= {J_K_E, J_K_NE, J_K_RU, J_K_GI, 0};
-    char googelonJapanese[]	= {J_K_GU, J_K_GE, J_K_RO, J_SPACE, J_6, 0};
-    char techsJapanese[]	= {J_K_TE, J_K_TU, J_K_KU, J_K_SU, J_SPACE, J_7, 0};
-    char flutterJapanese[]  	= {J_K_HU, J_K_RA, J_K_TU, J_K_TA, J_SPACE, J_9, 0};
-    char vapourJapanese[]   	= {J_K_ZA, J_DASH, J_K_BE, J_DASH, J_K_PA, J_DASH, J_SPACE, J_8, 0};
-*/
-

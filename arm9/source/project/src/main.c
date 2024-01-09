@@ -61,7 +61,7 @@ USA
 #include "screenleft_tex.h"
 #include "screenright_tex.h"
 #include "treewood_tex.h"
-#include "Sphere008.h"
+#include "Sphere008_NoLight.h"
 #include "gui_console_connector.h"
 extern int vsnprintf( char* buffer, size_t buf_size, const char* format, va_list vlist );
 #include "ndsDisplayListUtils.h"
@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
 	/////////////////////////////////////////////////////////Reload TGDS Proj///////////////////////////////////////////////////////////
 	char tmpName[256];
 	char ext[256];
-	if(__dsimode == true){
+	if(1 == 0){
 		char TGDSProj[256];
 		char curChosenBrowseFile[256];
 		strcpy(TGDSProj,"0:/");
@@ -6365,6 +6365,24 @@ void drawScene(){
 		glColor3f(1.0, 1.0, 1.0); //clear last scene color/light vectors
 	#endif
 	
+		glLightfv(GL_LIGHT0, GL_AMBIENT,  light_ambient0Scene);
+		glLightfv(GL_LIGHT0, GL_DIFFUSE,  light_diffuse0Scene);
+		glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular0Scene);
+		glLightfv(GL_LIGHT0, GL_POSITION, light_position0Scene);
+	
+		glLightfv(GL_LIGHT1, GL_AMBIENT, light_ambient1Scene);
+		glLightfv(GL_LIGHT1, GL_DIFFUSE, light_diffuse1Scene);
+		glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular1Scene);
+		glLightfv(GL_LIGHT1, GL_POSITION, light_position1Scene);
+
+		#ifdef ARM9
+		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,   mat_ambient); 
+		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,   mat_diffuse);
+		glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  mat_specular);
+		glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION,  mat_emission);
+		glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, high_shininess);
+		#endif
+
 	glPushMatrix();
 	
 	if (view == MONSTERVIEW){
@@ -6539,11 +6557,9 @@ void drawScene(){
 	#if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
     glutSwapBuffers();
 	#endif
-	#if defined(ARM9)
-	glFlush();	
-	#endif
 	#if (!defined(_MSC_VER) && defined(ARM9)) //TGDS ARM9
-    //handleARM9SVC();	// Do not remove, handles TGDS services 
-    IRQVBlankWait();
+	handleARM9SVC();	// Do not remove, handles TGDS services 
+    glFlush();	
+	IRQVBlankWait();
     #endif
 }

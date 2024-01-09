@@ -28,25 +28,30 @@ int widthScene;	/// the width of the window
 int heightScene;	/// the height of the window
 
 // light 0 colours
-#ifdef WIN32
-GLfloat ambient0Scene[4]	= {0.1f, 0.1f, 0.1f, 1.0f}; //WIN32
-GLfloat diffuse0Scene[4]	= {0.4f, 0.4f, 0.4f, 1.01f}; //WIN32
-GLfloat specular0Scene[4]	= {0.2f, 0.2f, 0.2f, 1.0f}; //WIN32
-GLfloat position0Scene[4]	= {0.0f, -1.0f, 0.0f, 0.0f}; //WIN32
-#endif
-#ifdef ARM9
-GLfloat ambient0Scene[]  = { 0.0f, 0.0f, 0.0f, 1.0f }; //NDS
-GLfloat diffuse0Scene[]  = { 1.0f, 1.0f, 1.0f, 1.0f }; //NDS
-GLfloat specular0Scene[] = { 1.0f, 1.0f, 1.0f, 1.0f }; //NDS
-GLfloat position0Scene[] = { 2.0f, 5.0f, 5.0f, 0.0f }; //NDS
-#endif
+
+//https://www.glprogramming.com/red/chapter05.html
+//The GL_DIFFUSE parameter probably most closely correlates with what you naturally think of as "the color of a light." 
+//It defines the RGBA color of the diffuse light that a particular light source adds to a scene. By default, GL_DIFFUSE is (1.0, 1.0, 1.0, 1.0) for GL_LIGHT0, 
+//which produces a bright, white light as shown in the left side of "Plate 13" in Appendix I. 
+//The default value for any other light (GL_LIGHT1, ... , GL_LIGHT7) is (0.0, 0.0, 0.0, 0.0).
+GLfloat light_diffuse0Scene[4]	= {0.3f, 0.3f, 0.4f, 1.01f}; //WIN32
+
+GLfloat light_ambient0Scene[4]	= {0.9f, 0.9f, 0.9f, 1.0f}; //WIN32
+GLfloat light_specular0Scene[4]	= {0.6f, -0.6f, 0.6f, 1.0f}; //WIN32
+GLfloat light_position0Scene[4]	= {1.0f, 3.0f, 1.6f, 1.0f}; //WIN32
 
 // light 1 colours
-GLfloat ambient1Scene[4]	= {0.1f, 0.1f, 0.1f, 1.0f};
-GLfloat diffuse1Scene[4]	= {0.45f, 0.45f, 0.45f, 1.0f};
-GLfloat specular1Scene[4]	= {0.5f, 0.5f, 0.5f, 1.0f};
-GLfloat position1Scene[4]	= {-2.0f, -5.0f, -5.0f, -1.0f};
-GLfloat direction1Scene[4]	= {0.0f, 0.0f, -1.0f};
+GLfloat light_ambient1Scene[4]	= {0.1f, 0.1f, 0.1f, 1.0f};
+GLfloat light_diffuse1Scene[4]	= {0.3f, 0.3f, 0.3f, 1.0f};
+GLfloat light_specular1Scene[4]	= {0.5f, 0.5f, -0.5f, 1.0f};
+GLfloat light_position1Scene[4]	= {1.0f, -0.6f, 1.0f, 1.0f};
+
+//material
+GLfloat mat_ambient[]    = { 1.0f, 8.0f, 8.0f, 0.0f }; 
+GLfloat mat_diffuse[]    = { 16.0f, 16.0f, 16.0f, 0.0f }; 
+GLfloat mat_specular[]   = { 8.0f, 8.0f, 8.0f, 0.0f }; 
+GLfloat mat_emission[]   = { 5.0f, 5.0f, 5.0f, 0.0f }; 
+GLfloat high_shininess[] = { 128.0f };
 
 /// Resets the camera position to default position and tilt
 void initializeCamera(struct Camera * Inst){
@@ -103,15 +108,6 @@ void initializeScene(struct Scene * Inst){
 	// set up our directional overhead lights
 	Inst->light0On = false;
 	Inst->light1On = true;
-	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient0Scene);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse0Scene);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, specular0Scene);
-	glLightfv(GL_LIGHT0, GL_POSITION, position0Scene);
-	
-	//glLightfv(GL_LIGHT1, GL_AMBIENT, ambient1Scene);
-	//glLightfv(GL_LIGHT1, GL_DIFFUSE, diffuse1Scene);
-	//glLightfv(GL_LIGHT1, GL_SPECULAR, specular1Scene);
-	//glLightfv(GL_LIGHT1, GL_POSITION, position1Scene);
 	
 	Inst->fogMode = false;
 	Inst->wireMode = false;		/// wireframe mode on / off
@@ -197,10 +193,10 @@ int InitGL(int argc, char *argv[]){
 	arrayOfTextures[2] = (u32)&treewood_tex; //2: treewood_tex.bmp
 	arrayOfTextures[3] = (u32)&road_tex; //3: road_tex.bmp
 	arrayOfTextures[4] = (u32)&logo_tex; //4: logo_tex.bmp
-	int texturesInSlot = LoadLotsOfGLTextures((u32*)&arrayOfTextures, (int*)&texturesBatallionGL, 5); //Implements both glBindTexture and glTexImage2D 
+	int texturesInSlot = LoadLotsOfGLTextures((u32*)&arrayOfTextures, (sizeof(arrayOfTextures)/sizeof(u32)) ); //Implements both glBindTexture and glTexImage2D 
 	int i = 0;
 	for(i = 0; i < texturesInSlot; i++){
-		printf("Texture loaded: %d:textID[%d] Size: %d", i, texturesBatallionGL[i], getTextureBaseFromTextureSlot(activeTexture));
+		printf("Tex. index: %d: Tex. name[%d]", i, getTextureNameFromIndex(i));
 	}
 	#endif
 
@@ -216,7 +212,6 @@ int InitGL(int argc, char *argv[]){
 	ReSizeGLScene(255, 191);
 	glMaterialShinnyness();
 #endif
-
 	// setup backface culling
 	glCullFace(GL_BACK);
 	glEnable(GL_CULL_FACE);
@@ -224,6 +219,7 @@ int InitGL(int argc, char *argv[]){
 	glShadeModel(GL_SMOOTH);
 	
 	glEnable(GL_COLOR_MATERIAL);	//allow to mix both glColor3f + light sources when lighting is enabled (glVertex + glNormal3f)
+	glEnable(GL_LIGHT0|GL_LIGHT1);
 
 	return 0;
 }
@@ -284,7 +280,9 @@ int startTGDSProject(int argc, char *argv[])
 	keyboardInput((unsigned char)'1', 0, 0);
 	keyboardInput((unsigned char)'2', 0, 0);
 	keyboardInput((unsigned char)'F', 0, 0);
-	//glEnable(GL_LIGHTING); //disabled lights 
+	
+	glEnable(GL_LIGHTING); 
+	glEnable(GL_LIGHT0|GL_LIGHT1);
 	
 
 	// start the timer and enter the mail GLUT loop
@@ -345,8 +343,8 @@ void drawSphereCustom(float r, int lats, int longs){
 	}
 #endif
 	#ifdef ARM9
-	#include "Sphere008.h"
+	#include "Sphere008_NoLight.h"
 	glScalef(r, r, r);
-	glCallListGX((u32*)&Sphere008); //comment out when running on NDSDisplayListUtils
+	glCallListGX((u32*)&Sphere008_NoLight); //comment out when running on NDSDisplayListUtils
 	#endif
 }
