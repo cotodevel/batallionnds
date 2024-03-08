@@ -31,6 +31,7 @@ USA
 #include "InterruptsARMCores_h.h"
 #include "dldi.h"
 #include "ipcfifoTGDSUser.h"
+#include "exceptionTGDS.h"
 
 IMA_Adpcm_Player backgroundMusicPlayer;	//Actual PLAYER Instance. See ima_adpcm.cpp -> [PLAYER: section
 IMA_Adpcm_Player SoundEffect0Player;
@@ -66,19 +67,24 @@ void playSoundStreamARM7(){
 	}
 	fresult = pf_mount(currentFH);
 	if (fresult != FR_OK) { 
+		
+		//Throw exception
+		int stage = 10;
+		handleDSInitOutputMessage("playSoundStreamARM7(): pf_mount() failed");
+		handleDSInitError7(stage, (u32)savedDSHardware);
+		
 		fifomsg[33] = 0xAABBCCDD;
 	}
 	fresult = pf_open(fname, currentFH);
-	if(streamType == FIFO_PLAYSOUNDEFFECT_FILE){
-		if (fresult != FR_OK) { 
-			//strcpy((char*)0x02000000, "soundeffect failed to open:");
-			//strcat((char*)0x02000000, filename);
-		}
-		else{
-			//strcpy((char*)0x02000000, "soundeffect open OK:"); //ok so far
-			//strcat((char*)0x02000000, filename);
-		}
+	if (fresult != FR_OK) { 
+		//strcpy((char*)0x02000000, "soundfile failed to open:");
+		//strcat((char*)0x02000000, filename);
 	}
+	else{
+		//strcpy((char*)0x02000000, "soundfile open OK:"); //ok so far
+		//strcat((char*)0x02000000, filename);
+	}
+	
 	pf_lseek(0, currentFH);
 	
 	int argBuffer[MAXPRINT7ARGVCOUNT];
