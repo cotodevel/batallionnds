@@ -40,22 +40,17 @@ struct sIPCSharedTGDSSpecific {
 	char filename[256];
 };
 
-#ifdef ARM9
-
 //TGDS Memory Layout ARM7/ARM9 Cores
-#define TGDS_ARM7_MALLOCSTART (u32)(0x06000000)
-#define TGDS_ARM7_MALLOCSIZE (int)(96*1024)
-#define TGDSDLDI_ARM7_ADDRESS (u32)(TGDS_ARM7_MALLOCSTART + TGDS_ARM7_MALLOCSIZE)
-
-#endif
+#define TGDS_ARM7_MALLOCSTART (u32)(0x06018000)
+#define TGDS_ARM7_MALLOCSIZE (int)(16*1024)
+#define TGDSDLDI_ARM7_ADDRESS (u32)(TGDS_ARM7_MALLOCSTART + TGDS_ARM7_MALLOCSIZE)	//0x0601C000
+#define TGDS_ARM7_AUDIOBUFFER_STREAM (u32)(0x03800000)
 
 #define FIFO_PLAYSOUNDSTREAM_FILE (u32)(0xFFFFABCB)
 #define FIFO_STOPSOUNDSTREAM_FILE (u32)(0xFFFFABCC)
 
 #define FIFO_PLAYSOUNDEFFECT_FILE (u32)(0xFFFFABCD)
 #define FIFO_STOPSOUNDEFFECT_FILE (u32)(0xFFFFABCE)
-
-#define workBufferSoundEffect0 (s16*)((int)0x06000000 + (96*1024) - (4096*4))
 
 #define NO_VIDEO_PLAYBACK	1
 
@@ -69,13 +64,20 @@ extern "C" {
 extern void HandleFifoNotEmptyWeakRef(u32 cmd1, uint32 cmd2);
 extern void HandleFifoEmptyWeakRef(uint32 cmd1,uint32 cmd2);
 extern struct sIPCSharedTGDSSpecific* getsIPCSharedTGDSSpecific();
-extern void playStreamEffect(char * fname, bool loopStream);
+
+extern bool soundGameOverEmitted;
+extern void gameoverSound();
+
+extern void MunchFoodSound();
+
 extern void BgMusic(char * filename);
 extern void BgMusicOff();
-extern void stopStreamEffect();
+extern bool bgMusicEnabled;
 
 #ifdef ARM9
 extern u32 playSoundStreamFromFile(char * videoStructFDFilename, bool loop, u32 streamType);
+extern void playStreamEffect(char * filename, bool loop);
+extern void stopStreamEffect();
 #endif
 
 #ifdef __cplusplus
