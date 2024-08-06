@@ -35,15 +35,22 @@ USA
 #include "InterruptsARMCores_h.h"
 
 ////////////////////////////////TGDS-MB v3 VRAM Bootcode start////////////////////////////////
-
+__attribute__((section(".iwram64K")))
 IMA_Adpcm_Player backgroundMusicPlayer;	//Actual PLAYER Instance. See ima_adpcm.cpp -> [PLAYER: section
+
+__attribute__((section(".iwram64K")))
 IMA_Adpcm_Player SoundEffect0Player;
 
+__attribute__((section(".iwram64K")))
 FATFS FatfsFILEBgMusic; //Sound stream handle
+
+__attribute__((section(".iwram64K")))
 FATFS FatfsFILESoundSample0; //Sound effect handle #0
 
-struct soundPlayerContext soundData;
+__attribute__((section(".iwram64K")))
 FATFS fileHandle;					// Petit-FatFs work area 
+
+struct soundPlayerContext soundData;
 char fname[256];
 char debugBuf7[256];
 
@@ -222,6 +229,15 @@ __attribute__ ((optnone))
 #endif
 int main(int argc, char **argv) {
 //---------------------------------------------------------------------------------
+	
+	//Copy ARM7i sections from VRAM -> IWRAM if we're already at VRAM
+	extern u32 __arm7iwram_lma__;
+	extern u32 __arm7iwram_lma_end__;
+	extern u32 __iwram_startFast;
+	extern u32 __iwram_topFast;
+	int iwramSectionSize = (int) ((u32)&__arm7iwram_lma_end__ - (u32)&__iwram_startFast);
+	dmaTransferWord(0, (uint32)&__arm7iwram_lma__, (uint32)&__iwram_startFast, iwramSectionSize);
+	
 	/*			TGDS 1.6 Standard ARM7 Init code start	*/
 	installWifiFIFO();
 	while(!(*(u8*)0x04000240 & 2) ){} //wait for VRAM_D block
