@@ -114,7 +114,6 @@ extern int vsnprintf( char* buffer, size_t buf_size, const char* format, va_list
 //ARM7 VRAM core
 #include "arm7vram.h"
 #include "arm7vram_twl.h"
-#endif
 
 u32 * getTGDSMBV3ARM7Bootloader(){
 	if(__dsimode == false){
@@ -124,6 +123,7 @@ u32 * getTGDSMBV3ARM7Bootloader(){
 		return (u32*)&arm7vram_twl[0];
 	}
 }
+#endif
 
 struct Scene scene;	/// the scene we render
 
