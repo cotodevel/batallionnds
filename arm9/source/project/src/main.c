@@ -1,4 +1,4 @@
-﻿//Batallion author:
+//Batallion author:
 /***************************************************************/
 /*  This file has been modified in the 2004 release.           */
 /*  This is the "main" file. There are a lot of chages since   */
@@ -56,15 +56,13 @@ USA
 #include "biosTGDS.h"
 #include "InterruptsARMCores_h.h"
 #include "interrupts.h"
-#include "logo_tex.h"
-#include "road_tex.h"
-#include "screenleft_tex.h"
-#include "screenright_tex.h"
-#include "treewood_tex.h"
 #include "Sphere008_NoLight.h"
 #include "gui_console_connector.h"
 extern int vsnprintf( char* buffer, size_t buf_size, const char* format, va_list vlist );
 #include "ndsDisplayListUtils.h"
+#include "TGDSLogoLZSSCompressed.h"
+#include "loader.h"
+#include "dswnifi_lib.h"
 #endif
 
 #if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
@@ -134,17 +132,17 @@ __attribute__((optimize("Os")))
 #if (!defined(__GNUC__) && defined(__clang__))
 __attribute__ ((optnone))
 #endif
-int main(int argc, char *argv[])
+int main(int argc, char **argv)
 {
 	#ifdef _MSC_VER
-	startTGDSProject(argc, argv); 
+	startTGDSProject(argc, argv);
 	#endif
 
 	#ifdef ARM9
 	/*			TGDS 1.6 Standard ARM9 Init code start	*/
 	//Save Stage 1: IWRAM ARM7 payload: NTR/TWL (0x03800000)
-	memcpy((void *)TGDS_MB_V3_ARM7_STAGE1_ADDR, (const void *)0x02380000, (int)(96*1024));	//
-	coherent_user_range_by_size((uint32)TGDS_MB_V3_ARM7_STAGE1_ADDR, (int)(96*1024)); //		also for TWL binaries 
+	memcpy((void *)TGDS_MB_V3_ARM7_STAGE1_ADDR, (const void *)0x02380000, (int)(96*1024));
+	coherent_user_range_by_size((uint32)TGDS_MB_V3_ARM7_STAGE1_ADDR, (int)(96*1024));
 	
 	//Execute Stage 2: VRAM ARM7 payload: NTR/TWL (0x06000000)
 	u32 * payload = NULL;
@@ -186,41 +184,39 @@ int main(int argc, char *argv[])
 	}
 	REG_IME = 1;
 	
-	/*
-	#ifdef NO_VIDEO_PLAYBACK
-	argv[2] = (char*)0x02000000; //debug, if enabled, disables video intro
-	#endif
+	
+	argv[1] = (char*)0xFF; //comment out to enable video intro
 	
 	//Play game intro if coldboot
-	if(argv[2] == NULL){
+	if(argv[1] == NULL){
 		char tmpName[256];
-		strcpy(tmpName, videoIntro);
+		char bootldr[256];
+		
+		//Show logo
+		RenderTGDSLogoMainEngine((uint8*)&TGDSLogoLZSSCompressed[0], TGDSLogoLZSSCompressed_size);
+		strcpy(curChosenBrowseFile, videoIntro);
+	
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		char startPath[MAX_TGDSFILENAME_LENGTH+1];
 		strcpy(startPath,"/");
 		if(__dsimode == true){
-			strcpy(curChosenBrowseFile, "0:/ToolchainGenericDS-videoplayer.srl");
+			strcpy(bootldr, "0:/ToolchainGenericDS-videoplayer.srl");
 		}
 		else{
-			strcpy(curChosenBrowseFile, "0:/ToolchainGenericDS-videoplayer.nds");
+			strcpy(bootldr, "0:/ToolchainGenericDS-videoplayer.nds");
 		}
 		//Send args
-		printf("[Booting %s]", curChosenBrowseFile);
-		printf("Want to send argument?");
-		printf("(A) Yes: (Start) Choose arg.");
-		printf("(B) No. ");
-		
 		int argcCount = 0;
 		argcCount++;
 		printf("[Booting... Please wait] >%d", TGDSPrintfColor_Red);
 		
 		char thisArgv[3][MAX_TGDSFILENAME_LENGTH];
 		memset(thisArgv, 0, sizeof(thisArgv));
-		strcpy(&thisArgv[0][0], TGDSPROJECTNAME);	//Arg0:	This Binary loaded
-		strcpy(&thisArgv[1][0], curChosenBrowseFile);	//Arg1:	NDS Binary reloaded
-		strcpy(&thisArgv[2][0], tmpName);					//Arg2: NDS Binary ARG0
+		strcpy(&thisArgv[0][0], TGDSPROJECTNAME);		//Arg0:	This Binary loaded
+		strcpy(&thisArgv[1][0], bootldr);				//Arg1:	NDS Binary reloaded
+		strcpy(&thisArgv[2][0], curChosenBrowseFile);	//Arg2: NDS Binary ARG0
 		u32 * payload = getTGDSMBV3ARM7Bootloader();
-		if(TGDSMultibootRunNDSPayload(curChosenBrowseFile, (u8*)payload, 3, (char*)&thisArgv) == false){ //should never reach here, nor even return true. Should fail it returns false
+		if(TGDSMultibootRunNDSPayload(bootldr, (u8*)payload, 3, (char*)&thisArgv) == false){ //should never reach here, nor even return true. Should fail it returns false
 			printf("Invalid NDS/TWL Binary >%d", TGDSPrintfColor_Yellow);
 			printf("or you are in NTR mode trying to load a TWL binary. >%d", TGDSPrintfColor_Yellow);
 			printf("or you are missing the TGDS-multiboot payload in root path. >%d", TGDSPrintfColor_Yellow);
@@ -239,13 +235,6 @@ int main(int argc, char *argv[])
 		}
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	}
-	else if(strncmp(argv[2], videoIntro, strlen(videoIntro)) == 0){
-		//video intro already played, skip.
-	}
-	else if(strncmp(argv[2], videoTest, strlen(videoTest)) == 0){
-		//play videoTest maybe?
-	}
-	*/
 	
 	clrscr();
 	printf("---");
@@ -397,7 +386,7 @@ void closeSoundUser(){
 
 #endif
 
-///////////////////////////////////////////// game specific program /////////////////////////////////////////////
+///////////////////////////////////////////// game program /////////////////////////////////////////////
 
 /* openAL headers*/
 #ifdef SOUND

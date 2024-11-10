@@ -61,6 +61,9 @@ USA
 #include "dswnifi_lib.h"
 #include "soundTGDS.h"
 #include "biosTGDS.h"
+#include "dmaTGDS.h"
+#include "timerTGDS.h"
+
 #endif
 
 #ifdef ARM9
@@ -71,17 +74,30 @@ struct sIPCSharedTGDSSpecific* getsIPCSharedTGDSSpecific(){
 	return sIPCSharedTGDSSpecificInst;
 }
 
-//inherits what is defined in: ipcfifoTGDS.c
 #ifdef ARM9
 __attribute__((section(".itcm")))
 #endif
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("O0")))
+#endif
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void HandleFifoNotEmptyWeakRef(u32 cmd1, uint32 cmd2){
 	switch (cmd1) {
+		//NDS7: 
 		#ifdef ARM7
 		
 			#if defined(ARM7VRAMCUSTOMCORE)
+			case(FIFO_STOP_ARM7_VRAM_CORE):{
+				playerStopARM7();
+				uint32 * fifomsg = (uint32 *)NDS_UNCACHED_SCRATCHPAD;
+				setValueSafe(&fifomsg[34], (uint32)0);
+			}
+			break;
+			
 			case(FIFO_STOPSOUNDSTREAM_FILE):{
-			backgroundMusicPlayer.stop();
+				stopBGMusic7();
 			}
 			break;
 			
@@ -89,15 +105,11 @@ void HandleFifoNotEmptyWeakRef(u32 cmd1, uint32 cmd2){
 				playSoundStreamARM7();
 			}
 			break;
-			
-			case(FIFO_STOPSOUNDEFFECT_FILE):{
-				//SoundEffect0Player.stop();
-			}
-			break;			
 			#endif
 			
 		#endif
 		
+		//NDS9: 
 		#ifdef ARM9
 		
 		#endif
@@ -113,12 +125,26 @@ void HandleFifoEmptyWeakRef(uint32 cmd1,uint32 cmd2){
 //project specific stuff
 
 #ifdef ARM9
+
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("O0")))
+#endif
+
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void playStreamEffect(char * fname, bool loopStream){
-	stopStreamEffect();
 	u32 streamType = FIFO_PLAYSOUNDEFFECT_FILE;
 	playSoundStreamFromFile((char*)&fname[2], loopStream, streamType);
 }
 
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("O0")))
+#endif
+
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void BgMusic(char * filename){
 	BgMusicOff();
 	//ARM7 ADPCM playback 
@@ -126,18 +152,52 @@ void BgMusic(char * filename){
 	playSoundStreamFromFile((char*)&filename[2], true, streamType);
 }
 
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("O0")))
+#endif
+
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void BgMusicOff(){
 	SendFIFOWords(FIFO_STOPSOUNDSTREAM_FILE, 0xFF);
 }
 
-void stopStreamEffect(){
-	SendFIFOWords(FIFO_STOPSOUNDEFFECT_FILE, 0xFF);
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("O0")))
+#endif
+
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
+void haltARM7(){
+	uint32 * fifomsg = (uint32 *)NDS_UNCACHED_SCRATCHPAD;
+	setValueSafe(&fifomsg[34], (uint32)FIFO_STOP_ARM7_VRAM_CORE);
+	SendFIFOWords(FIFO_STOP_ARM7_VRAM_CORE, 0xFF);
+	while( getValueSafe(&fifomsg[34]) == (uint32)FIFO_STOP_ARM7_VRAM_CORE){
+		swiDelay(1);
+	}
+	
 }
 
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("O0")))
+#endif
+
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void updateStreamCustomDecoder(u32 srcFrmt){
 
 }
 
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("O0")))
+#endif
+
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void freeSoundCustomDecoder(u32 srcFrmt){
 
 }
@@ -155,13 +215,14 @@ u32 playSoundStreamFromFile(char * videoStructFDFilename, bool loop, u32 streamT
 	strcpy(filename, videoStructFDFilename);
 	
 	uint32 * fifomsg = (uint32 *)NDS_UNCACHED_SCRATCHPAD;
-	fifomsg[33] = (uint32)0xFFFFCCAA;
-	fifomsg[34] = (uint32)loop;
-	fifomsg[35] = (uint32)streamType;
+	setValueSafe(&fifomsg[33], (uint32)0xFFFFCCAA);
+	setValueSafe(&fifomsg[34], (uint32)loop);
+	setValueSafe(&fifomsg[35], (uint32)streamType);
 	SendFIFOWords(FIFO_PLAYSOUNDSTREAM_FILE, 0xFF);
+
 	//If audio stream track... reset everytime entirely. Otherwise for sound effects play right away
 	if(streamType != FIFO_PLAYSOUNDEFFECT_FILE){
-		while(fifomsg[33] == (uint32)0xFFFFCCAA){
+		while( getValueSafe(&fifomsg[33]) == (uint32)0xFFFFCCAA){
 			swiDelay(1);
 		}
 	}
@@ -170,7 +231,14 @@ u32 playSoundStreamFromFile(char * videoStructFDFilename, bool loop, u32 streamT
 
 #endif
 
-//Libutils setup: TGDS project uses Soundstream, WIFI, ARM7 malloc, etc.
+//Libutils setup: TGDS project uses WIFI, ARM7 malloc, except custom sound + bootloader.
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("O0")))
+#endif
+
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void setupLibUtils(){
 	//libutils:
 	
@@ -190,11 +258,11 @@ void setupLibUtils(){
 	#ifdef ARM7
 	initializeLibUtils7(
 		(HandleFifoNotEmptyWeakRefLibUtils_fn)&libUtilsFIFONotEmpty, //ARM7 & ARM9
-		(wifiUpdateVBLANKARM7LibUtils_fn)&Wifi_Update, //ARM7
-		(wifiInterruptARM7LibUtils_fn)&Wifi_Interrupt,  //ARM7
-		(SoundStreamTimerHandlerARM7LibUtils_fn)&TIMER1Handler, //ARM7: void TIMER1Handler()
-		(SoundStreamStopSoundARM7LibUtils_fn)&stopSound, 	//ARM7: void stopSound()
-		(SoundStreamSetupSoundARM7LibUtils_fn)&setupSound,	//ARM7: void setupSound()
+		(wifiUpdateVBLANKARM7LibUtils_fn)&Wifi_Update, //ARM7 : Wifi7
+		(wifiInterruptARM7LibUtils_fn)&Wifi_Interrupt,  //ARM7 : Wifi7
+		NULL, //ARM7: void TIMER1Handler()	//Custom ARM7 Sound
+		NULL, 	//ARM7: void stopSound()	//Custom ARM7 Sound
+		NULL,	//ARM7: void setupSound()	//Custom ARM7 Sound
 		(initMallocARM7LibUtils_fn)&initARM7Malloc, //ARM7: void initARM7Malloc(u32 ARM7MallocStartaddress, u32 ARM7MallocSize);
 		(wifiDeinitARM7ARM9LibUtils_fn)&DeInitWIFI,  //ARM7 & ARM9: DeInitWIFI()
 		(MicInterruptARM7LibUtils_fn)&micInterrupt, //ARM7: micInterrupt()

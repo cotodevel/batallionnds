@@ -7,14 +7,11 @@
 #include "battalion.h"
 
 #ifdef ARM9
-#include "logo_tex.h"
-#include "road_tex.h"
-#include "screenleft_tex.h"
-#include "screenright_tex.h"
-#include "treewood_tex.h"
 #include "Sphere008.h"
 #include "gui_console_connector.h"
 #include "imagepcx.h"
+#include "loader.h"
+#include "GXPayload.h" //required to flush the GX<->DMA<->FIFO circuit on real hardware
 #endif
 
 #ifndef _MSC_VER
@@ -186,6 +183,8 @@ int InitGL(int argc, char *argv[]){
 	glDisable(GL_LIGHT0|GL_LIGHT1|GL_LIGHT2|GL_LIGHT3);
 
 	#if !defined(_MSC_VER) && defined(ARM9) //BatallionNDS on TGDS ARM9?
+	//unused textures
+	/*
 	//#1: Load a texture and map each one to a texture slot
 	u32 arrayOfTextures[5];
 	arrayOfTextures[0] = (u32)&screenleft_tex; //0: screenleft_tex.bmp
@@ -198,6 +197,7 @@ int InitGL(int argc, char *argv[]){
 	for(i = 0; i < texturesInSlot; i++){
 		printf("Tex. index: %d: Tex. name[%d]", i, getTextureNameFromIndex(i));
 	}
+	*/
 	#endif
 
 	if(Inst->TGDSProjectDual3DEnabled == false){
@@ -221,6 +221,7 @@ int InitGL(int argc, char *argv[]){
 	glEnable(GL_COLOR_MATERIAL);	//allow to mix both glColor3f + light sources when lighting is enabled (glVertex + glNormal3f)
 	glEnable(GL_LIGHT0|GL_LIGHT1);
 
+	glCallListGX((u32*)&GXPayload); //Run this payload once to force cache flushes on DMA GXFIFO
 	return 0;
 }
 
@@ -266,7 +267,6 @@ int startTGDSProject(int argc, char *argv[])
 	initialization();
 	setPlayConditions();
 
-	//////////////////////////////////////////////////////////////// todo end////////////////////////////////////////////
 	// create the scene and set perspective projection as default
 	initializeScene(&scene);
 #ifdef ARM9
@@ -307,7 +307,7 @@ int startTGDSProject(int argc, char *argv[])
     glMaterialShinnyness();
 	glReset(); //Depend on GX stack to render scene
 	while(1==1){
-		//game
+		//game loop
 		id();
 	}
 #endif

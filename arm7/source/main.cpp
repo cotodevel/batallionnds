@@ -34,7 +34,6 @@ USA
 #include "timerTGDS.h"
 #include "InterruptsARMCores_h.h"
 
-////////////////////////////////TGDS-MB v3 VRAM Bootcode start////////////////////////////////
 __attribute__((section(".iwram64K")))
 IMA_Adpcm_Player backgroundMusicPlayer;	//Actual PLAYER Instance. See ima_adpcm.cpp -> [PLAYER: section
 
@@ -283,4 +282,6 @@ void playerStopARM7(){
 	}
 }
 
-////////////////////////////////TGDS-MB v3 VRAM Bootcode end////////////////////////////////
+void stopBGMusic7(){
+	backgroundMusicPlayer.stop();
+}

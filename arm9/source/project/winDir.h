@@ -49,6 +49,10 @@ enum COLOR
 #include <string.h>
 #include <assert.h>
 
+#include "LA.h"	// For handling .bmp files or matrix images
+#include "bmp.h"
+#include "sphere.h"
+
 #endif
 #endif
 #endif

@@ -36,14 +36,9 @@ USA
 
 #ifdef __cplusplus
 extern "C" {
-#if defined(ARM7VRAMCUSTOMCORE)
-extern IMA_Adpcm_Player backgroundMusicPlayer;	//Sound stream Background music Instance
-extern IMA_Adpcm_Player SoundEffect0Player;	//Sound stream Background music Instance
-#endif
 #endif
 
 extern int main(int argc, char **argv);
-extern FATFS fileHandle;					// Petit-FatFs work area 
 extern char fname[256];
 extern char debugBuf7[256];
 extern bool stopSoundStreamUser();
@@ -59,10 +54,7 @@ extern void handleARM7FSRender();
 extern bool stopSoundStreamUser();
 extern void playerStopARM7();
 
-#if defined(ARM7VRAMCUSTOMCORE)
-extern FATFS FatfsFILEBgMusic; //Sound stream handle
-extern FATFS FatfsFILESoundSample0; //Sound effect handle #0
-#endif
+extern void stopBGMusic7();
 
 #ifdef __cplusplus
 }

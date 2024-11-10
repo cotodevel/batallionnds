@@ -28,6 +28,9 @@ using namespace std; // std::cout, std::cin
 #include <iostream>
 #endif
 
+#include "billiardgl\createTexture.h"   // Function to generate a texture from a Matrix image
+#include "billiardgl\BillardGL.h"
+
 std::vector<std::string> list_directory(const std::string &directory)
 {
     WIN32_FIND_DATAA findData;
