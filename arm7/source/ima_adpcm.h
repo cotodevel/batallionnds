@@ -6,7 +6,7 @@
 #include "soundTGDS.h"
 #include "petitfs-src/pff.h"
 
-#define ADPCM_SIZE (int)(2560)		//TGDS IMA-ADPCM buffer size
+#define ADPCM_SIZE (int)(2048)		//TGDS IMA-ADPCM buffer size
 typedef bool (*closeSoundHandle)();	//ret: true = closed sound stream. false = couldn't close sound stream
 
 enum
@@ -111,13 +111,13 @@ public:
 class IMA_Adpcm_Player {
 	bool autofill;
 	bool paused;
-	int currentStreamingMode;
+	u32 currentStreamingMode;	//FIFO_PLAYSOUNDSTREAM_FILE (stream, slower) or FIFO_PLAYSOUNDEFFECT_FILE (buffer, fast)
 public:
 	IMA_Adpcm_Stream stream;
 	bool active;
 	IMA_Adpcm_Player();
 	wavFormatChunk headerChunk;
-	int play(bool loop_audio, bool automatic_updates, int buffer_length = ADPCM_SIZE / 8, closeSoundHandle = NULL, FATFS * inFatfsFILEHandle = NULL, int incomingStreamingMode = 0);
+	int play(bool loop_audio, bool automatic_updates, int buffer_length = ADPCM_SIZE / 8, closeSoundHandle = NULL, FATFS * inFatfsFILEHandle = NULL, u32 incomingStreamingMode = 0);
 	void pause();
 	void resume();
 	void stop();
