@@ -18,21 +18,26 @@ USA
 
 */
 
+
 //TGDS required version: IPC Version: 1.3
 
 //IPC FIFO Description: 
 //		struct sIPCSharedTGDS * TGDSIPC = TGDSIPCStartAddress; 														// Access to TGDS internal IPC FIFO structure. 		(ipcfifoTGDS.h)
 //		struct sIPCSharedTGDSSpecific * TGDSUSERIPC = (struct sIPCSharedTGDSSpecific *)TGDSIPCUserStartAddress;		// Access to TGDS Project (User) IPC FIFO structure	(ipcfifoTGDSUser.h)
 
-//inherits what is defined in: ipcfifoTGDS.h
 #ifndef __ipcfifoTGDSUser_h__
 #define __ipcfifoTGDSUser_h__
 
 #include "dsregs.h"
 #include "dsregs_asm.h"
 #include "ipcfifoTGDS.h"
-#include "dswnifi.h"
-#include "posixHandleTGDS.h"
+#include "utilsTGDS.h"
+#include "typedefsTGDS.h"
+
+#if defined(ARM7VRAMCUSTOMCORE)
+#include "pff.h"
+#include "ima_adpcm.h"
+#endif
 
 //---------------------------------------------------------------------------------
 struct sIPCSharedTGDSSpecific {
@@ -46,36 +51,63 @@ struct sIPCSharedTGDSSpecific {
 #define TGDSDLDI_ARM7_ADDRESS (u32)(TGDS_ARM7_MALLOCSTART + TGDS_ARM7_MALLOCSIZE)	//0x0601C000
 #define FIFO_PLAYSOUNDSTREAM_FILE (u32)(0xFFFFABCB)
 #define FIFO_STOPSOUNDSTREAM_FILE (u32)(0xFFFFABCC)
-
 #define FIFO_PLAYSOUNDEFFECT_FILE (u32)(0xFFFFABCD)
-#define FIFO_STOPSOUNDEFFECT_FILE (u32)(0xFFFFABCE)
-
-#define NO_VIDEO_PLAYBACK	1
+#define FIFO_STOP_ARM7_VRAM_CORE (u32)(0xFFFFABCE)
 
 #endif
 
 #ifdef __cplusplus
+
+#ifdef ARM7
+#if defined(ARM7VRAMCUSTOMCORE)
+	extern IMA_Adpcm_Player backgroundMusicPlayer;	//Sound stream Background music Instance
+	extern IMA_Adpcm_Player SoundEffect0Player;	//Sound stream Background music Instance
+
+	extern FATFS fileHandle; //Sound stream handle
+	extern FATFS FatfsFILESoundSample0; //Sound effect handle #0
+#endif
+#endif
+
 extern "C" {
 #endif
 
 //NOT weak symbols : the implementation of these is project-defined (here)
 extern void HandleFifoNotEmptyWeakRef(u32 cmd1, uint32 cmd2);
 extern void HandleFifoEmptyWeakRef(uint32 cmd1,uint32 cmd2);
+extern void setupLibUtils();
 extern struct sIPCSharedTGDSSpecific* getsIPCSharedTGDSSpecific();
-
 extern bool soundGameOverEmitted;
 extern void gameoverSound();
-
 extern void MunchFoodSound();
 
+extern void playStreamEffect(char * fname, bool loopStream);
 extern void BgMusic(char * filename);
 extern void BgMusicOff();
 extern bool bgMusicEnabled;
 
+
+#if defined(ARM7VRAMCUSTOMCORE)
+
+#ifdef ARM7
+extern int main(int argc, char **argv);
+extern struct TGDSVideoFrameContext videoCtx;
+extern struct soundPlayerContext soundData;
+extern char fname[256];
+
+extern void playSoundStreamARM7();
+extern void handleARM7FSRender();
+
+extern bool stopSoundStreamUser();
+extern void playerStopARM7();
+#endif
+
+#endif
+
 #ifdef ARM9
 extern u32 playSoundStreamFromFile(char * videoStructFDFilename, bool loop, u32 streamType);
-extern void playStreamEffect(char * filename, bool loop);
-extern void stopStreamEffect();
+extern void BgMusic(char * filename);
+extern void BgMusicOff();
+extern void haltARM7();
 #endif
 
 #ifdef __cplusplus
