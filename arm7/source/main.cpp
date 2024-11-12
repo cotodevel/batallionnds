@@ -44,7 +44,7 @@ __attribute__((section(".iwram64K")))
 FATFS FatfsFILEBgMusic; //Sound stream handle
 
 __attribute__((section(".iwram64K")))
-FATFS FatfsFILESoundSample0; //Sound effect handle #0
+FATFS FatfsFILESoundSample0; //Sound effect handle #0. Too slow to use by ARM7. Needs direct samples instead
 
 __attribute__((section(".iwram64K")))
 FATFS fileHandle;					// Petit-FatFs work area 
@@ -157,13 +157,7 @@ void playSoundStreamARM7(){
 	struct sIPCSharedTGDSSpecific* sharedIPC = getsIPCSharedTGDSSpecific();
 	char * filename = (char*)&sharedIPC->filename[0];
 	strcpy((char*)fname, filename);
-	
-	if(streamType == FIFO_PLAYSOUNDSTREAM_FILE){
-		currentFH = &FatfsFILEBgMusic;
-	}
-	else if(streamType == FIFO_PLAYSOUNDEFFECT_FILE){
-		currentFH = &FatfsFILESoundSample0;
-	}
+	currentFH = &FatfsFILEBgMusic;
 	fresult = pf_mount(currentFH);
 	if (fresult != FR_OK) { 
 		
@@ -175,15 +169,6 @@ void playSoundStreamARM7(){
 		fifomsg[33] = 0xAABBCCDD;
 	}
 	fresult = pf_open(fname, currentFH);
-	if (fresult != FR_OK) { 
-		strcpy((char*)0x02000000, "soundfile failed to open:");
-		strcat((char*)0x02000000, filename);
-	}
-	else{
-		strcpy((char*)0x02000000, "soundfile open OK:"); //ok so far
-		strcat((char*)0x02000000, filename);
-	}
-	
 	pf_lseek(0, currentFH);
 	
 	int argBuffer[MAXPRINT7ARGVCOUNT];
@@ -193,31 +178,10 @@ void playSoundStreamARM7(){
 	//decode audio here
 	bool loop_audio = loop;
 	bool automatic_updates = false;
-	if(streamType == FIFO_PLAYSOUNDSTREAM_FILE){
-		if(backgroundMusicPlayer.play(loop_audio, automatic_updates, ADPCM_SIZE, stopSoundStreamUser, currentFH, streamType) == 0){
-			//ADPCM Playback!
-		}
-	}
-	else if(streamType == FIFO_PLAYSOUNDEFFECT_FILE){
-		if(SoundEffect0Player.play(loop_audio, automatic_updates, ADPCM_SIZE, stopSoundStreamUser, currentFH, streamType) == 0){
-			//ADPCM Sample Playback!
-		}
+	if(backgroundMusicPlayer.play(loop_audio, automatic_updates, ADPCM_SIZE, stopSoundStreamUser, currentFH, streamType) == 0){
+		//ADPCM Playback!
 	}
 	fifomsg[33] = (u32)fresult;
-}
-
-
-#if (defined(__GNUC__) && !defined(__clang__))
-__attribute__((optimize("O0")))
-#endif
-#if (!defined(__GNUC__) && defined(__clang__))
-__attribute__ ((optnone))
-#endif
-void handleARM7FSRender(){
-	uint32 * fifomsg = (uint32 *)NDS_CACHED_SCRATCHPAD;
-	int fileOffset = (int)fifomsg[32];
-	int bufferSize = (int)fifomsg[33];
-	fifomsg[34] = (u32)0;
 }
 
 #if (defined(__GNUC__) && !defined(__clang__))

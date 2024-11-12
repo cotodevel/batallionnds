@@ -64,6 +64,17 @@ USA
 #include "dmaTGDS.h"
 #include "timerTGDS.h"
 
+//TGDS Project sound effects
+#include "boom_sampleEffect.h"
+#include "crash_sampleEffect.h"
+#include "electrical_sampleEffect.h"
+#include "monsterbeam_sampleEffect.h"
+#include "rocket_sampleEffect.h"
+#include "slag_sampleEffect.h"
+#include "tank_sampleEffect.h"
+#include "tech_sampleEffect.h"
+#include "teleporter_sampleEffect.h"
+
 #endif
 
 #ifdef ARM9
@@ -105,6 +116,29 @@ void HandleFifoNotEmptyWeakRef(u32 cmd1, uint32 cmd2){
 				playSoundStreamARM7();
 			}
 			break;
+
+			case(FIFO_WRITE_AUDIO_HARDWARE):{
+				uint32 * fifomsg = (uint32 *)NDS_UNCACHED_SCRATCHPAD;
+				struct soundItem * sndItem = (struct soundItem *)getValueSafe(&fifomsg[34]);
+				if(sndItem->channel == 5){
+					SCHANNEL_CR(6) = (u32)0; //clear up or hardware audio stalls
+					//SCHANNEL_TIMER(6) = (u32)0; 	//can't be enabled or hardware audio stalls
+					//SCHANNEL_SOURCE(6) = (u32)0;	//can't be enabled or hardware audio stalls
+					//SCHANNEL_LENGTH(6) = (u32)0;	//can't be enabled or hardware audio stalls
+				}
+				else{
+					SCHANNEL_CR(5) = (u32)0; //clear up or hardware audio stalls
+					//SCHANNEL_TIMER(5) = (u32)0;	//can't be enabled or hardware audio stalls
+					//SCHANNEL_SOURCE(5) = (u32)0;	//can't be enabled or hardware audio stalls
+					//SCHANNEL_LENGTH(5) = (u32)0;	//can't be enabled or hardware audio stalls
+				}
+				
+				SCHANNEL_CR(sndItem->channel) = (u32)(sndItem->cnt);
+				SCHANNEL_TIMER(sndItem->channel) = SOUND_FREQ(sndItem->freq);
+				SCHANNEL_SOURCE(sndItem->channel) = (u32)(sndItem->soundBuffer);
+				SCHANNEL_LENGTH(sndItem->channel) = (sndItem->len >> 1);
+			}break;
+
 			#endif
 			
 		#endif
@@ -124,18 +158,136 @@ void HandleFifoEmptyWeakRef(uint32 cmd1,uint32 cmd2){
 
 //project specific stuff
 
+static int curChannel = 5;
+
 #ifdef ARM9
+__attribute__((section(".dtcm")))
+static u8 panning = 1;
+
+struct soundItem soundsCached[MAX_SOUNDS_BUFFERED];
 
 #if (defined(__GNUC__) && !defined(__clang__))
 __attribute__((optimize("O0")))
 #endif
-
 #if (!defined(__GNUC__) && defined(__clang__))
 __attribute__ ((optnone))
 #endif
+__attribute__((section(".itcm")))
 void playStreamEffect(char * fname, bool loopStream){
-	u32 streamType = FIFO_PLAYSOUNDEFFECT_FILE;
-	playSoundStreamFromFile((char*)&fname[2], loopStream, streamType);
+	struct sIPCSharedTGDSSpecific* sharedIPC = getsIPCSharedTGDSSpecific();
+	
+	//cache upcoming sample by allocating a new blank entry
+	u8 * targetBuffer = NULL;
+	int targetBufferSize = 0;
+	
+	bool found = false;
+	int NDSChannel = 0;
+	for(NDSChannel = 0; NDSChannel < MAX_SOUNDS_BUFFERED; NDSChannel++){
+		if(strlen((char*)&soundsCached[NDSChannel].soundFile[0]) > (ENTRIES_TO_COMPARE-1) ){
+			if(strncmpi((char*)&soundsCached[NDSChannel].soundFile[0], (char*)&fname[2], ENTRIES_TO_COMPARE) == 0){
+				found = true;
+				break;
+			}
+		}
+	}
+	
+	if(found == false){
+		if(strcmpi((char*)&fname[0], (char*)"0:/boom.wav") == 0){
+			targetBuffer = &boom_sampleEffect[0];
+			targetBufferSize = boom_sampleEffect_size;
+		}
+		
+		else if(strcmpi((char*)&fname[0], (char*)"0:/crash.wav") == 0){
+			targetBuffer = &crash_sampleEffect[0];
+			targetBufferSize = crash_sampleEffect_size;
+		}
+		
+		else if(strcmpi((char*)&fname[0], (char*)"0:/electrical.wav") == 0){
+			targetBuffer = &electrical_sampleEffect[0];
+			targetBufferSize = electrical_sampleEffect_size;
+		}
+		
+		else if(strcmpi((char*)&fname[0], (char*)"0:/monsterbeam.wav") == 0){
+			targetBuffer = &monsterbeam_sampleEffect[0];
+			targetBufferSize = monsterbeam_sampleEffect_size;
+		}
+		
+		else if(strcmpi((char*)&fname[0], (char*)"0:/rocket.wav") == 0){
+			targetBuffer = &rocket_sampleEffect[0];
+			targetBufferSize = rocket_sampleEffect_size;
+		}
+		
+		else if(strcmpi((char*)&fname[0], (char*)"0:/slag.wav") == 0){
+			targetBuffer = &slag_sampleEffect[0];
+			targetBufferSize = slag_sampleEffect_size;
+		}
+		
+		else if(strcmpi((char*)&fname[0], (char*)"0:/tank.wav") == 0){
+			targetBuffer = &tank_sampleEffect[0];
+			targetBufferSize = tank_sampleEffect_size;
+		}
+		
+		else if(strcmpi((char*)&fname[0], (char*)"0:/tech.wav") == 0){
+			targetBuffer = &tech_sampleEffect[0];
+			targetBufferSize = tech_sampleEffect_size;
+		}
+		
+		else if(strcmpi((char*)&fname[0], (char*)"0:/teleporter.wav") == 0){
+			targetBuffer = &teleporter_sampleEffect[0];
+			targetBufferSize = teleporter_sampleEffect_size;
+		}
+		
+		//Allocate a new entry.
+		for(NDSChannel = 0; NDSChannel < MAX_SOUNDS_BUFFERED; NDSChannel++){
+			if(strnlen((char*)&soundsCached[NDSChannel].soundFile[0], ENTRIES_TO_COMPARE) < (ENTRIES_TO_COMPARE-1)){
+				strncpy((char*)&soundsCached[NDSChannel].soundFile[0], (char*)&fname[2], ENTRIES_TO_COMPARE);
+				soundsCached[NDSChannel].soundBuffer = targetBuffer;
+				soundsCached[NDSChannel].soundLen = targetBufferSize;
+				break;
+			}
+		}
+		
+		//Ran out of entries? re-use the last one
+		if(NDSChannel >= MAX_SOUNDS_BUFFERED){
+			strncpy((char*)&soundsCached[MAX_SOUNDS_BUFFERED-1].soundFile[0], (char*)&fname[2], ENTRIES_TO_COMPARE);
+			soundsCached[MAX_SOUNDS_BUFFERED-1].soundBuffer = targetBuffer;
+			soundsCached[MAX_SOUNDS_BUFFERED-1].soundLen = targetBufferSize;
+			NDSChannel = (MAX_SOUNDS_BUFFERED-1);
+		}
+	}
+	else{
+		//if soundfile exists, re-use it
+		//printf("cached entry: %s", (char*)&soundsCached[i].soundFile[0]);
+		targetBuffer = soundsCached[NDSChannel].soundBuffer;
+		targetBufferSize = soundsCached[NDSChannel].soundLen;
+	}
+	
+	struct soundItem * sndItem = (struct soundItem *)&soundsCached[NDSChannel];
+	u32 cnt   = SCHANNEL_ENABLE | SOUND_ONE_SHOT | SOUND_VOL(0x7F) | SOUND_PAN(64 * panning) | SOUND_8BIT; // Bit29-30  Format       (0=PCM8, 1=PCM16, 2=IMA-ADPCM, 3=PSG/Noise)
+	int len = (int)( ( ( ((int)targetBufferSize) << 1 ) + 3) & (~3) ); //align to 4 bytes otherwise audio hardware stalls
+	u16 freq = 11025;
+	//Channels 0 - 3 are used by ARM7 background music
+	//Channels 4 and 15 are unused
+	sndItem->cnt = cnt;
+	sndItem->len = len;
+	sndItem->freq = freq;
+	sndItem->channel = curChannel;
+	if(len > 16){
+		writeARM7SoundChannelFromSourceBatallion(sndItem); //implementation prevents audio stalls 
+		if(curChannel == 5){
+			curChannel = 6;
+		}
+		else{
+			curChannel = 5;
+		}
+
+		if(panning == 1){
+			panning = 2;
+		}
+		else{
+			panning = 1;
+		}
+	}
 }
 
 #if (defined(__GNUC__) && !defined(__clang__))
@@ -177,8 +329,25 @@ void haltARM7(){
 	while( getValueSafe(&fifomsg[34]) == (uint32)FIFO_STOP_ARM7_VRAM_CORE){
 		swiDelay(1);
 	}
-	
 }
+
+
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("O0")))
+#endif
+
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
+void writeARM7SoundChannelFromSourceBatallion(struct soundItem * sndItem){
+	if(sndItem != NULL){
+		uint32 * fifomsg = (uint32 *)NDS_UNCACHED_SCRATCHPAD;
+		setValueSafe(&fifomsg[34], (uint32)sndItem);
+		coherent_user_range_by_size((uint32)sndItem, (int)sizeof(struct soundItem));
+		SendFIFOWords(FIFO_WRITE_AUDIO_HARDWARE, (u32)0xFFFFFFFF);
+	}
+}
+
 
 #if (defined(__GNUC__) && !defined(__clang__))
 __attribute__((optimize("O0")))
@@ -221,10 +390,8 @@ u32 playSoundStreamFromFile(char * videoStructFDFilename, bool loop, u32 streamT
 	SendFIFOWords(FIFO_PLAYSOUNDSTREAM_FILE, 0xFF);
 
 	//If audio stream track... reset everytime entirely. Otherwise for sound effects play right away
-	if(streamType != FIFO_PLAYSOUNDEFFECT_FILE){
-		while( getValueSafe(&fifomsg[33]) == (uint32)0xFFFFCCAA){
-			swiDelay(1);
-		}
+	while( getValueSafe(&fifomsg[33]) == (uint32)0xFFFFCCAA){
+		swiDelay(1);
 	}
 	return fifomsg[33];
 }

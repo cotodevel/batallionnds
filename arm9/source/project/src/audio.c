@@ -64,6 +64,7 @@ ALuint  sources[NUM_SOURCES];
 int initSoundBatallion()
 {
 #ifdef ARM9
+	memset(&soundsCached, 0, sizeof(soundsCached));
 	//init sound: ARM7
 	BgMusicOff();
 #endif	
@@ -122,29 +123,69 @@ void exitSoundBatallion()
 /* adds a sound */
 int doSound(int nsource, int nbuffer, bool loop)
 {
-	
 	switch(nbuffer){
 		case MONSTERBEAM:{
 			#ifdef ARM9
-				playStreamEffect("0:/beam.ima", false); //one way effect sound then stop //playStreamEffect("0:/beam.ima", true);
+				playStreamEffect("0:/monsterbeam.wav", true); //false == one way effect sound then stop
 			#endif
 		}break;
+		
+		case TECHSHOOT:{
+			#ifdef ARM9
+				playStreamEffect("0:/tech.wav", false); //one way effect sound then stop
+			#endif
+		}break;
+		
+		
+		
 	}
-
-    if(soundOn != 0 && maxSources > 0){
-		return 0;
-    
-    }
-    return -1;
+    return 0;
 }
 
 int doSoundAt(int nsource, int nbuffer, bool loop,
               float x, float y, float z)
 {
-    if(soundOn != 0 && maxSources > 0)
-    {
-    
+	switch(nbuffer){
+		case EXPLOSION:{
+			#ifdef ARM9
+				playStreamEffect("0:/boom.wav", false); //one way effect sound then stop
+			#endif
+		}break;
+		
+		case HELOROCKET:{
+			#ifdef ARM9
+				playStreamEffect("0:/rocket.wav", false); //one way effect sound then stop
+			#endif
+		}break;
+		
+		case ELECTRIC:{
+			#ifdef ARM9
+				playStreamEffect("0:/electrical.wav", false); //one way effect sound then stop
+			#endif
+		}break;
+		
+		case SLAG:{
+			#ifdef ARM9
+				playStreamEffect("0:/slag.wav", false); //one way effect sound then stop
+			#endif
+		}break;
+		
+		case CRASH:{
+			#ifdef ARM9
+				playStreamEffect("0:/crash.wav", false); //one way effect sound then stop
+			#endif
+		}break;
+		
+		case TANKFIRE:{
+			#ifdef ARM9
+				playStreamEffect("0:/tank.wav", false); //one way effect sound then stop
+			#endif
+		}break;
+		
+		
+		
 	}
+	
     return 0;
 }
 
@@ -207,8 +248,7 @@ int stopSoundBatallion(int source)
 	switch(source){
 	case MONSTERBEAM :{ //Googelon halting laser sound
 			#ifdef ARM9
-				//stopStreamEffect(); 
-				//playStreamEffect("0:/beam.ima", false); //one way effect sound then stop
+				//stopStreamEffect();
 			#endif
 		}break;
 	}
