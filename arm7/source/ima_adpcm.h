@@ -111,7 +111,7 @@ public:
 class IMA_Adpcm_Player {
 	bool autofill;
 	bool paused;
-	u32 currentStreamingMode;	//FIFO_PLAYSOUNDSTREAM_FILE (stream, slower) or FIFO_PLAYSOUNDEFFECT_FILE (buffer, fast)
+	u32 currentStreamingMode;	//FIFO_PLAYSOUNDSTREAM_FILE (software decoding, slower) 
 public:
 	IMA_Adpcm_Stream stream;
 	bool active;

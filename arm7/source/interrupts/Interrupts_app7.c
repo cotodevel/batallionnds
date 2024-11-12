@@ -37,9 +37,7 @@ void bootfile(){
 
 //User Handler Definitions
 
-#ifdef ARM9
-__attribute__((section(".itcm")))
-#endif
+__attribute__((section(".iwram64K")))
 void IpcSynchandlerUser(uint8 ipcByte){
 	switch(ipcByte){
 		default:{
@@ -49,70 +47,50 @@ void IpcSynchandlerUser(uint8 ipcByte){
 	}
 }
 
-#ifdef ARM9
-__attribute__((section(".itcm")))
-#endif
+__attribute__((section(".iwram64K")))
 void Timer0handlerUser(){
 
 }
 
-#ifdef ARM9
-__attribute__((section(".itcm")))
-#endif
+__attribute__((section(".iwram64K")))
 void Timer1handlerUser(){
 
 }
 
-#ifdef ARM9
-__attribute__((section(".itcm")))
-#endif
+__attribute__((section(".iwram64K")))
 void Timer2handlerUser(){
 	timerAudioCallback();
 }
 
-#ifdef ARM9
-__attribute__((section(".itcm")))
-#endif
+__attribute__((section(".iwram64K")))
 void Timer3handlerUser(){
 
 }
 
-#ifdef ARM9
-__attribute__((section(".itcm")))
-#endif
+__attribute__((section(".iwram64K")))
 void HblankUser(){
 
 }
 
-#ifdef ARM9
-__attribute__((section(".itcm")))
-#endif
+__attribute__((section(".iwram64K")))
 void VblankUser(){
 	
 
 }
 
-#ifdef ARM9
-__attribute__((section(".itcm")))
-#endif
+__attribute__((section(".iwram64K")))
 void VcounterUser(){
-	struct sIPCSharedTGDS * sIPCSharedTGDSInst = (struct sIPCSharedTGDS *)TGDSIPCStartAddress;
-	//Handle Clock (should this one run on IRQs instead?)
-	sIPCSharedTGDSInst->ndsRTCSeconds = nds_get_time7();
+	
 }
 
 //Note: this event is hardware triggered from ARM7, on ARM9 a signal is raised through the FIFO hardware
-#ifdef ARM9
-__attribute__((section(".itcm")))
-#endif
+__attribute__((section(".iwram64K")))
 void screenLidHasOpenedhandlerUser(){
 	TurnOnScreens();
 }
 
 //Note: this event is hardware triggered from ARM7, on ARM9 a signal is raised through the FIFO hardware
-#ifdef ARM9
-__attribute__((section(".itcm")))
-#endif
+__attribute__((section(".iwram64K")))
 void screenLidHasClosedhandlerUser(){
 	TurnOffScreens();
 }

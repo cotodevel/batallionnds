@@ -536,31 +536,23 @@ int IMA_Adpcm_Player::play(
 	}
 	
 	// IMA-ADPCM stream
-	if(currentStreamingMode == FIFO_PLAYSOUNDSTREAM_FILE){
-		int fsize = pf_size(stream.currentFatfsFILEHandle);
-		soundData.channels = headerChunk.wChannels = ADPCMchannels = stream.get_channels();
-		headerChunk.dwSamplesPerSec = stream.get_sampling_rate();
-		headerChunk.wFormatTag = 1;
-		headerChunk.wBitsPerSample = 16;	//Always signed 16 bit PCM out
-		soundData.len = fsize;
-		soundData.loc = 0;
-		soundData.dataOffset = pf_tell(stream.currentFatfsFILEHandle);
-		multRate = 1;
-		sndRate = headerChunk.dwSamplesPerSec;
-		sampleLen = buffer_length;
-		soundData.sourceFmt = SRC_WAV;
-		
-		//ARM7 sound code
-		setupSoundTGDSVideoPlayerARM7();
-		strpcmL0 = (s16*)0x037f8000;
-		strpcmL1 = (strpcmL0 + (sampleLen ));
-		strpcmR0 = (strpcmL1 + (sampleLen ));
-		strpcmR1 = (strpcmR0 + (sampleLen ));		
-	}
-	else if(currentStreamingMode == FIFO_PLAYSOUNDEFFECT_FILE){
-		//file handle is opened, and decoding is realtime in small samples, then mixed into the final output audio buffer.
-	}
-
+	int fsize = pf_size(stream.currentFatfsFILEHandle);
+	soundData.channels = headerChunk.wChannels = ADPCMchannels = stream.get_channels();
+	headerChunk.dwSamplesPerSec = stream.get_sampling_rate();
+	headerChunk.wFormatTag = 1;
+	headerChunk.wBitsPerSample = 16;	//Always signed 16 bit PCM out
+	soundData.len = fsize;
+	soundData.loc = 0;
+	soundData.dataOffset = pf_tell(stream.currentFatfsFILEHandle);
+	multRate = 1;
+	sndRate = headerChunk.dwSamplesPerSec;
+	sampleLen = buffer_length;
+	soundData.sourceFmt = SRC_WAV;
+	setupSoundTGDSVideoPlayerARM7();
+	strpcmL0 = (s16*)0x037f8000;
+	strpcmL1 = (strpcmL0 + (sampleLen ));
+	strpcmR0 = (strpcmL1 + (sampleLen ));
+	strpcmR1 = (strpcmR0 + (sampleLen ));
 	paused = false;
 	setvolume( 4 );
 	active=true;
@@ -734,7 +726,7 @@ void setupSoundTGDSVideoPlayerARM7() {
 	
 	int ch;
 	
-	for(ch=0;ch<4;++ch)
+	for(ch=0;ch<16;++ch) //Hardware bug: If channels aren't initialized here, audio (per channel) stalls on NTR/TWL hardware
 	{
 		SCHANNEL_CR(ch) = 0;
 		SCHANNEL_TIMER(ch) = SOUND_FREQ((sndRate * multRate));
@@ -765,42 +757,6 @@ void timerAudioCallback(){
 
 	if(backgroundMusicPlayer.active == true){
 		IMAADPCMDecode((s16 *)bufR,(s16 *)bufL, &backgroundMusicPlayer);
-	}
-
-	//Sound effect mix
-	if(SoundEffect0Player.active == true){
-		s16 * tmpDat = (s16 *)&adpcmWorkBuffer[0];
-		SoundEffect0Player.i_stream_request(ADPCM_SIZE, tmpDat, WAV_FORMAT_IMA_ADPCM);
-		if(SoundEffect0Player.stream.get_channels() == 2){
-			uint i=0;
-			for(i=0;i<(ADPCM_SIZE);++i)
-			{
-				int mixedL=(int)bufL[i] + (int)checkClipping((int)tmpDat[i << 1]);
-				if (mixedL>32767) mixedL=32767;
-				if (mixedL<-32768) mixedL=-32768;
-				bufL[i] = (short)mixedL;
-				
-				int mixedR=(int)bufR[i] + (int)checkClipping((int)tmpDat[(i << 1) | 1]);
-				if (mixedR>32767) mixedR=32767;
-				if (mixedR<-32768) mixedR=-32768;
-				bufR[i] = (short)mixedR;
-			}
-		}
-		else{
-			uint i=0;
-			for(i=0;i<(ADPCM_SIZE);++i)
-			{
-				int mixedL=(int)bufL[i] + (int)checkClipping((int)tmpDat[i]);
-				if (mixedL>32767) mixedL=32767;
-				if (mixedL<-32768) mixedL=-32768;
-				bufL[i] = (short)mixedL;
-				
-				int mixedR=(int)bufR[i] + (int)checkClipping((int)tmpDat[i]);
-				if (mixedR>32767) mixedR=32767;
-				if (mixedR<-32768) mixedR=-32768;
-				bufR[i] = (short)mixedR;
-			}
-		}
 	}
 
 	// Left channel

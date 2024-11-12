@@ -39,11 +39,23 @@ USA
 #include "ima_adpcm.h"
 #endif
 
+#define MAX_SOUNDS_BUFFERED ((int)16)
+#define ENTRIES_TO_COMPARE ((int)6)
+struct soundItem {
+	char soundFile[ENTRIES_TO_COMPARE * 4];
+	u32 cnt; 
+	int len; 
+	u16 freq;
+	u32 soundBuffer;
+	int soundLen;
+	int channel;
+} __attribute__((aligned (4)));
+
 //---------------------------------------------------------------------------------
 struct sIPCSharedTGDSSpecific {
 //---------------------------------------------------------------------------------
-	char filename[256];
-};
+	char filename[64];
+} __attribute__((aligned (4)));
 
 //TGDS Memory Layout ARM7/ARM9 Cores
 #define TGDS_ARM7_MALLOCSTART (u32)(0x06018000)
@@ -51,8 +63,8 @@ struct sIPCSharedTGDSSpecific {
 #define TGDSDLDI_ARM7_ADDRESS (u32)(TGDS_ARM7_MALLOCSTART + TGDS_ARM7_MALLOCSIZE)	//0x0601C000
 #define FIFO_PLAYSOUNDSTREAM_FILE (u32)(0xFFFFABCB)
 #define FIFO_STOPSOUNDSTREAM_FILE (u32)(0xFFFFABCC)
-#define FIFO_PLAYSOUNDEFFECT_FILE (u32)(0xFFFFABCD)
 #define FIFO_STOP_ARM7_VRAM_CORE (u32)(0xFFFFABCE)
+#define FIFO_WRITE_AUDIO_HARDWARE (u32)(0xFFFFABCF)
 
 #endif
 
@@ -93,17 +105,13 @@ extern int main(int argc, char **argv);
 extern struct TGDSVideoFrameContext videoCtx;
 extern struct soundPlayerContext soundData;
 extern char fname[256];
-
-extern void playSoundStreamARM7();
-extern void handleARM7FSRender();
-
-extern bool stopSoundStreamUser();
-extern void playerStopARM7();
 #endif
 
 #endif
 
 #ifdef ARM9
+extern struct soundItem soundsCached[MAX_SOUNDS_BUFFERED]; //EWRAM
+extern void writeARM7SoundChannelFromSourceBatallion(struct soundItem * sndItem);
 extern u32 playSoundStreamFromFile(char * videoStructFDFilename, bool loop, u32 streamType);
 extern void BgMusic(char * filename);
 extern void BgMusicOff();
