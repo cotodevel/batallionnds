@@ -37,7 +37,6 @@
 #endif
 
 #ifdef ARM9
-#include "Texture_Cube_metal.h"
 #include "consoleTGDS.h"
 #include "imagepcx.h"
 #endif
