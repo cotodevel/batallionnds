@@ -111,13 +111,13 @@ public:
 class IMA_Adpcm_Player {
 	bool autofill;
 	bool paused;
-	u32 currentStreamingMode;	//FIFO_PLAYSOUNDSTREAM_FILE (software decoding, slower) 
+	int currentStreamingMode;
 public:
 	IMA_Adpcm_Stream stream;
 	bool active;
 	IMA_Adpcm_Player();
 	wavFormatChunk headerChunk;
-	int play(bool loop_audio, bool automatic_updates, int buffer_length = ADPCM_SIZE / 8, closeSoundHandle = NULL, FATFS * inFatfsFILEHandle = NULL, u32 incomingStreamingMode = 0);
+	int play(bool loop_audio, bool automatic_updates, int buffer_length = ADPCM_SIZE / 8, closeSoundHandle = NULL, FATFS * inFatfsFILEHandle = NULL, int incomingStreamingMode = 0);
 	void pause();
 	void resume();
 	void stop();
@@ -147,7 +147,8 @@ extern bool player_loop;
 extern void soundPauseStart();
 extern void timerAudioCallback();
 extern void setupSoundTGDSVideoPlayerARM7();
-extern u8 adpcmWorkBuffer[ADPCM_SIZE*4];
+extern u8 adpcmWorkBuffer[ADPCM_SIZE*2];
+extern u8 streamBuffer[ADPCM_SIZE*2];
 
 #ifdef __cplusplus
 }

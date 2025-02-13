@@ -61,6 +61,8 @@ struct sIPCSharedTGDSSpecific {
 #define TGDS_ARM7_MALLOCSTART (u32)(0x06018000)
 #define TGDS_ARM7_MALLOCSIZE (int)(16*1024)
 #define TGDSDLDI_ARM7_ADDRESS (u32)(TGDS_ARM7_MALLOCSTART + TGDS_ARM7_MALLOCSIZE)	//0x0601C000
+#define TGDS_ARM7_AUDIOBUFFER_STREAM (u32)(0x06010000)	//Unused: 15K
+
 #define FIFO_PLAYSOUNDSTREAM_FILE (u32)(0xFFFFABCB)
 #define FIFO_STOPSOUNDSTREAM_FILE (u32)(0xFFFFABCC)
 #define FIFO_STOP_ARM7_VRAM_CORE (u32)(0xFFFFABCE)
@@ -73,10 +75,7 @@ struct sIPCSharedTGDSSpecific {
 #ifdef ARM7
 #if defined(ARM7VRAMCUSTOMCORE)
 	extern IMA_Adpcm_Player backgroundMusicPlayer;	//Sound stream Background music Instance
-	extern IMA_Adpcm_Player SoundEffect0Player;	//Sound stream Background music Instance
-
 	extern FATFS fileHandle; //Sound stream handle
-	extern FATFS FatfsFILESoundSample0; //Sound effect handle #0
 #endif
 #endif
 
@@ -110,6 +109,7 @@ extern char fname[256];
 #endif
 
 #ifdef ARM9
+extern void initHardwareCustom(u8 DSHardware);
 extern struct soundItem soundsCached[MAX_SOUNDS_BUFFERED]; //EWRAM
 extern void writeARM7SoundChannelFromSourceBatallion(struct soundItem * sndItem);
 extern u32 playSoundStreamFromFile(char * videoStructFDFilename, bool loop, u32 streamType);

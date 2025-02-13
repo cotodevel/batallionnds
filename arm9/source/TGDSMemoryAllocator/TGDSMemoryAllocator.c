@@ -29,7 +29,7 @@ USA
 //After that, TGDS project initializes the default/custom allocator automatically.
 
 
-	////////[Custom Memory implementation ]////////
+	////////[Custom Memory implementation: [NTR 4MB] [TWL 16MB] EWRAM malloc support ]////////
 
 //Definition that overrides the weaksymbol expected from toolchain to init ARM9's TGDS memory allocation
 #if (defined(__GNUC__) && !defined(__clang__))
@@ -58,7 +58,7 @@ struct AllocatorInstance * getProjectSpecificMemoryAllocatorSetup(bool isCustomT
 	XmemSetup(xmemsize, XMEM_BS);
 	XmemInit(customMemoryAllocator->ARM9MallocStartaddress, (u32)customMemoryAllocator->memoryToAllocate);
 	
-	//ARM7 TGDS 96K = 0x037f8000 ~ 0x03810000. TGDS Sound Streaming code: Disabled/Custom
+	//Memory Setup: ARM7 TGDS 96K = 0x037f8000 ~ 0x03810000. TGDS Sound Streaming code: Disabled
 	WRAM_CR = WRAM_0KARM9_32KARM7;
 	return customMemoryAllocator;
 }
