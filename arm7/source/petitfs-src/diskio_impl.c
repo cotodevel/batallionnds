@@ -20,7 +20,6 @@
    Public Functions
 
 ---------------------------------------------------------------------------*/
-
 //Coto- 18 Nov. 2024: Add cached sectors, to remove some more audio clicks!
 struct dldiCache dldiCached[MAX_ENTRIES_BUFFERED];
 static int sequentialCachedEntry = 0;
@@ -52,6 +51,7 @@ DSTATUS disk_initialize (void){
 /*-----------------------------------------------------------------------*/
 /* Read Partial Sector                                                   */
 /*-----------------------------------------------------------------------*/
+
 #ifdef ARM7
 __attribute__ ((optnone))
 #endif

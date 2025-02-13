@@ -31,20 +31,20 @@ int heightScene;	/// the height of the window
 //It defines the RGBA color of the diffuse light that a particular light source adds to a scene. By default, GL_DIFFUSE is (1.0, 1.0, 1.0, 1.0) for GL_LIGHT0, 
 //which produces a bright, white light as shown in the left side of "Plate 13" in Appendix I. 
 //The default value for any other light (GL_LIGHT1, ... , GL_LIGHT7) is (0.0, 0.0, 0.0, 0.0).
-GLfloat light_diffuse0Scene[4]	= {0.3f, 0.3f, 0.4f, 1.01f}; //WIN32
+GLfloat light_diffuse0Scene[4]	= {0.9f, 0.9f, 0.4f, 1.01f}; //WIN32
 
-GLfloat light_ambient0Scene[4]	= {0.9f, 0.9f, 0.9f, 1.0f}; //WIN32
-GLfloat light_specular0Scene[4]	= {0.6f, -0.6f, 0.6f, 1.0f}; //WIN32
-GLfloat light_position0Scene[4]	= {1.0f, 3.0f, 1.6f, 1.0f}; //WIN32
+GLfloat light_ambient0Scene[4]	= {0.1f, 0.1f, 0.1f, 1.0f}; //WIN32
+GLfloat light_specular0Scene[4]	= {0.6f, 0.6f, 0.6f, 1.0f}; //WIN32
+GLfloat light_position0Scene[4]	= {-1.0f, -1.0f, 1.0f, 0.0f}; //WIN32
 
 // light 1 colours
 GLfloat light_ambient1Scene[4]	= {0.1f, 0.1f, 0.1f, 1.0f};
-GLfloat light_diffuse1Scene[4]	= {0.3f, 0.3f, 0.3f, 1.0f};
-GLfloat light_specular1Scene[4]	= {0.5f, 0.5f, -0.5f, 1.0f};
-GLfloat light_position1Scene[4]	= {1.0f, -0.6f, 1.0f, 1.0f};
+GLfloat light_diffuse1Scene[4]	= {0.45f, 0.45f, 0.45f, 1.0f};
+GLfloat light_specular1Scene[4]	= {0.5f, 0.5f, 0.5f, 1.0f};
+GLfloat light_position1Scene[4]	= {-2.0f, -5.0f, -5.0f, -1.0f};
 
 //material
-GLfloat mat_ambient[]    = { 1.0f, 8.0f, 8.0f, 0.0f }; 
+GLfloat mat_ambient[]    = { 8.0f, 8.0f, 8.0f, 0.0f }; 
 GLfloat mat_diffuse[]    = { 16.0f, 16.0f, 16.0f, 0.0f }; 
 GLfloat mat_specular[]   = { 8.0f, 8.0f, 8.0f, 0.0f }; 
 GLfloat mat_emission[]   = { 5.0f, 5.0f, 5.0f, 0.0f }; 
@@ -65,6 +65,12 @@ void initializeCamera(struct Camera * Inst){
 }
 
 /// Decrements the distance to origin (zoom in)
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("Ofast")))
+#endif
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void dec(struct Camera * Inst){
 	Inst->distance--;
 }
@@ -75,17 +81,35 @@ void inc(struct Camera * Inst){
 }
 
 /// Adjusts the camera rotation around the Y axis
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("Ofast")))
+#endif
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void clockwise(struct Camera * Inst){
 	Inst->horizontalAngle++;
 }
 
 /// Adjusts the camera rotation around the Y axis
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("Ofast")))
+#endif
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void anticlockwise(struct Camera * Inst){
 	Inst->horizontalAngle--;
 }
 
 /// Adjusts the camera rotation around the X axis
 /// the angle is locked if it gets above 0 degrees
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("Ofast")))
+#endif
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void tiltup(struct Camera * Inst){
 	if (Inst->verticalTilt < 0)
 		Inst->verticalTilt++;
@@ -93,18 +117,30 @@ void tiltup(struct Camera * Inst){
 
 /// Adjusts the camera rotation around the X axis
 /// The angle is locked if it gets greate than 90 degrees
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("Ofast")))
+#endif
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void tiltdown(struct Camera * Inst){
 	if (Inst->verticalTilt > -90)
 		Inst->verticalTilt--;
 }
 
 /// Default Constructor. Initialises defaults.
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("Ofast")))
+#endif
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void initializeScene(struct Scene * Inst){
 	TWLPrintf("-- Creating scene\n");
 
 	// set up our directional overhead lights
 	Inst->light0On = false;
-	Inst->light1On = true;
+	Inst->light1On = false;
 	
 	Inst->fogMode = false;
 	Inst->wireMode = false;		/// wireframe mode on / off
@@ -113,14 +149,26 @@ void initializeScene(struct Scene * Inst){
 }
 
 
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("Ofast")))
+#endif
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void render3DUpperScreen(){
 	//Update camera for NintendoDS Upper 3D Screen:
-	renderCube = true;
+	renderCube = false;
 }
 
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("Ofast")))
+#endif
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
 void render3DBottomScreen(){
 	//Update camera for NintendoDS Bottom 3D Screen
-	renderCube = false;
+	renderCube = true;
 }
 
 /// Sets up the OpenGL state machine environment
@@ -205,7 +253,6 @@ int InitGL(int argc, char *argv[]){
 		menuShow();
 	}
 	REG_IE |= IRQ_VBLANK;
-	glReset(); //Depend on GX stack to render scene
 	glClearColor(0,35,195);		// blue green background colour
 
 	/* TGDS 1.65 OpenGL 1.1 Initialization */
@@ -218,8 +265,7 @@ int InitGL(int argc, char *argv[]){
 
 	glShadeModel(GL_SMOOTH);
 	
-	glEnable(GL_COLOR_MATERIAL);	//allow to mix both glColor3f + light sources when lighting is enabled (glVertex + glNormal3f)
-	glEnable(GL_LIGHT0|GL_LIGHT1);
+	glEnable(GL_COLOR_MATERIAL);	//allow to mix both glColor3f + light sources (glVertex + glNormal3f)
 
 	glCallListGX((u32*)&GXPayload); //Run this payload once to force cache flushes on DMA GXFIFO
 	return 0;
@@ -303,9 +349,8 @@ int startTGDSProject(int argc, char *argv[])
 #endif
 
 #if defined(ARM9)
-	startTimerCounter(tUnitsMilliseconds, 1);
     glMaterialShinnyness();
-	glReset(); //Depend on GX stack to render scene
+	REG_IE |= IRQ_VBLANK;
 	while(1==1){
 		//game loop
 		id();

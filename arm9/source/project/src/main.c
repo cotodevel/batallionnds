@@ -61,8 +61,18 @@ USA
 extern int vsnprintf( char* buffer, size_t buf_size, const char* format, va_list vlist );
 #include "ndsDisplayListUtils.h"
 #include "TGDSLogoLZSSCompressed.h"
+#include "TGDS_threads.h"
 #include "loader.h"
 #include "dswnifi_lib.h"
+
+//TGDS-MB ARM7 Bootldr
+#include "arm7bootldr.h"
+#include "arm7bootldr_twl.h"
+
+//TGDS-MB ARM7 Stage 1
+#include "arm7_stage1.h"
+#include "arm7_stage1_twl.h"
+
 #endif
 
 #if defined(_MSC_VER) && !defined(ARM9) //BatallionNDS is VS2012?
@@ -96,37 +106,47 @@ extern int vsnprintf( char* buffer, size_t buf_size, const char* format, va_list
  #include <unistd.h>
 #endif
 
+#ifdef ARM9
+__attribute__((section(".dtcm")))
+#endif
+struct task_Context * internalTGDSThreads = NULL;
+
+#ifdef __cplusplus
+extern "C"{
+#endif
+
+extern int vsnprintf(char *str, size_t size, const char *format, va_list ap);
+
+#ifdef __cplusplus
+}
+#endif
 
 #include "Scene.h"
 
-#ifndef _MSC_VER
-					// //
-#define ARM9 1		// Enable only if not real GCC + NDS environment
-#undef _MSC_VER		// //
-#undef WIN32		// //
-#endif
-
 #ifdef ARM9
 #include "loader.h"
-
-//ARM7 VRAM core
-#include "arm7vram.h"
-#include "arm7vram_twl.h"
-
-u32 * getTGDSMBV3ARM7Bootloader(){
+u32 * getTGDSMBV3ARM7Bootloader(){	//Required by ToolchainGenericDS-multiboot v3
 	if(__dsimode == false){
-		return (u32*)&arm7vram[0];	
+		return (u32*)&arm7bootldr[0];	
 	}
 	else{
-		return (u32*)&arm7vram_twl[0];
+		return (u32*)&arm7bootldr_twl[0];
 	}
 }
-#endif
+
+u32 * getTGDSMBV3ARM7Stage1(){	//required by TGDS-mb v3's ARM7 @ 0x03800000
+	if(__dsimode == false){
+		return (u32*)&arm7_stage1[0];	
+	}
+	else{
+		return (u32*)&arm7_stage1_twl[0];
+	}
+}
 
 struct Scene scene;	/// the scene we render
 
 #if (defined(__GNUC__) && !defined(__clang__))
-__attribute__((optimize("Os")))
+__attribute__((optimize("O0")))
 #endif
 
 #if (!defined(__GNUC__) && defined(__clang__))
@@ -141,26 +161,19 @@ int main(int argc, char **argv)
 	#ifdef ARM9
 	/*			TGDS 1.6 Standard ARM9 Init code start	*/
 	//Save Stage 1: IWRAM ARM7 payload: NTR/TWL (0x03800000)
-	memcpy((void *)TGDS_MB_V3_ARM7_STAGE1_ADDR, (const void *)0x02380000, (int)(96*1024));
+	memcpy((void *)TGDS_MB_V3_ARM7_STAGE1_ADDR, (const void *)getTGDSMBV3ARM7Stage1(), (int)(96*1024));
 	coherent_user_range_by_size((uint32)TGDS_MB_V3_ARM7_STAGE1_ADDR, (int)(96*1024));
 	
-	//Execute Stage 2: VRAM ARM7 payload: NTR/TWL (0x06000000)
-	u32 * payload = NULL;
+	//NTR mode requires ARM7DLDI layout set up before malloc setup
 	if(__dsimode == false){
-		payload = (u32*)&arm7vram[0];	
+		bool isCustomTGDSMalloc = true;
+		setTGDSMemoryAllocator(getProjectSpecificMemoryAllocatorSetup(isCustomTGDSMalloc));
+		sint32 fwlanguage = (sint32)getLanguage();
 	}
-	else{
-		payload = (u32*)&arm7vram_twl[0];
-	}
-	executeARM7Payload((u32)0x02380000, 96*1024, payload);
 	
 	bool isTGDSCustomConsole = true;	//set default console or custom console: custom console 
 	GUI_init(isTGDSCustomConsole);
 	GUI_clear();
-	
-	bool isCustomTGDSMalloc = true;
-	setTGDSMemoryAllocator(getProjectSpecificMemoryAllocatorSetup(isCustomTGDSMalloc));
-	sint32 fwlanguage = (sint32)getLanguage();
 	
 	int ret=FS_init();
 	if (ret != 0){
@@ -170,20 +183,31 @@ int main(int argc, char **argv)
 		}
 	}
 	
+	//TWL mode doesn't care about ARM7DLDI layout, but requires malloc to be setup after it in order to allocate 16MB of EWRAM 
+	if(__dsimode == true){
+		bool isCustomTGDSMalloc = true;
+		setTGDSMemoryAllocator(getProjectSpecificMemoryAllocatorSetup(isCustomTGDSMalloc));
+		sint32 fwlanguage = (sint32)getLanguage();		
+	}
+	
+	switch_dswnifi_mode(dswifi_idlemode);
 	asm("mcr	p15, 0, r0, c7, c10, 4");
 	flush_icache_all();
 	flush_dcache_all();	
+	internalTGDSThreads = getTGDSThreadSystem();
 	/*			TGDS 1.6 Standard ARM9 Init code end	*/
 	
-	setupDisabledExceptionHandler();
 	REG_IME = 0;
 	set0xFFFF0000FastMPUSettings();
 	//TGDS-Projects -> legacy NTR TSC compatibility
 	if(__dsimode == true){
-		TWLSetTouchscreenTWLMode(); //guaranteed TSC on TWL Mode through Unlaunch
+		TWLSetTouchscreenTWLMode();
 	}
 	REG_IME = 1;
 	
+	setupDisabledExceptionHandler();
+	
+	setBacklight(POWMAN_BACKLIGHT_TOP_BIT | POWMAN_BACKLIGHT_BOTTOM_BIT); //Dual3D or debug session enabled screens
 	
 	argv[1] = (char*)0xFF; //comment out to enable video intro
 	
@@ -250,7 +274,8 @@ int main(int argc, char **argv)
 	printf("---");
 	printf("ending TGDS Project. Halt");
 	while(1==1){
-
+		bool waitForVblank = false;
+		int threadsRan = runThreads(internalTGDSThreads, waitForVblank);
 	}
 	#endif
 	
@@ -6483,8 +6508,70 @@ void drawScene(){
     glutSwapBuffers();
 	#endif
 	#if (!defined(_MSC_VER) && defined(ARM9)) //TGDS ARM9
-	handleARM9SVC();	// Do not remove, handles TGDS services 
-    glFlush();	
-	IRQVBlankWait();
+	glFlush();	
+	bool waitForVblank = true;	//TGDS threads + OpenGL frame
+	int threadsRan = runThreads(internalTGDSThreads, waitForVblank);
     #endif
 }
+
+//////////////////////////////////////////////////////// Threading User code start : TGDS Project specific ////////////////////////////////////////////////////////
+//User callback when Task Overflows. Intended for debugging purposes only, as normal user code tasks won't overflow if a task is implemented properly.
+//	u32 * args = This Task context
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("O0")))
+#endif
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
+void onThreadOverflowUserCode(u32 * args){
+	struct task_def * thisTask = (struct task_def *)args;
+	struct task_Context * parentTaskCtx = thisTask->parentTaskCtx;	//get parent Task Context node 
+	char threadStatus[64];
+	switch(thisTask->taskStatus){
+		case(INVAL_THREAD):{
+			strcpy(threadStatus, "INVAL_THREAD");
+		}break;
+		
+		case(THREAD_OVERFLOW):{
+			strcpy(threadStatus, "THREAD_OVERFLOW");
+		}break;
+		
+		case(THREAD_EXECUTE_OK_WAIT_FOR_SLEEP):{
+			strcpy(threadStatus, "THREAD_EXECUTE_OK_WAIT_FOR_SLEEP");
+		}break;
+		
+		case(THREAD_EXECUTE_OK_WAKEUP_FROM_SLEEP_GO_IDLE):{
+			strcpy(threadStatus, "THREAD_EXECUTE_OK_WAKEUP_FROM_SLEEP_GO_IDLE");
+		}break;
+	}
+	
+	char debOut2[256];
+	char timerUnitsMeasurement[32];
+	if( thisTask->taskStatus == THREAD_OVERFLOW){
+		if(thisTask->timerFormat == tUnitsMilliseconds){
+			strcpy(timerUnitsMeasurement, "ms");
+		}
+		else if(thisTask->timerFormat == tUnitsMicroseconds){
+			strcpy(timerUnitsMeasurement, "us");
+		} 
+		else{
+			strcpy(timerUnitsMeasurement, "-");
+		}
+		sprintf(debOut2, "[%s]. Thread requires at least (%d) %s. ", threadStatus, thisTask->remainingThreadTime, timerUnitsMeasurement);
+	}
+	else{
+		sprintf(debOut2, "[%s]. ", threadStatus);
+	}
+	
+	int TGDSDebuggerStage = 10;
+	u8 fwNo = *(u8*)(0x027FF000 + 0x5D);
+	handleDSInitOutputMessage((char*)debOut2);
+	handleDSInitError(TGDSDebuggerStage, (u32)fwNo);
+	
+	while(1==1){
+		HaltUntilIRQ();
+	}
+}
+//////////////////////////////////////////////////////////////////////// Threading User code end /////////////////////////////////////////////////////////////////////////////
+
+#endif

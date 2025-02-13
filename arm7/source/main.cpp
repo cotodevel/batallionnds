@@ -1,5 +1,4 @@
 /*
-
 			Copyright (C) 2017  Coto
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,127 +18,35 @@ USA
 
 #include "main.h"
 #include "biosTGDS.h"
-#include "spifwTGDS.h"
-#include "posixHandleTGDS.h"
-#include "pff.h"
-#include "ipcfifoTGDSUser.h"
 #include "loader.h"
-#include "dldi.h"
-#include "exceptionTGDS.h"
-#include "dmaTGDS.h"
 #include "busTGDS.h"
+#include "dmaTGDS.h"
+#include "spifwTGDS.h"
+#include "powerTGDS.h"
 #include "wifi_arm7.h"
+#include "pff.h"
 #include "ima_adpcm.h"
 #include "soundTGDS.h"
+#include "biosTGDS.h"
 #include "timerTGDS.h"
 #include "InterruptsARMCores_h.h"
+#include "loader.h"
+#include "ipcfifoTGDSUser.h"
+#include "dldi.h"
+#include "debugNocash.h"
+#include "TGDS_threads.h"
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////Custom ARM7 VRAM Core/////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 __attribute__((section(".iwram64K")))
 IMA_Adpcm_Player backgroundMusicPlayer;	//Actual PLAYER Instance. See ima_adpcm.cpp -> [PLAYER: section
 
 __attribute__((section(".iwram64K")))
-IMA_Adpcm_Player SoundEffect0Player;
-
-__attribute__((section(".iwram64K")))
-FATFS FatfsFILEBgMusic; //Sound stream handle
-
-__attribute__((section(".iwram64K")))
-FATFS FatfsFILESoundSample0; //Sound effect handle #0. Too slow to use by ARM7. Needs direct samples instead
-
-__attribute__((section(".iwram64K")))
-FATFS fileHandle;					// Petit-FatFs work area 
+FATFS fileHandle;					// bootloader / / Sound stream handle
 
 struct soundPlayerContext soundData;
 char fname[256];
-char debugBuf7[256];
-
-/*
-//If NTR/TWL Binary
-	int isNTRTWLBinary = isNTROrTWLBinaryTGDSMB7(fh);
-	//Trying to boot a TWL binary in NTR mode? 
-	if(!(isNTRTWLBinary == isNDSBinaryV1) && !(isNTRTWLBinary == isNDSBinaryV2) && !(isNTRTWLBinary == isNDSBinaryV3) && !(isNTRTWLBinary == isTWLBinary) && !(isNTRTWLBinary == isNDSBinaryV1Slot2)){
-	}
-*/
-
-#if (defined(__GNUC__) && !defined(__clang__))
-__attribute__((optimize("O0")))
-#endif
-#if (!defined(__GNUC__) && defined(__clang__))
-__attribute__ ((optnone))
-#endif
-int isNTROrTWLBinaryTGDSMB7(FATFS * currentFH){
-	int mode = notTWLOrNTRBinary;
-	return mode;
-}
-
-
-#include <stdio.h>
-
-#if (defined(__GNUC__) && !defined(__clang__))
-__attribute__((optimize("O0")))
-#endif
-#if (!defined(__GNUC__) && defined(__clang__))
-__attribute__ ((optnone))
-#endif
-void strrev(char *arr, int start, int end)
-{
-    char temp;
-
-    if (start >= end)
-        return;
-
-    temp = *(arr + start);
-    *(arr + start) = *(arr + end);
-    *(arr + end) = temp;
-
-    start++;
-    end--;
-    strrev(arr, start, end);
-}
-
-#if (defined(__GNUC__) && !defined(__clang__))
-__attribute__((optimize("O0")))
-#endif
-#if (!defined(__GNUC__) && defined(__clang__))
-__attribute__ ((optnone))
-#endif
-char *itoa(int number, char *arr, int base)
-{
-    int i = 0, r, negative = 0;
-
-    if (number == 0)
-    {
-        arr[i] = '0';
-        arr[i + 1] = '\0';
-        return arr;
-    }
-
-    if (number < 0 && base == 10)
-    {
-        number *= -1;
-        negative = 1;
-    }
-
-    while (number != 0)
-    {
-        r = number % base;
-        arr[i] = (r > 9) ? (r - 10) + 'a' : r + '0';
-        i++;
-        number /= base;
-    }
-
-    if (negative)
-    {
-        arr[i] = '-';
-        i++;
-    }
-
-    strrev(arr, 0, i - 1);
-
-    arr[i] = '\0';
-
-    return arr;
-}
 
 #if (defined(__GNUC__) && !defined(__clang__))
 __attribute__((optimize("O0")))
@@ -157,7 +64,11 @@ void playSoundStreamARM7(){
 	struct sIPCSharedTGDSSpecific* sharedIPC = getsIPCSharedTGDSSpecific();
 	char * filename = (char*)&sharedIPC->filename[0];
 	strcpy((char*)fname, filename);
-	currentFH = &FatfsFILEBgMusic;
+	
+	if(streamType == FIFO_PLAYSOUNDSTREAM_FILE){
+		currentFH = &fileHandle;
+	}
+	
 	fresult = pf_mount(currentFH);
 	if (fresult != FR_OK) { 
 		
@@ -175,14 +86,34 @@ void playSoundStreamARM7(){
 	memset((unsigned char *)&argBuffer[0], 0, sizeof(argBuffer));
 	argBuffer[0] = 0xc070ffff;
 	
+	extern bool stopSoundStreamUser();
 	//decode audio here
 	bool loop_audio = loop;
 	bool automatic_updates = false;
-	if(backgroundMusicPlayer.play(loop_audio, automatic_updates, ADPCM_SIZE, stopSoundStreamUser, currentFH, streamType) == 0){
-		//ADPCM Playback!
+	if(streamType == FIFO_PLAYSOUNDSTREAM_FILE){
+		if(backgroundMusicPlayer.play(loop_audio, automatic_updates, ADPCM_SIZE, stopSoundStreamUser, currentFH, streamType) == 0){
+			//ADPCM Playback!
+		}
 	}
+	
 	fifomsg[33] = (u32)fresult;
 }
+
+void stopBGMusic7(){
+	backgroundMusicPlayer.stop();
+}
+
+bool stopSoundStreamUser(){
+
+}
+
+void bootfile(){
+	
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////TGDS-mb v3 end /////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #if (defined(__GNUC__) && !defined(__clang__))
 __attribute__((optimize("O0")))
@@ -192,60 +123,18 @@ __attribute__ ((optnone))
 #endif
 int main(int argc, char **argv) {
 //---------------------------------------------------------------------------------
-	
-	//Copy ARM7i sections from VRAM -> IWRAM if we're already at VRAM
-	extern u32 __arm7iwram_lma__;
-	extern u32 __arm7iwram_lma_end__;
-	extern u32 __iwram_startFast;
-	extern u32 __iwram_topFast;
-	int iwramSectionSize = (int) ((u32)&__arm7iwram_lma_end__ - (u32)&__iwram_startFast);
-	dmaTransferWord(0, (uint32)&__arm7iwram_lma__, (uint32)&__iwram_startFast, iwramSectionSize);
-	
 	/*			TGDS 1.6 Standard ARM7 Init code start	*/
 	installWifiFIFO();
 	while(!(*(u8*)0x04000240 & 2) ){} //wait for VRAM_D block
 	ARM7InitDLDI(TGDS_ARM7_MALLOCSTART, TGDS_ARM7_MALLOCSIZE, TGDSDLDI_ARM7_ADDRESS);
 	SendFIFOWords(FIFO_ARM7_RELOAD, 0xFF); //ARM7 Reload OK -> acknowledge ARM9
+	struct task_Context * TGDSThreads = getTGDSThreadSystem();
     /*			TGDS 1.6 Standard ARM7 Init code end	*/
 	REG_IE|=(IRQ_VBLANK); //X button depends on this
+	
 	while (1) {
-		handleARM7SVC();	/* Do not remove, handles TGDS services */
-		HaltUntilIRQ(); //Save power until next Vblank
+		bool waitForVblank = false;
+		int threadsRan = runThreads(TGDSThreads, waitForVblank);
 	}
 	return 0;
-}
-
-bool stopSoundStreamUser(){
-
-}
-
-#if (defined(__GNUC__) && !defined(__clang__))
-__attribute__((optimize("O0")))
-#endif
-#if (!defined(__GNUC__) && defined(__clang__))
-__attribute__ ((optnone))
-#endif
-void playerStopARM7(){
-	memset((void *)strpcmL0, 0, 2048);
-	memset((void *)strpcmL1, 0, 2048);
-	memset((void *)strpcmR0, 0, 2048);
-	memset((void *)strpcmR1, 0, 2048);
-
-	REG_IE&=~IRQ_TIMER2;
-	
-	TIMERXDATA(1) = 0;
-	TIMERXCNT(1) = 0;
-	TIMERXDATA(2) = 0;
-	TIMERXCNT(2) = 0;
-	for(int ch=0;ch<4;++ch)
-	{
-		SCHANNEL_CR(ch) = 0;
-		SCHANNEL_TIMER(ch) = 0;
-		SCHANNEL_LENGTH(ch) = 0;
-		SCHANNEL_REPEAT_POINT(ch) = 0;
-	}
-}
-
-void stopBGMusic7(){
-	backgroundMusicPlayer.stop();
 }

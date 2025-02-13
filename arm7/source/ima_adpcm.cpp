@@ -143,7 +143,7 @@ int IMA_Adpcm_Stream::stream( s16 *target, int length )
 	if( format == WAV_FORMAT_PCM )
 		return stream_pcm( target, length );
 	else
-		return decode_ima( target, length );
+	return decode_ima( target, length );
 }
 
 #if (defined(__GNUC__) && !defined(__clang__))
@@ -520,7 +520,7 @@ int IMA_Adpcm_Player::play(
 	int buffer_length, 
 	closeSoundHandle closeHandle, 
 	FATFS * inFatfsFILEHandle, 
-	u32 incomingStreamingMode
+	int incomingStreamingMode
 ){
 	if(inFatfsFILEHandle == NULL){
 		return -1;
@@ -536,23 +536,28 @@ int IMA_Adpcm_Player::play(
 	}
 	
 	// IMA-ADPCM stream
-	int fsize = pf_size(stream.currentFatfsFILEHandle);
-	soundData.channels = headerChunk.wChannels = ADPCMchannels = stream.get_channels();
-	headerChunk.dwSamplesPerSec = stream.get_sampling_rate();
-	headerChunk.wFormatTag = 1;
-	headerChunk.wBitsPerSample = 16;	//Always signed 16 bit PCM out
-	soundData.len = fsize;
-	soundData.loc = 0;
-	soundData.dataOffset = pf_tell(stream.currentFatfsFILEHandle);
-	multRate = 1;
-	sndRate = headerChunk.dwSamplesPerSec;
-	sampleLen = buffer_length;
-	soundData.sourceFmt = SRC_WAV;
-	setupSoundTGDSVideoPlayerARM7();
-	strpcmL0 = (s16*)0x037f8000;
-	strpcmL1 = (strpcmL0 + (sampleLen ));
-	strpcmR0 = (strpcmL1 + (sampleLen ));
-	strpcmR1 = (strpcmR0 + (sampleLen ));
+	if(currentStreamingMode == FIFO_PLAYSOUNDSTREAM_FILE){
+		int fsize = pf_size(stream.currentFatfsFILEHandle);
+		soundData.channels = headerChunk.wChannels = ADPCMchannels = stream.get_channels();
+		headerChunk.dwSamplesPerSec = stream.get_sampling_rate();
+		headerChunk.wFormatTag = 1;
+		headerChunk.wBitsPerSample = 16;	//Always signed 16 bit PCM out
+		soundData.len = fsize;
+		soundData.loc = 0;
+		soundData.dataOffset = pf_tell(stream.currentFatfsFILEHandle);
+		multRate = 1;
+		sndRate = headerChunk.dwSamplesPerSec;
+		sampleLen = buffer_length;
+		soundData.sourceFmt = SRC_WAV;
+		
+		//ARM7 sound code
+		setupSoundTGDSVideoPlayerARM7();
+		strpcmL0 = (s16*)TGDS_ARM7_AUDIOBUFFER_STREAM;
+		strpcmL1 = (strpcmL0 + (sampleLen * 2));
+		strpcmR0 = (strpcmL1 + (sampleLen * 2));
+		strpcmR1 = (strpcmR0 + (sampleLen * 2));		
+	}
+
 	paused = false;
 	setvolume( 4 );
 	active=true;
@@ -590,7 +595,6 @@ __attribute__ ((optnone))
 void IMA_Adpcm_Player::stop()		{
 	stream.close();
 	active=false;
-	paused=true;
 	setvolume( 0 );
 }
 
@@ -647,19 +651,27 @@ __attribute__((optimize("O0")))
 __attribute__ ((optnone))
 #endif
 __attribute__((section(".iwram64K")))
-int IMA_Adpcm_Player::i_stream_request( int length, void * dest, int format ){
-	if( stream.stream( (s16*)dest, length ) != 1 ) {
-		return 0;
-	}
+int IMA_Adpcm_Player::i_stream_request( int length, void * dest, int format )		{
+	if( !paused ) {
+		if( stream.stream( (s16*)dest, length ) != 1)
+		{
+			
+		}
+		else{
+			if(!stream.wave_loop){ //is bool loop == disabled?
+				stop();
+			}
+		}
+		
+	} 
 	else {
 		s16 *d = (s16*)dest;
 		int i = length * 2;
 		for( ; i; i-- ) {
 			*d++ = 0;
 		}
-		stop();
 	}
-	return -1;
+	return length;
 }
 
 __attribute__((section(".iwram64K")))
@@ -673,8 +685,9 @@ __attribute__((optimize("O0")))
 #if (!defined(__GNUC__) && defined(__clang__))
 __attribute__ ((optnone))
 #endif
-u8 adpcmWorkBuffer[ADPCM_SIZE*4];
+u8 adpcmWorkBuffer[ADPCM_SIZE*2];
 
+u8 streamBuffer[ADPCM_SIZE*2];
 #if (defined(__GNUC__) && !defined(__clang__))
 __attribute__((optimize("O0")))
 #endif
@@ -684,24 +697,23 @@ __attribute__ ((optnone))
 __attribute__((section(".iwram64K")))
 void IMAADPCMDecode(s16 * lBuf, s16 * rBuf, IMA_Adpcm_Player * thisPlayer)	{
 	s16 * tmpData = (s16 *)&adpcmWorkBuffer[0];
-	if(thisPlayer->i_stream_request(ADPCM_SIZE, tmpData, WAV_FORMAT_IMA_ADPCM) != -1){
-		if(soundData.channels == 2)
-		{
-			uint i=0;
-			for(i=0;i<(ADPCM_SIZE);++i)
-			{					
-				lBuf[i] = (s16)checkClipping((int)tmpData[i << 1]);
-				rBuf[i] = (s16)checkClipping((int)tmpData[(i << 1) | 1]);
-			}
+	thisPlayer->i_stream_request(ADPCM_SIZE, tmpData, WAV_FORMAT_IMA_ADPCM);
+	if(soundData.channels == 2)
+	{
+		uint i=0;
+		for(i=0;i<(ADPCM_SIZE);++i)
+		{					
+			lBuf[i] = (s16)checkClipping((int)tmpData[i << 1]);
+			rBuf[i] = (s16)checkClipping((int)tmpData[(i << 1) | 1]);
 		}
-		else
+	}
+	else
+	{
+		uint i=0;
+		for(i=0;i<(ADPCM_SIZE);++i)
 		{
-			uint i=0;
-			for(i=0;i<(ADPCM_SIZE);++i)
-			{
-				lBuf[i] = (s16)checkClipping((int)tmpData[i]);
-				rBuf[i] = (s16)checkClipping((int)tmpData[i]);
-			}
+			lBuf[i] = (s16)checkClipping((int)tmpData[i]);
+			rBuf[i] = (s16)checkClipping((int)tmpData[i]);
 		}
 	}
 }
@@ -726,7 +738,7 @@ void setupSoundTGDSVideoPlayerARM7() {
 	
 	int ch;
 	
-	for(ch=0;ch<16;++ch) //Hardware bug: If channels aren't initialized here, audio (per channel) stalls on NTR/TWL hardware
+	for(ch=0;ch<4;++ch)
 	{
 		SCHANNEL_CR(ch) = 0;
 		SCHANNEL_TIMER(ch) = SOUND_FREQ((sndRate * multRate));
@@ -758,7 +770,7 @@ void timerAudioCallback(){
 	if(backgroundMusicPlayer.active == true){
 		IMAADPCMDecode((s16 *)bufR,(s16 *)bufL, &backgroundMusicPlayer);
 	}
-
+	
 	// Left channel
 	SCHANNEL_SOURCE((sndCursor << 1)) = (uint32)bufL;
 	SCHANNEL_CR((sndCursor << 1)) = SCHANNEL_ENABLE | SOUND_ONE_SHOT | SOUND_VOL(0x7F) | SOUND_PAN(0) | SOUND_16BIT;

@@ -31,13 +31,11 @@ USA
 #include "spiTGDS.h"
 #include "clockTGDS.h"
 
-//TGDS-MB v3 bootloader
-void bootfile(){
-}
-
 //User Handler Definitions
 
-__attribute__((section(".iwram64K")))
+#ifdef ARM9
+__attribute__((section(".itcm")))
+#endif
 void IpcSynchandlerUser(uint8 ipcByte){
 	switch(ipcByte){
 		default:{
@@ -47,50 +45,97 @@ void IpcSynchandlerUser(uint8 ipcByte){
 	}
 }
 
-__attribute__((section(".iwram64K")))
+#ifdef ARM9
+__attribute__((section(".itcm")))
+#endif
 void Timer0handlerUser(){
 
 }
 
-__attribute__((section(".iwram64K")))
+#ifdef ARM9
+__attribute__((section(".itcm")))
+#endif
 void Timer1handlerUser(){
 
 }
 
-__attribute__((section(".iwram64K")))
+#ifdef ARM9
+__attribute__((section(".itcm")))
+#endif
 void Timer2handlerUser(){
 	timerAudioCallback();
 }
 
-__attribute__((section(".iwram64K")))
+#ifdef ARM9
+__attribute__((section(".itcm")))
+#endif
 void Timer3handlerUser(){
 
 }
 
-__attribute__((section(".iwram64K")))
+#ifdef ARM9
+__attribute__((section(".itcm")))
+#endif
 void HblankUser(){
 
 }
 
-__attribute__((section(".iwram64K")))
+#ifdef ARM9
+__attribute__((section(".itcm")))
+#endif
 void VblankUser(){
 	
 
 }
 
-__attribute__((section(".iwram64K")))
+#ifdef ARM9
+__attribute__((section(".itcm")))
+#endif
 void VcounterUser(){
-	
+
 }
 
 //Note: this event is hardware triggered from ARM7, on ARM9 a signal is raised through the FIFO hardware
-__attribute__((section(".iwram64K")))
+#ifdef ARM9
+__attribute__((section(".itcm")))
+#endif
 void screenLidHasOpenedhandlerUser(){
 	TurnOnScreens();
 }
 
 //Note: this event is hardware triggered from ARM7, on ARM9 a signal is raised through the FIFO hardware
-__attribute__((section(".iwram64K")))
+#ifdef ARM9
+__attribute__((section(".itcm")))
+#endif
 void screenLidHasClosedhandlerUser(){
 	TurnOffScreens();
+}
+
+#include "timerTGDS.h"
+
+#if (defined(__GNUC__) && !defined(__clang__))
+__attribute__((optimize("O0")))
+#endif
+#if (!defined(__GNUC__) && defined(__clang__))
+__attribute__ ((optnone))
+#endif
+void playerStopARM7(){
+	REG_IE&=~IRQ_TIMER2;
+	TIMERXDATA(1) = 0;
+	TIMERXCNT(1) = 0;
+	TIMERXDATA(2) = 0;
+	TIMERXCNT(2) = 0;
+	int ch=0;
+	for(ch=0;ch<4;++ch)
+	{
+		SCHANNEL_CR(ch) = 0;
+		SCHANNEL_TIMER(ch) = 0;
+		SCHANNEL_LENGTH(ch) = 0;
+		SCHANNEL_REPEAT_POINT(ch) = 0;
+	}
+	
+	memset((void *)strpcmL0, 0, 1024);
+	memset((void *)strpcmL1, 0, 1024);
+	memset((void *)strpcmR0, 0, 1024);
+	memset((void *)strpcmR1, 0, 1024);
 }
