@@ -32,8 +32,8 @@ Start: Start game (Creature 1)
 L: Start game (Creature 2)
 R: Start game (Creature 3)
 Select: Start game (Creature 4)
-
 A: Shoot laser
+L + R + Select + Start = Run ToolchainGenericDS-Multiboot
 
 ____Remoteboot____
 Also, it's recommended to use the remoteboot feature. It allows to send the current TGDS Project over wifi removing the necessity
